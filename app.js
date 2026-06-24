@@ -3,7 +3,6 @@ const columns = [
   { key: "expand", width: 36 },
   { key: "number", width: 68 },
   { key: "rss", width: 112 },
-  { key: "aiImpact", width: 48 },
   { key: "name", width: 390 },
   { key: "unit", width: 78 },
   { key: "add", width: 44 },
@@ -46,7 +45,6 @@ const headerRows = [
     { text: "", rowspan: 3, key: "expand" },
     { text: "№", rowspan: 3, key: "number" },
     { text: "РСС / ТД / ДОП.", rowspan: 3, key: "rss" },
-    { text: "", rowspan: 3, key: "aiImpact" },
     { text: "Вид работ", rowspan: 3, key: "name" },
     { text: "Ед. изм.", rowspan: 3, key: "unit" },
     { text: "", rowspan: 3, key: "add" },
@@ -263,30 +261,6 @@ function renderColumns() {
   colgroup.innerHTML = columns.map((col) => `<col style="width:${col.width}px" />`).join("");
 }
 
-function getAiLegendItems() {
-  return [
-    { key: "ai", icon: "ai", label: "Сгенерировано ИИ", description: "ИИ создал строку без активных предупреждений." },
-    { key: "warning", icon: "warning", label: "Проверить", description: "Есть предупреждение, требуется проверка сметчиком." },
-    { key: "error", icon: "error", label: "Коллизия / ошибка", description: "ИИ не смог надежно сопоставить позицию." },
-    { key: "reviewed", icon: "reviewed", label: "Проверено", description: "Решение подтверждено или позиция закрыта." },
-    { key: "changed", icon: "edit", label: "Изменено вручную", description: "Пользователь выбрал другое значение." },
-    { key: "manual", icon: "manual", label: "Ручной разбор", description: "Позиция отправлена на отдельную проверку." }
-  ];
-}
-
-function renderAiLegendControl() {
-  const items = getAiLegendItems()
-    .map((item) => '<span class="ai-legend-row"><span class="ai-status-dot ai-status-' + item.key + '" aria-hidden="true">' + renderAiStatusIcon(item.icon) + '</span><span><strong>' + escapeAttr(item.label) + '</strong><small>' + escapeAttr(item.description) + '</small></span></span>')
-    .join("");
-  return '<span class="ai-legend-control-wrap">' +
-    '<button class="ai-legend-control" type="button" aria-label="Легенда статусов ИИ">' + renderAiStatusIcon("book") + '</button>' +
-    '<span class="ai-status-tooltip ai-legend-tooltip" role="tooltip">' +
-      '<span class="ai-tooltip-head"><span><i class="ai-tooltip-dot" aria-hidden="true"></i><b>Статусы ИИ</b></span></span>' +
-      '<span class="ai-tooltip-body">' + items + '</span>' +
-    '</span>' +
-  '</span>';
-}
-
 function renderFillMarkIcon() {
   return '<span class="fill-mark" title="Заливка колонки" aria-hidden="true">' +
     '<svg viewBox="0 0 24 24" focusable="false">' +
@@ -321,9 +295,6 @@ function renderHeader() {
           const sort = cell.sortable ? renderFillMarkIcon() : "";
           if (cell.key === "select") {
             return `<th ${attrs}><input class="select-box" id="selectAll" type="checkbox" aria-label="Выбрать все строки" /></th>`;
-          }
-          if (cell.key === "aiImpact") {
-            return `<th ${attrs}>${renderAiLegendControl()}</th>`;
           }
           return `<th ${attrs}>${cell.text}${sort}</th>`;
         })
@@ -376,7 +347,7 @@ function renderCell(row, key) {
     return `<td class="number-cell">${row.number}</td>`;
   }
   if (key === "rss") {
-    return `<td class="rss-cell">${row.source ? `<span class="rss-wrap"><button class="menu-button" type="button" aria-label="Меню ${row.number}">•••</button><a class="rss-link" href="#">ДОК</a></span>` : ""}</td>`;
+    return `<td class="rss-cell">${row.source ? `<span class="rss-wrap"><button class="menu-button" type="button" aria-label="Меню ${row.number}">•••</button><a class="rss-link" href="#">ДОП</a></span>` : ""}</td>`;
   }
   if (key === "name") {
     const warning = row.type !== "group" ? '<span class="warn-dot" aria-label="Предупреждение">!</span>' : "";
@@ -409,31 +380,17 @@ function renderCell(row, key) {
 
 function renderReviewCell(row, key) {
   const values = row.values || {};
-  const markers = renderCellIssueMarkers(row, key);
-  const issueClass = markers ? " has-issue" : "";
+  const cellIssues = getCellIssues(row.id, key);
+  const markers = "";
+  const issueToneClass = getIssueToneClass(cellIssues);
+  const issueClass = cellIssues.length ? ` has-issue ${issueToneClass}` : "";
   const highlightClass = isHighlightedCell(row, key) ? " is-cell-highlighted" : "";
 
-  if (key === "aiImpact") {
-    const status = getAiStatusMeta(row);
-    const statusTag = renderAiStatusTag(row, status);
-    const nameIssueClass = getCellIssues(row.id, "name").length ? " has-issue" : "";
-    const nameHighlightClass = isHighlightedCell(row, "name") ? " is-cell-highlighted" : "";
-    const statusAttrs = status
-      ? (status.issueId
-        ? ` data-issue-id="${escapeAttr(status.issueId)}"`
-        : ` data-row-source="${escapeAttr(row.id)}"`)
-      : "";
-    const interactionAttrs = status
-      ? ` role="button" tabindex="0" aria-label="${escapeAttr(`${status.label}. ${status.title}`)}"`
-      : "";
-    return `<td class="ai-impact-cell${nameIssueClass}${nameHighlightClass}" data-cell="name"${statusAttrs}${interactionAttrs}><span class="ai-impact-stack">${statusTag || ""}</span></td>`;
-  }
-
   if (key === "name") {
-    return `<td class="name-cell"><span class="name-wrap"><span class="tree-spacer"></span><span class="name-text" title="${escapeAttr(row.name)}">${row.name}</span></span></td>`;
+    return `<td class="name-cell${issueClass}${highlightClass}" data-cell="${key}"><span class="name-wrap"><span class="tree-spacer"></span><span class="name-text" title="${escapeAttr(row.name)}">${escapeAttr(row.name)}</span></span></td>`;
   }
 
-  if (!markers && !highlightClass) {
+  if (!markers && !highlightClass && !cellIssues.length) {
     return renderCell(row, key);
   }
 
@@ -644,127 +601,6 @@ function resetReviewAccordions(options = {}) {
   state.review.editingCommentId = null;
 }
 
-function renderSourceBadge(row) {
-  if (!row.sourceType || row.sourceType === "manual") return "";
-  const labels = {
-    "ai-generated": "ИИ",
-    mixed: "ИИ+",
-    imported: "ИМП"
-  };
-  const label = labels[row.sourceType] || row.sourceType;
-  return `<button class="source-badge source-badge-${row.sourceType}" type="button" data-row-source="${row.id}" title="Источник строки: ${escapeAttr(sourceTypeLabel(row.sourceType))}">${label}</button>`;
-}
-
-function renderAiStatusTag(row, status = getAiStatusMeta(row)) {
-  if (!status) return "";
-  return `<span class="ai-status-tag ai-status-${status.key}" aria-hidden="true"><span class="ai-status-icon">${renderAiStatusIcon(status.icon)}</span></span>`;
-}
-
-function getAiStatusMeta(row) {
-  const rowIssues = issues.filter((issue) => issue.rowId === row.id);
-  const unresolvedIssues = rowIssues.filter((issue) => !["confirmed", "resolved", "changed"].includes(issue.status));
-  const manualIssue = rowIssues.find((issue) => issue.status === "sent-to-manual");
-  if (manualIssue) {
-    return {
-      key: "manual",
-      icon: "manual",
-      label: "Ручной разбор",
-      issueId: manualIssue.id,
-      title: `Позиция отправлена на ручной разбор: ${manualIssue.title}.`,
-      description: "Пользователь решил вынести позицию из быстрого потока проверки.",
-      confidence: manualIssue.confidence,
-      cta: "КЛИКНИТЕ ДЛЯ ПРОСМОТРА РЕШЕНИЯ"
-    };
-  }
-  const errorIssue = unresolvedIssues.find((issue) => issue.severity === "error");
-  if (errorIssue) {
-    return {
-      key: "error",
-      icon: "error",
-      label: "Коллизия / ошибка",
-      issueId: errorIssue.id,
-      title: `Ошибка: ${errorIssue.title}. ИИ не смог надежно сопоставить позицию.`,
-      description: errorIssue.description || "ИИ не нашел надежных соответствий в справочниках.",
-      confidence: errorIssue.confidence,
-      cta: "КЛИКНИТЕ ДЛЯ РУЧНОГО ВЫБОРА"
-    };
-  }
-  const warningIssue = unresolvedIssues.find((issue) => issue.severity === "warning" || issue.status === "sent-to-manual");
-  if (warningIssue) {
-    return {
-      key: "warning",
-      icon: "warning",
-      label: "Проверить",
-      issueId: warningIssue.id,
-      title: `Нужно проверить: ${warningIssue.title}. Проверьте решение ИИ.`,
-      description: warningIssue.description || "ИИ нашел совпадение, но уверенность ниже порога.",
-      confidence: warningIssue.confidence,
-      cta: "КЛИКНИТЕ ДЛЯ ПРОВЕРКИ"
-    };
-  }
-  const changedIssue = rowIssues.find((issue) => issue.status === "changed");
-  if (changedIssue) {
-    return {
-      key: "changed",
-      icon: "edit",
-      label: "Изменено вручную",
-      issueId: changedIssue.id,
-      title: "Позиция изменена пользователем.",
-      description: "Сметчик выбрал другое значение из справочника вместо исходного предложения ИИ.",
-      confidence: changedIssue.confidence,
-      cta: "КЛИКНИТЕ ДЛЯ ПРОСМОТРА ИЗМЕНЕНИЯ"
-    };
-  }
-  const reviewedIssue = rowIssues.find((issue) => ["confirmed", "resolved"].includes(issue.status));
-  if (reviewedIssue) {
-    return {
-      key: "reviewed",
-      icon: "reviewed",
-      label: "Проверено",
-      issueId: null,
-      title: "Позиция обработана сметчиком: решение подтверждено или закрыто.",
-      description: "Сметчик завершил проверку этой позиции.",
-      confidence: reviewedIssue.confidence,
-      cta: "ПОЗИЦИЯ УЖЕ ПРОВЕРЕНА"
-    };
-  }
-  const syntheticReviewStatus = state.review.syntheticStatuses[`ai-row-${row.id}`];
-  if (syntheticReviewStatus === "sent-to-manual") {
-    return {
-      key: "manual",
-      icon: "manual",
-      label: "Ручной разбор",
-      title: "Позиция создана ИИ и отправлена на ручной разбор.",
-      description: "Пользователь решил вынести позицию из быстрого потока проверки.",
-      confidence: 1,
-      cta: "КЛИКНИТЕ ДЛЯ ПРОСМОТРА РЕШЕНИЯ"
-    };
-  }
-  if (["confirmed", "resolved"].includes(syntheticReviewStatus)) {
-    return {
-      key: "reviewed",
-      icon: "reviewed",
-      label: "Проверено",
-      title: "Позиция обработана сметчиком: решение подтверждено.",
-      description: "Сметчик подтвердил ИИ-позицию без активных предупреждений.",
-      confidence: 1,
-      cta: "ПОЗИЦИЯ УЖЕ ПРОВЕРЕНА"
-    };
-  }
-  if (["ai-generated", "mixed"].includes(row.sourceType)) {
-    return {
-      key: "ai",
-      icon: "ai",
-      label: "Сгенерировано ИИ",
-      title: "Строка создана ИИ без активных предупреждений.",
-      description: "Модель сопоставила позицию со справочником на основе контекста соседей.",
-      confidence: 0.94,
-      cta: "КЛИКНИТЕ ДЛЯ ПРОСМОТРА ЛОГИКИ ИИ"
-    };
-  }
-  return null;
-}
-
 function renderAiStatusIcon(icon) {
   const icons = {
     ai: '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"></path><path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8L18 15Z"></path></svg>',
@@ -799,27 +635,14 @@ function renderReviewPlaceholderIcon(kind) {
   return '<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M4 6h12"></path><path d="M4 11h10"></path><path d="M4 16h8"></path><path d="m16 15 4 4"></path><path d="m20 15-4 4"></path></svg>';
 }
 
-function sourceTypeLabel(sourceType) {
-  const labels = {
-    manual: "ручная строка",
-    imported: "импортированная строка",
-    "ai-generated": "Создано ИИ",
-    mixed: "частично создано ИИ"
-  };
-  return labels[sourceType] || sourceType;
-}
-
-function renderCellIssueMarkers(row, key) {
-  return getCellIssues(row.id, key)
-    .map((issue) => {
-      const label = issue.severity === "error" ? "Ошибка" : "Предупреждение";
-      return `<button class="issue-marker ${issue.severity}" type="button" data-issue-id="${issue.id}" title="${label}: ${escapeAttr(issue.title)}">${issue.severity === "error" ? "!" : "?"}</button>`;
-    })
-    .join("");
-}
-
 function getCellIssues(rowId, key) {
   return issues.filter((issue) => issue.rowId === rowId && issue.cellKey === key && isIssueActiveInTable(issue));
+}
+
+function getIssueToneClass(cellIssues) {
+  if (cellIssues.some((issue) => issue.severity === "error")) return "issue-error";
+  if (cellIssues.some((issue) => issue.severity === "warning")) return "issue-warning";
+  return "issue-neutral";
 }
 
 function isIssueActiveInTable(issue) {
@@ -845,6 +668,9 @@ function renderReviewDrawer() {
   const drawer = document.getElementById("reviewDrawer");
   if (!drawer) return;
   const filteredIssues = getFilteredIssues();
+  if (state.review.drawerOpen && !state.review.selectedIssueId) {
+    state.review.selectedIssueId = getDefaultReviewIssueId();
+  }
   if (state.review.drawerOpen && state.review.selectedIssueId && !filteredIssues.some((issue) => issue.id === state.review.selectedIssueId)) {
     state.review.selectedIssueId = filteredIssues[0]?.id || null;
   }
@@ -896,7 +722,7 @@ function renderReviewHeader() {
   }
   if (nextButton) {
     nextButton.innerHTML = renderPositionNavIcon("next");
-    nextButton.disabled = currentIndex < 0 || currentIndex >= activeIssues.length - 1;
+    nextButton.disabled = currentIndex < 0 || activeIssues.length <= 1;
   }
 }
 
@@ -1327,6 +1153,10 @@ function getReviewIssue(issueId) {
   return getReviewItems().find((issue) => issue.id === issueId) || null;
 }
 
+function getDefaultReviewIssueId() {
+  return getFilteredIssues()[0]?.id || getReviewItems()[0]?.id || null;
+}
+
 function getPrimaryIssueForRow(rowId) {
   const rowIssues = issues.filter((issue) => issue.rowId === rowId);
   return rowIssues.find((issue) => issue.severity === "error" && isIssueActiveInTable(issue))
@@ -1536,13 +1366,14 @@ function walkRows(items, callback, parentId = null) {
 }
 
 function openReviewDrawer(issueId = null) {
+  const nextIssueId = issueId || getDefaultReviewIssueId();
   state.review.drawerOpen = true;
-  if (issueId) {
-    state.review.selectedIssueId = issueId;
+  if (nextIssueId) {
+    state.review.selectedIssueId = nextIssueId;
     resetReviewAccordions();
   }
   renderReviewUi();
-  if (issueId) navigateToIssue(issueId);
+  if (nextIssueId) navigateToIssue(nextIssueId);
 }
 
 function closeReviewDrawer() {
@@ -1741,12 +1572,15 @@ function commitReviewDecision() {
   selectNextActiveIssue(nextIssueId);
 }
 
-function getAdjacentActiveIssueId(direction, currentIssueId = state.review.selectedIssueId) {
+function getAdjacentActiveIssueId(direction, currentIssueId = state.review.selectedIssueId, options = {}) {
   const activeIssues = getFilteredIssues();
   if (!activeIssues.length) return null;
   const currentIndex = activeIssues.findIndex((item) => item.id === currentIssueId);
   if (currentIndex < 0) return activeIssues[0].id;
   const nextIndex = currentIndex + (direction === "previous" ? -1 : 1);
+  if (options.wrap && direction === "next" && nextIndex >= activeIssues.length) {
+    return activeIssues[0].id;
+  }
   return activeIssues[nextIndex]?.id || null;
 }
 
@@ -1772,6 +1606,17 @@ function selectNextActiveIssue(preferredIssueId = null) {
     state.review.referenceType = "all";
     renderReviewUi();
     renderBody();
+    return;
+  }
+  state.review.referenceQuery = "";
+  state.review.referenceType = "all";
+  selectIssue(nextIssueId);
+}
+
+function selectNextFilteredIssue() {
+  const nextIssueId = getAdjacentActiveIssueId("next", state.review.selectedIssueId, { wrap: true });
+  if (!nextIssueId) {
+    renderReviewUi();
     return;
   }
   state.review.referenceQuery = "";
@@ -1943,62 +1788,23 @@ function bindBodyEvents() {
     });
   });
 
-  document.querySelectorAll(".issue-marker, .ai-impact-cell[data-issue-id]").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-      if (button.classList.contains("ai-impact-cell")) {
-        state.review.activeFilter = "all";
-        state.review.referenceQuery = "";
-        state.review.referenceType = "all";
-      }
-      openReviewDrawer(button.dataset.issueId);
-    });
-  });
-
-  document.querySelectorAll("[data-row-source]").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const rowId = button.dataset.rowSource;
-      const row = findRow(rows, rowId);
-      const rowIssue = row ? getPrimaryIssueForRow(rowId) || createAiRowReviewItem(row) : null;
-      state.review.activeFilter = "all";
-      state.review.referenceQuery = "";
-      state.review.referenceType = "all";
-      state.review.drawerOpen = true;
-      if (rowIssue) {
-        selectIssue(rowIssue.id);
-      } else {
-        state.review.highlightedRowId = rowId;
-        state.review.highlightedCellKey = "name";
-        renderBody();
-        requestAnimationFrame(() => {
-          const rowEl = document.querySelector(`tr[data-id="${CSS.escape(rowId)}"]`);
-          const cellEl = rowEl?.querySelector('[data-cell="name"]');
-          scrollTableToTarget(rowEl, cellEl);
-        });
-      }
-    });
-  });
-
-  document.querySelectorAll(".ai-impact-cell[data-issue-id], .ai-impact-cell[data-row-source]").forEach((cell) => {
-    cell.addEventListener("keydown", (event) => {
-      if (!["Enter", " "].includes(event.key)) return;
-      event.preventDefault();
-      cell.click();
-    });
-  });
 }
 
 function setupReviewEvents() {
   document.addEventListener("click", cancelCommentEditingOnOutsideInteraction);
-  document.getElementById("openReviewDrawer")?.addEventListener("click", () => openReviewDrawer(state.review.selectedIssueId));
+  document.getElementById("openReviewDrawer")?.addEventListener("click", () => {
+    state.review.activeFilter = "all";
+    state.review.referenceQuery = "";
+    state.review.referenceType = "all";
+    openReviewDrawer(getDefaultReviewIssueId());
+  });
   document.getElementById("closeReviewDrawer")?.addEventListener("click", closeReviewDrawer);
   document.getElementById("positionAccordionToggle")?.addEventListener("click", () => {
     state.review.positionsExpanded = !state.review.positionsExpanded;
     renderReviewUi();
   });
   document.getElementById("prevReviewIssue")?.addEventListener("click", () => selectPreviousActiveIssue());
-  document.getElementById("nextReviewIssue")?.addEventListener("click", () => selectNextActiveIssue());
+  document.getElementById("nextReviewIssue")?.addEventListener("click", () => selectNextFilteredIssue());
 
   document.getElementById("reviewFilters")?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-review-filter]");
