@@ -173,7 +173,16 @@ function buildRowsFromProjectData(data) {
   }
 
   cleanEmptyChildren(roots);
+  expandRowsByDefault(roots);
   return roots;
+}
+
+function expandRowsByDefault(items) {
+  items.forEach((row) => {
+    if (!row.children) return;
+    row.expanded = true;
+    expandRowsByDefault(row.children);
+  });
 }
 
 function getSourceAnrRow(sourceAnrRowId) {
