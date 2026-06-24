@@ -113,6 +113,7 @@ const state = {
     draftDecisions: {},
     editingCommentId: null,
     matchExpanded: false,
+    resultExpanded: false,
     aiLogicOpen: false,
     positionsExpanded: false,
     selectedIssueId: null,
@@ -636,6 +637,7 @@ function renderCommentMessage(comment) {
 function resetReviewAccordions(options = {}) {
   if (options.includePositions) state.review.positionsExpanded = false;
   state.review.matchExpanded = false;
+  state.review.resultExpanded = false;
   state.review.aiLogicOpen = false;
   state.review.commentsExpanded = true;
   state.review.reasonExpanded = false;
@@ -1033,12 +1035,17 @@ function renderReviewDetail() {
         '</div>' +
       '</div>' +
       '<div class="analysis-column">' +
-        '<section class="result-ai-panel">' +
-          '<div class="result-ai-head"><h4>Сформированная позиция в АСОР</h4></div>' +
-          '<div class="source-result-grid">' + resultFields.map((field) => '<span>' + field.label + '</span><strong title="' + escapeAttr(field.value) + '">' + escapeAttr(field.value) + '</strong>').join("") + '</div>' +
-          '<div class="result-reason"><h4>Почему так</h4><p class="reason-card-text' + reasonTextClass + '">' + escapeAttr(reasonText) + '</p>' + reasonToggle + '</div>' +
-          '<div class="result-logic">' +
-            '<button class="result-logic-head" id="aiLogicToggle" type="button" aria-expanded="' + String(state.review.aiLogicOpen) + '"><i aria-hidden="true">' + renderReasoningTriggerIcon() + '</i><span>Как рассуждал ИИ?</span></button>' +
+        '<section class="result-ai-panel ' + (state.review.resultExpanded ? 'expanded' : 'collapsed') + '">' +
+          '<button class="result-ai-head" id="resultAccordionToggle" type="button" aria-expanded="' + String(state.review.resultExpanded) + '">' +
+            '<span>Сформированные позиции АСОР</span>' +
+            '<span class="position-accordion-icon" aria-hidden="true">' + renderAccordionArrowIcon(state.review.resultExpanded) + '</span>' +
+          '</button>' +
+          '<div class="result-ai-body">' +
+            '<div class="source-result-grid">' + resultFields.map((field) => '<span>' + field.label + '</span><strong title="' + escapeAttr(field.value) + '">' + escapeAttr(field.value) + '</strong>').join("") + '</div>' +
+            '<div class="result-reason"><h4>Почему так</h4><p class="reason-card-text' + reasonTextClass + '">' + escapeAttr(reasonText) + '</p>' + reasonToggle + '</div>' +
+            '<div class="result-logic">' +
+              '<button class="result-logic-head" id="aiLogicToggle" type="button" aria-expanded="' + String(state.review.aiLogicOpen) + '"><i aria-hidden="true">' + renderReasoningTriggerIcon() + '</i><span>Как рассуждал ИИ?</span></button>' +
+            '</div>' +
           '</div>' +
         '</section>' +
         '<div class="detail-section info-card action-section"><div class="info-card-head"><span class="info-card-icon action" aria-hidden="true">' + renderInfoCardIcon("action") + '</span><h4>Что делать</h4></div><p>' + escapeAttr(getActionCardText(issue, metrics)) + '</p></div>' +
@@ -2032,6 +2039,12 @@ function setupReviewEvents() {
     if (event.target.closest("#referenceAccordionToggle")) {
       state.review.referencesExpanded = !state.review.referencesExpanded;
       renderReviewUi();
+      return;
+    }
+
+    if (event.target.closest("#resultAccordionToggle")) {
+      state.review.resultExpanded = !state.review.resultExpanded;
+      renderReviewDetail();
       return;
     }
 
