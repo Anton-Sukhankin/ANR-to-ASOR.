@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>S.Cost table prototype</title>
     <link rel="stylesheet" href="styles.css?v=data-foundation" />
+    <link rel="stylesheet" href="src/components/AISidebarDrawer/AISidebarDrawer.css?v=escost-chat" />
   </head>
   <body>
     <header class="app-header">
@@ -206,9 +207,20 @@
         <span>Всего:</span>
         <strong>26 224 311,08</strong>
       </div>
+      <button class="ai-chat-trigger-btn btn-trigger-ai-chat" id="btn-trigger-ai-chat" type="button" title="Открыть ИИ-сметчика" aria-label="Открыть ИИ-сметчика">
+        <span class="ai-chat-trigger-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M12 3.25l1.55 4.2a3.7 3.7 0 0 0 2.2 2.2L19.95 11l-4.2 1.55a3.7 3.7 0 0 0-2.2 2.2L12 18.95l-1.55-4.2a3.7 3.7 0 0 0-2.2-2.2L4.05 11l4.2-1.35a3.7 3.7 0 0 0 2.2-2.2L12 3.25Z"></path>
+          </svg>
+        </span>
+        <span>ИИ-сметчик</span>
+      </button>
     </footer>
 
+    <div id="ai-sidebar-drawer-root"></div>
+
     <script src="data/project-data.js?v=data-foundation"></script>
+    <script src="src/components/AISidebarDrawer/AISidebarDrawer.js?v=escost-chat"></script>
     <script src="app.js?v=data-foundation"></script>
   </body>
 </html>

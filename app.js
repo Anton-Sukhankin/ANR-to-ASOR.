@@ -100,7 +100,7 @@ const state = {
   selected: new Set(),
   review: {
     drawerOpen: false,
-    activeFilter: "all",
+    activeFilter: "created",
     referenceQuery: "",
     referenceType: "all",
     referencesExpanded: true,
@@ -121,11 +121,10 @@ const state = {
 };
 
 const reviewFilters = [
-  { key: "all", label: "Все" },
+  { key: "created", label: "Всего создано" },
   { key: "warning", label: "Предупреждения" },
-  { key: "error", label: "Ошибки" },
-  { key: "unresolved", label: "Непроверенные" },
-  { key: "ai", label: "Созданы ИИ" }
+  { key: "transfer-error", label: "Ошибки переноса" },
+  { key: "unrecognized", label: "Не распознано" }
 ];
 
 const issueTypeLabels = {
@@ -135,6 +134,7 @@ const issueTypeLabels = {
   entity_not_found: "Не найдена сущность",
   missing_data: "Недостаточно данных",
   normalized_value: "Нормализация значения",
+  unrecognized_anr_row: "Строка АНР не распознана",
   ai_generated: "Создано ИИ"
 };
 
@@ -690,6 +690,16 @@ function renderReviewDrawer() {
   renderReviewFilters();
   renderReviewList();
   renderReviewDetail();
+  window.updateAIDrawerContext?.();
+}
+
+function setupAiChatEvents() {
+  window.initAIDrawer?.();
+  const trigger = document.getElementById("btn-trigger-ai-chat");
+  if (!trigger) return;
+  trigger.addEventListener("click", () => {
+    window.toggleAIDrawer?.();
+  });
 }
 
 function renderPositionAccordion() {
@@ -711,12 +721,15 @@ function renderReviewHeader() {
   const nextButton = document.getElementById("nextReviewIssue");
   const issue = getReviewIssue(state.review.selectedIssueId);
   const row = issue ? findRow(rows, issue.rowId) : null;
+  const sourceRow = issue ? getIssueSourceRow(issue) : null;
   if (kicker) {
     kicker.textContent = issue ? reviewStateLabel(issue) : "Проверка ИИ";
     kicker.className = "review-kicker" + (issue ? " " + reviewStateClass(issue) : "");
   }
   if (title) {
-    title.textContent = row ? `Проверка позиции: строка ${row.number || issue.rowId}` : "Проверка позиций";
+    title.textContent = isUnrecognizedIssue(issue)
+      ? `Проверка АНР: строка ${sourceRow?.rowNumber || issue.sourceAnrRowId || issue.id}`
+      : (row ? `Проверка позиции: строка ${row.number || issue.rowId}` : "Проверка позиций");
   }
   if (meta) {
     meta.innerHTML = issue
@@ -762,15 +775,22 @@ function renderReviewList() {
   list.innerHTML = issueList
     .map((issue) => {
       const row = findRow(rows, issue.rowId);
+      const sourceRow = getIssueSourceRow(issue);
       const active = state.review.selectedIssueId === issue.id ? " active" : "";
-      const showIssueTags = ["all", "ai"].includes(state.review.activeFilter);
+      const isUnrecognized = isUnrecognizedIssue(issue);
+      const showIssueTags = ["created", "unrecognized"].includes(state.review.activeFilter);
       const reviewCopy = getReviewCopy(issue);
       const issueTags = showIssueTags
         ? '<span class="issue-card-tags"><span class="issue-tag ' + reviewStateClass(issue) + '">' + reviewStateLabel(issue) + '</span>' + (issue.status === "sent-to-manual" ? '' : '<span class="issue-tag status">' + statusLabel(issue.status) + '</span>') + '</span>'
         : "";
-      return `<button class="issue-card ${issue.severity}${active}" type="button" data-select-issue="${issue.id}">
-        <span class="issue-card-top"><span class="issue-card-main"><strong>${escapeAttr(row?.number || issue.rowId)}</strong><span class="issue-card-title">${escapeAttr(issue.title)}</span></span>${issueTags}</span>
-        <span class="issue-card-meta">${escapeAttr(reviewCopy.shortDescription)}</span>
+      const cardNumber = isUnrecognized ? `АНР ${sourceRow?.rowNumber || issue.sourceAnrRowId || issue.id}` : (row?.number || issue.rowId);
+      const cardTitle = isUnrecognized ? (sourceRow?.rawText || issue.title) : issue.title;
+      const cardMeta = isUnrecognized
+        ? `Не применено в АСОР · ед. изм.: ${sourceRow?.unit || "не указана"} · объем: ${sourceRow?.quantity || "не указан"}`
+        : reviewCopy.shortDescription;
+      return `<button class="issue-card ${issue.severity}${isUnrecognized ? " unrecognized" : ""}${active}" type="button" data-select-issue="${issue.id}">
+        <span class="issue-card-top"><span class="issue-card-main"><strong>${escapeAttr(cardNumber)}</strong><span class="issue-card-title">${escapeAttr(cardTitle)}</span></span>${issueTags}</span>
+        <span class="issue-card-meta">${escapeAttr(cardMeta)}</span>
       </button>`;
     })
     .join("");
@@ -796,6 +816,10 @@ function renderReviewDetail() {
   }
 
   state.review.selectedIssueId = issue.id;
+  if (isUnrecognizedIssue(issue)) {
+    renderUnrecognizedIssueDetail(detail, issue);
+    return;
+  }
   const renderIssue = getIssueWithDraft(issue);
   const row = findRow(rows, issue.rowId);
   const sourceRow = getIssueSourceRow(issue);
@@ -826,14 +850,6 @@ function renderReviewDetail() {
       : "<li>Нет надежных альтернатив</li>";
   const referenceEmpty = candidates.length && !visibleCandidates.length ? '<li class="candidate-empty">Нет кандидатов по этому поиску.</li>' : "";
 
-  const aiReasoningSteps = getAiReasoningSteps(issue, decision, metrics);
-  const reasonText = getReasonCardText();
-  const hasLongReason = reasonText.length > 180;
-  const reasonTextClass = hasLongReason && !state.review.reasonExpanded ? " collapsed" : " expanded";
-  const reasonToggle = hasLongReason
-    ? '<button class="reason-more-button" id="reasonMoreToggle" type="button">' + (state.review.reasonExpanded ? 'Скрыть' : 'Показать еще') + '</button>'
-    : "";
-
   const footerState = getReviewFooterState(issue);
   const manualDisabled = !isManualReviewAvailable(issue);
   const draft = getIssueDraft(issue.id);
@@ -847,8 +863,8 @@ function renderReviewDetail() {
       '<div class="detail-summary">' +
         '<div class="normalization-panel ' + (state.review.matchExpanded ? 'expanded' : 'collapsed') + '">' +
           '<button class="match-panel-head" id="matchAccordionToggle" type="button" aria-label="Показать или скрыть варианты из справочника" aria-expanded="' + String(state.review.matchExpanded) + '">' +
-            '<span>Сопоставление с АСОР</span>' +
-            '<div class="match-head-tags" aria-label="Состояние сопоставления">' + renderMatchHeadTags(metrics) + '</div>' +
+            '<span>Сопоставление АНР с АСОР</span>' +
+            '<div class="match-head-tags" aria-label="Состояние и параметр сопоставления">' + renderMatchHeadTags(metrics, issue, row) + '</div>' +
             '<div class="match-head-metrics" aria-label="Метрики сопоставления">' +
               '<b class="match-chip confidence" title="Уверенность"><i aria-hidden="true">✓</i>' + metrics.confidence + '%</b>' +
               '<b class="match-chip threshold" title="Порог"><i aria-hidden="true">≥</i>' + metrics.threshold + '%</b>' +
@@ -872,15 +888,11 @@ function renderReviewDetail() {
       '<div class="analysis-column">' +
         '<section class="result-ai-panel ' + (state.review.resultExpanded ? 'expanded' : 'collapsed') + '">' +
           '<button class="result-ai-head" id="resultAccordionToggle" type="button" aria-expanded="' + String(state.review.resultExpanded) + '">' +
-            '<span>Сформированные позиции АСОР</span>' +
+            '<span class="result-title-with-help"><span>Логика сопоставления</span>' + renderMatchingHelpTooltip() + '</span>' +
             '<span class="position-accordion-icon" aria-hidden="true">' + renderAccordionArrowIcon(state.review.resultExpanded) + '</span>' +
           '</button>' +
           '<div class="result-ai-body">' +
             '<div class="source-result-grid">' + resultFields.map((field) => '<span>' + field.label + '</span><strong title="' + escapeAttr(field.value) + '">' + escapeAttr(field.value) + '</strong>').join("") + '</div>' +
-            '<div class="result-reason"><h4>Почему так</h4><p class="reason-card-text' + reasonTextClass + '">' + escapeAttr(reasonText) + '</p>' + reasonToggle + '</div>' +
-            '<div class="result-logic">' +
-              '<button class="result-logic-head" id="aiLogicToggle" type="button" aria-expanded="' + String(state.review.aiLogicOpen) + '"><i aria-hidden="true">' + renderReasoningTriggerIcon() + '</i><span>Как рассуждал ИИ?</span></button>' +
-            '</div>' +
           '</div>' +
         '</section>' +
         '<div class="detail-section info-card action-section"><div class="info-card-head"><span class="info-card-icon action" aria-hidden="true">' + renderInfoCardIcon("action") + '</span><h4>Что делать</h4></div><p>' + escapeAttr(getActionCardText(issue, metrics)) + '</p></div>' +
@@ -893,7 +905,41 @@ function renderReviewDetail() {
       '<button class="review-manual-action" type="button" data-review-action="manual" ' + (manualDisabled ? 'disabled' : '') + '>Ручной разбор</button>' +
       '<button class="review-primary-action" type="button" data-review-action="commit" ' + (footerState.disabled ? 'disabled' : '') + '>' + footerState.label + '</button>' +
     '</div>' +
-    renderAiReasoningOverlay(issue, row, metrics, aiReasoningSteps) +
+  '</div>';
+}
+
+function renderUnrecognizedIssueDetail(detail, issue) {
+  const sourceRow = getIssueSourceRow(issue) || {};
+  const sourceFields = [
+    { label: "Номер строки АНР", value: sourceRow.rowNumber || issue.sourceAnrRowId || "Не определено" },
+    { label: "Наименование", value: sourceRow.rawText || issue.sourceValue || "Не определено" },
+    { label: "Ед. изм.", value: sourceRow.unit || "Не указана" },
+    { label: "Объем", value: sourceRow.quantity || "Не указан" }
+  ];
+  const manualDisabled = !isManualReviewAvailable(issue);
+  detail.innerHTML = '<div class="detail-card error unrecognized-detail">' +
+    '<div class="detail-content">' +
+      '<div class="analysis-column">' +
+        '<section class="result-ai-panel expanded">' +
+          '<div class="result-ai-head static-head">' +
+            '<span>Исходная строка АНР</span>' +
+            '<span class="issue-tag error">Не распознано</span>' +
+          '</div>' +
+          '<div class="result-ai-body">' +
+            '<div class="source-result-grid">' + sourceFields.map((field) => '<span>' + field.label + '</span><strong title="' + escapeAttr(field.value) + '">' + escapeAttr(field.value) + '</strong>').join("") + '</div>' +
+            '<div class="result-reason"><h4>Почему не применено</h4><p class="reason-card-text expanded">' + escapeAttr(issue.reason || issue.description || "ИИ не смог надежно определить группу, вид работ или материал для переноса строки АНР в АСОР.") + '</p></div>' +
+          '</div>' +
+        '</section>' +
+        '<div class="detail-section info-card action-section"><div class="info-card-head"><span class="info-card-icon action" aria-hidden="true">' + renderInfoCardIcon("action") + '</span><h4>Что делать</h4></div><p>' + escapeAttr(issue.recommendedAction || "Проверьте исходную строку АНР и отправьте ее на ручной разбор для создания корректной позиции в АСОР.") + '</p></div>' +
+        renderCommentsAccordion(issue) +
+      '</div>' +
+    '</div>' +
+    '<div class="detail-actions">' +
+      '<button class="review-secondary-action" type="button" data-review-action="cancel">Отмена</button>' +
+      '<span class="detail-actions-spacer" aria-hidden="true"></span>' +
+      '<button class="review-manual-action" type="button" data-review-action="manual" ' + (manualDisabled ? 'disabled' : '') + '>Ручной разбор</button>' +
+      '<button class="review-primary-action" type="button" data-review-action="commit" disabled>Подтвердить</button>' +
+    '</div>' +
   '</div>';
 }
 
@@ -1098,15 +1144,17 @@ function isManualReviewAvailable(issue) {
   return Boolean(issue) && !isFinalReviewStatus(issue.status);
 }
 
-function renderMatchHeadTags(metrics) {
-  return getMatchHeadTags(metrics)
+function renderMatchHeadTags(metrics, issue, row) {
+  return getMatchHeadTags(metrics, issue, row)
     .map((tag) => '<b class="match-chip ' + tag.className + '">' + escapeAttr(tag.label) + '</b>')
     .join("");
 }
 
-function getMatchHeadTags(metrics) {
+function getMatchHeadTags(metrics, issue, row) {
+  const attributeLabel = getReviewedAttributeLabel(issue, row);
   const rawTags = [
-    { label: metrics.status, className: getMatchChipClass(metrics.status) }
+    { label: issue ? reviewStateLabel(issue) : metrics.status, className: getMatchChipClass(issue ? reviewStateLabel(issue) : metrics.status) },
+    { label: attributeLabel, className: "attribute" }
   ].filter((tag) => tag.label && tag.label !== "Не определено");
 
   const seen = new Set();
@@ -1116,6 +1164,51 @@ function getMatchHeadTags(metrics) {
     seen.add(key);
     return true;
   });
+}
+
+function getReviewedAttributeLabel(issue, row) {
+  if (!issue) return "";
+  const key = issue.cellKey || "";
+  if (key === "name") {
+    if (row?.type === "group") return "Группа работ";
+    if (row?.type === "material") return "Материал";
+    return "Вид работ";
+  }
+  const labels = {
+    unit: "Единица измерения",
+    materialNo: "Признак номинации",
+    norm: "Норма расхода",
+    qtyRcc: "Объем по РСС",
+    qtyTd: "Объем по ТД",
+    done: "Выполненный объем",
+    deviation: "Отклонение",
+    vat: "НДС",
+    noteRcc: "Примечание РСС",
+    noteTd: "Примечание ТД",
+    basis: "Обоснование",
+    remark: "Замечание",
+    unitMatContractor: "Цена материала",
+    unitMatAuto: "Цена материала",
+    unitMatManual: "Цена материала",
+    unitMatEstimator: "Цена материала",
+    unitSmrContractor: "Стоимость СМР",
+    unitSmrAuto: "Стоимость СМР",
+    unitSmrManual: "Стоимость СМР",
+    unitSmrEstimator: "Стоимость СМР",
+    unitTotalContractor: "Стоимость всего",
+    unitTotalPlane: "Стоимость всего",
+    unitTotalEstimator: "Стоимость всего",
+    costMatContractor: "Сумма материала",
+    costMatPlane: "Сумма материала",
+    costMatEstimator: "Сумма материала",
+    costSmrContractor: "Сумма СМР",
+    costSmrPlane: "Сумма СМР",
+    costSmrEstimator: "Сумма СМР",
+    costTotalContractor: "Сумма всего",
+    costTotalPlane: "Сумма всего",
+    costTotalEstimator: "Сумма всего"
+  };
+  return labels[key] || "Параметр строки";
 }
 
 function getMatchChipClass(label) {
@@ -1145,17 +1238,46 @@ function formatEstimateNumber(value) {
   });
 }
 
+function renderMatchingHelpTooltip() {
+  return '<span class="matching-help" aria-label="Справка по логике сопоставления">' +
+    '<span class="matching-help-icon" aria-hidden="true">?</span>' +
+    '<span class="matching-help-tooltip" role="tooltip">Система сопоставляет строку АНР с АСОР по детерминированным правилам: типу объекта, специализации, группе работ, виду работ, материалу, единице измерения и совпадениям в справочниках.</span>' +
+  '</span>';
+}
+
 function getAsorResultFields(row) {
   const path = row ? findRowPath(rows, row.id) : [];
   const group = path.find((item) => item.type === "group");
   const work = [...path].reverse().find((item) => item.type === "work");
   const material = row?.type === "material" ? row : null;
+  const recognitionKey = getRecognitionKey(row, group, work, material);
   return [
     { label: "Группа работ", value: group?.name || "Не определено" },
     { label: "Вид работ", value: work?.name || "Не определено" },
     { label: "Материал", value: material?.name || "Не определено" },
-    { label: "Ед. изм.", value: row?.unit || work?.unit || material?.unit || "Не определено" }
+    { label: "Ед. изм.", value: row?.unit || work?.unit || material?.unit || "Не определено" },
+    { label: "Ключ распознавания", value: recognitionKey }
   ];
+}
+
+function getRecognitionKey(row, group, work, material) {
+  const typeLabels = {
+    group: "Группа",
+    work: "Работа",
+    material: "Материал"
+  };
+  const objectType = projectData.project?.object || "Объект не определен";
+  const specialization = group?.name || "Специализация не определена";
+  const unit = row?.unit || work?.unit || material?.unit || "Ед. изм. не определена";
+  return [
+    `Тип объекта: ${objectType}`,
+    `Специализация: ${specialization}`,
+    `Тип позиции: ${typeLabels[row?.type] || "Позиция"}`,
+    `Группа работ: ${group?.name || "не определено"}`,
+    `Вид работ: ${work?.name || "не определено"}`,
+    `Материал: ${material?.name || "не определено"}`,
+    `Ед. изм.: ${unit}`
+  ].join(" / ");
 }
 
 function getReviewIssue(issueId) {
@@ -1201,17 +1323,18 @@ function createAiRowReviewItem(row) {
 function getReviewItems() {
   const allRows = flattenAllRows(rows);
   const aiRows = allRows.filter((row) => ["ai-generated", "mixed"].includes(row.sourceType));
-  return aiRows.map((row) => getPrimaryIssueForRow(row.id) || createAiRowReviewItem(row));
+  const createdItems = aiRows.map((row) => getPrimaryIssueForRow(row.id) || createAiRowReviewItem(row));
+  const unrecognizedItems = issues.filter(isUnrecognizedIssue);
+  return [...createdItems, ...unrecognizedItems];
 }
 
 function getFilteredIssues() {
   return getReviewItems().filter((issue) => {
     const row = findRow(rows, issue.rowId);
-    if (state.review.activeFilter === "warning") return issue.severity === "warning" && isIssueActiveInTable(issue);
-    if (state.review.activeFilter === "error") return issue.severity === "error" && isIssueActiveInTable(issue);
-    if (state.review.activeFilter === "unresolved") return isIssueDecisionRequired(issue);
-    if (state.review.activeFilter === "ai") return row && ["ai-generated", "mixed"].includes(row.sourceType);
-    return true;
+    if (state.review.activeFilter === "warning") return !isUnrecognizedIssue(issue) && issue.severity === "warning" && isIssueActiveInTable(issue);
+    if (state.review.activeFilter === "transfer-error") return !isUnrecognizedIssue(issue) && issue.severity === "error" && isIssueActiveInTable(issue);
+    if (state.review.activeFilter === "unrecognized") return isUnrecognizedIssue(issue) && isIssueActiveInTable(issue);
+    return row && ["ai-generated", "mixed"].includes(row.sourceType);
   });
 }
 
@@ -1225,28 +1348,31 @@ function getActionableReviewItems() {
 
 function getReviewCounts() {
   const reviewItems = getReviewItems();
-  const aiRows = reviewItems.filter((issue) => {
+  const createdRows = reviewItems.filter((issue) => {
     const row = findRow(rows, issue.rowId);
     return row && ["ai-generated", "mixed"].includes(row.sourceType);
   }).length;
-  const unresolved = reviewItems.filter(isIssueDecisionRequired).length;
-  const openWarnings = reviewItems.filter((issue) => issue.severity === "warning" && isIssueActiveInTable(issue)).length;
-  const openErrors = reviewItems.filter((issue) => issue.severity === "error" && isIssueActiveInTable(issue)).length;
+  const openWarnings = reviewItems.filter((issue) => !isUnrecognizedIssue(issue) && issue.severity === "warning" && isIssueActiveInTable(issue)).length;
+  const openTransferErrors = reviewItems.filter((issue) => !isUnrecognizedIssue(issue) && issue.severity === "error" && isIssueActiveInTable(issue)).length;
+  const unrecognized = reviewItems.filter((issue) => isUnrecognizedIssue(issue) && isIssueActiveInTable(issue)).length;
   return {
-    aiRows,
-    unresolved,
+    createdRows,
     openWarnings,
-    openErrors,
+    openTransferErrors,
+    unrecognized,
     openIssues: reviewItems.length
   };
 }
 
 function getReviewFilterCount(key, counts) {
   if (key === "warning") return counts.openWarnings;
-  if (key === "error") return counts.openErrors;
-  if (key === "unresolved") return counts.unresolved;
-  if (key === "ai") return counts.aiRows;
-  return counts.openIssues;
+  if (key === "transfer-error") return counts.openTransferErrors;
+  if (key === "unrecognized") return counts.unrecognized;
+  return counts.createdRows;
+}
+
+function isUnrecognizedIssue(issue) {
+  return issue?.type === "unrecognized_anr_row" || (!issue?.rowId && Boolean(issue?.sourceAnrRowId));
 }
 
 function severityLabel(severity) {
@@ -1256,6 +1382,7 @@ function severityLabel(severity) {
 
 function reviewStateLabel(issue) {
   if (issue?.status === "sent-to-manual") return "Ручной разбор";
+  if (isUnrecognizedIssue(issue)) return "Не распознано";
   return severityLabel(issue?.severity);
 }
 
@@ -1271,6 +1398,7 @@ function getHeaderGuidance(issue) {
   if (issue.status === "changed") return "Значение изменено вручную, позиция обработана";
   if (issue.status === "ai-generated") return "Строка создана ИИ без активных предупреждений";
   if (issue.status === "sent-to-manual") return "Позиция отправлена на ручной разбор";
+  if (isUnrecognizedIssue(issue)) return "Исходная строка АНР не применена в АСОР, требуется ручная проверка";
   if (issue.severity === "clean") return "Строка создана ИИ без активных предупреждений";
   return issue.severity === "error"
     ? "Нужно исправить сопоставление перед завершением проверки"
@@ -1292,6 +1420,13 @@ function statusLabel(status) {
 function getReviewCopy(issue) {
   const typeLabel = issueTypeLabels[issue.type] || issue.type || "Проверка позиции";
   const baseDescription = issue.description || "Позиция требует проверки результата сопоставления.";
+
+  if (isUnrecognizedIssue(issue)) {
+    return {
+      shortDescription: `${typeLabel} · строка не применена в АСОР`,
+      detailDescription: `${baseDescription} Проверьте исходные параметры АНР и отправьте строку на ручной разбор для создания корректной позиции.`
+    };
+  }
 
   if (issue.status === "resolved") {
     return {
@@ -1407,6 +1542,12 @@ function selectIssue(issueId) {
 function navigateToIssue(issueId) {
   const issue = getReviewIssue(issueId);
   if (!issue) return;
+  if (isUnrecognizedIssue(issue) || !issue.rowId) {
+    state.review.highlightedRowId = null;
+    state.review.highlightedCellKey = null;
+    renderBody();
+    return;
+  }
   revealRow(issue.rowId);
   state.review.highlightedRowId = issue.rowId;
   state.review.highlightedCellKey = issue.cellKey;
@@ -1802,7 +1943,7 @@ function bindBodyEvents() {
 function setupReviewEvents() {
   document.addEventListener("click", cancelCommentEditingOnOutsideInteraction);
   document.getElementById("openReviewDrawer")?.addEventListener("click", () => {
-    state.review.activeFilter = "all";
+    state.review.activeFilter = "created";
     state.review.referenceQuery = "";
     state.review.referenceType = "all";
     openReviewDrawer(getDefaultReviewIssueId());
@@ -1860,33 +2001,6 @@ function setupReviewEvents() {
     if (event.target.closest("#resultAccordionToggle")) {
       state.review.resultExpanded = !state.review.resultExpanded;
       renderReviewDetail();
-      return;
-    }
-
-    if (event.target.closest("#aiLogicToggle")) {
-      state.review.aiLogicOpen = true;
-      renderReviewDetail();
-      return;
-    }
-
-    if (event.target.closest("#aiLogicClose") || event.target.id === "aiReasoningOverlay") {
-      state.review.aiLogicOpen = false;
-      renderReviewDetail();
-      return;
-    }
-
-    if (event.target.closest("#reasonMoreToggle")) {
-      const scrollContainer = document.querySelector("#reviewDetail .detail-content");
-      const scrollTop = scrollContainer ? scrollContainer.scrollTop : 0;
-      state.review.reasonExpanded = !state.review.reasonExpanded;
-      renderReviewDetail();
-      const nextScrollContainer = document.querySelector("#reviewDetail .detail-content");
-      if (nextScrollContainer) {
-        nextScrollContainer.scrollTop = scrollTop;
-        requestAnimationFrame(() => {
-          nextScrollContainer.scrollTop = scrollTop;
-        });
-      }
       return;
     }
 
@@ -1953,12 +2067,6 @@ function setupReviewEvents() {
   });
 
   document.getElementById("reviewDetail")?.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && state.review.aiLogicOpen) {
-      event.preventDefault();
-      state.review.aiLogicOpen = false;
-      renderReviewDetail();
-      return;
-    }
     if (event.target.id === "issueCommentInput" && event.key === "Enter") {
       event.preventDefault();
       saveIssueComment();
@@ -2024,3 +2132,4 @@ renderColumns();
 renderHeader();
 renderBody();
 setupReviewEvents();
+setupAiChatEvents();

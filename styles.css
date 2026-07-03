@@ -957,6 +957,54 @@ body.ai-drawer-open .table-shell {
   z-index: 40;
 }
 
+.ai-chat-trigger-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 24px;
+  margin-left: auto;
+  padding: 0 10px;
+  border: 1px solid #b8d7ff;
+  border-radius: 7px;
+  color: #106fce;
+  background: #f6fbff;
+  box-shadow: 0 1px 2px rgba(25, 45, 70, 0.08);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+}
+
+.ai-chat-trigger-btn:hover,
+.ai-chat-trigger-btn:focus-visible {
+  color: #0573d6;
+  border-color: #8dc3ff;
+  background: #eaf5ff;
+  box-shadow: 0 2px 6px rgba(16, 111, 206, 0.16);
+  outline: 0;
+}
+
+.ai-chat-trigger-icon,
+.ai-chat-trigger-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ai-chat-trigger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.ai-chat-trigger-icon svg {
+  display: block;
+  fill: currentColor;
+}
+
 .review-drawer {
   position: fixed;
   top: 0;
@@ -975,6 +1023,19 @@ body.ai-drawer-open .table-shell {
 
 body.ai-drawer-open .review-drawer {
   transform: translateX(0);
+}
+
+body.ai-drawer-open.ai-chat-open .review-drawer {
+  bottom: 50vh;
+  height: 50vh;
+}
+
+body.ai-drawer-open.ai-chat-open .ai-drawer {
+  top: 50vh;
+  height: 50vh;
+  width: var(--review-drawer-visible-width);
+  min-width: min(670px, var(--review-drawer-visible-width));
+  max-width: var(--review-drawer-visible-width);
 }
 
 .review-drawer-head {
@@ -1608,6 +1669,12 @@ body.ai-drawer-open .review-drawer {
   background: #e9eef5;
 }
 
+.match-chip.attribute {
+  color: #334155;
+  border-color: #d7e1ed;
+  background: #f8fafc;
+}
+
 .match-chip.ai {
   color: #4f46e5;
   border-color: #c7d2fe;
@@ -1961,7 +2028,7 @@ body.ai-drawer-open .review-drawer {
 .result-ai-panel {
   display: grid;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid #cfd9e7;
   border-radius: 10px;
   background: #fff;
@@ -1999,11 +2066,97 @@ body.ai-drawer-open .review-drawer {
   white-space: nowrap;
 }
 
+.result-title-with-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  overflow: visible !important;
+}
+
+.matching-help {
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  overflow: visible;
+}
+
+.matching-help-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #cbd7e6;
+  border-radius: 50%;
+  color: #526174;
+  background: #f8fafc;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+.matching-help-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  z-index: 240;
+  width: 320px;
+  padding: 10px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 10px;
+  color: #dbe5f5;
+  background: #101827;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: left;
+  text-transform: none;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  white-space: normal;
+}
+
+.matching-help-tooltip::after {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 10px;
+  height: 10px;
+  background: #101827;
+  content: "";
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.matching-help:hover .matching-help-icon {
+  color: var(--blue);
+  border-color: #a9ccec;
+  background: #f4f9ff;
+}
+
+.matching-help:hover .matching-help-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
 .result-ai-head:hover,
 .result-ai-head:focus-visible {
   color: #526174;
   background: #fbfdff;
   outline: none;
+}
+
+.result-ai-head.static-head {
+  cursor: default;
+}
+
+.result-ai-head.static-head:hover {
+  color: #728197;
+  background: #fff;
 }
 
 .result-ai-head:hover .position-accordion-icon,
@@ -2073,6 +2226,14 @@ body.ai-drawer-open .review-drawer {
   line-height: 18px;
 }
 
+.unrecognized-detail .result-reason h4 {
+  color: #728197;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+  text-transform: uppercase;
+}
+
 .result-reason p {
   margin: 0;
   color: #26384f;
@@ -2095,6 +2256,12 @@ body.ai-drawer-open .review-drawer {
   line-height: 16px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.source-result-grid strong:last-child {
+  overflow: visible;
+  line-height: 17px;
+  white-space: normal;
 }
 
 .result-section-head h4 {

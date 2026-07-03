@@ -2319,8 +2319,101 @@ window.SCOST_PROJECT_DATA = {
     });
   });
 
+  function addUnrecognizedSourceRow(item) {
+    if (!existingSourceIds.has(item.id)) {
+      sourceAnrRows.push({
+        id: item.id,
+        rowNumber: item.rowNumber,
+        rawText: item.name,
+        group: item.group || "",
+        work: item.work || "",
+        material: item.material || "",
+        unit: item.unit,
+        quantity: item.quantity,
+        price: item.price || "0,00",
+        status: "unrecognized",
+        excelFields: {
+          number: item.rowNumber,
+          name: item.name,
+          unit: item.unit,
+          quantity: item.quantity,
+          price: item.price || "0,00"
+        }
+      });
+      existingSourceIds.add(item.id);
+    }
+  }
+
+  function addUnrecognizedIssue(item) {
+    if (existingIssueIds.has(item.issueId)) return;
+    issues.push({
+      id: item.issueId,
+      severity: "error",
+      type: "unrecognized_anr_row",
+      title: "Строка АНР не распознана",
+      description: "ИИ не смог применить исходную строку АНР в структуру АСОР и не создал по ней позицию.",
+      sourceValue: item.name,
+      selectedValue: "Не применено в АСОР",
+      confidence: item.confidence,
+      alternatives: [],
+      reason: item.reason,
+      recommendedAction: "Проверьте исходные параметры АНР и отправьте строку на ручной разбор для создания корректной позиции в АСОР.",
+      status: "open",
+      comments: [],
+      sourceAnrRowId: item.id,
+      matchDecisionId: null
+    });
+    existingIssueIds.add(item.issueId);
+  }
+
+  [
+    {
+      id: "ANR-UNREC-01",
+      issueId: "unrec-001",
+      rowNumber: "12.4",
+      name: "Поставка комплекта креплений без указания типа системы и места монтажа",
+      group: "",
+      work: "",
+      material: "Поставка комплекта креплений без указания типа системы и места монтажа",
+      unit: "компл.",
+      quantity: "18,000",
+      confidence: 0.18,
+      reason: "В строке АНР найдено наименование комплекта, но отсутствуют признаки группы работ, тип системы и надежный справочный кандидат."
+    },
+    {
+      id: "ANR-UNREC-02",
+      issueId: "unrec-002",
+      rowNumber: "14.2",
+      name: "Монтаж оборудования по ведомости без расшифровки позиции",
+      group: "",
+      work: "Монтаж оборудования по ведомости без расшифровки позиции",
+      material: "",
+      unit: "шт",
+      quantity: "6,000",
+      confidence: 0.14,
+      reason: "Формулировка ссылается на внешнюю ведомость, поэтому ИИ не смог определить вид работ и справочную позицию внутри АСОР."
+    },
+    {
+      id: "ANR-UNREC-03",
+      issueId: "unrec-003",
+      rowNumber: "17.8",
+      name: "Материал заказчика, марка уточняется проектом, количество по факту",
+      group: "",
+      work: "",
+      material: "Материал заказчика, марка уточняется проектом, количество по факту",
+      unit: "м",
+      quantity: "0,000",
+      confidence: 0.09,
+      reason: "В исходной строке нет точной марки материала и применимого объема, поэтому позиция не была перенесена в АСОР."
+    }
+  ].forEach((item) => {
+    addUnrecognizedSourceRow(item);
+    addUnrecognizedIssue(item);
+  });
+
   data.processingRun.rowsCreated = asorRows.length;
   data.processingRun.warningCount = issues.filter((issue) => issue.severity === "warning" && issue.status === "open").length;
   data.processingRun.errorCount = issues.filter((issue) => issue.severity === "error" && issue.status === "open").length;
+  data.processingRun.unrecognizedCount = issues.filter((issue) => issue.type === "unrecognized_anr_row" && issue.status === "open").length;
   data.project.status = data.processingRun.errorCount ? "created-with-errors" : "created-with-warnings";
 })(window.SCOST_PROJECT_DATA);
