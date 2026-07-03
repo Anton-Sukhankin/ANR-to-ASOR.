@@ -10,6 +10,7 @@
   --color-border: #d9e0e7;
   --color-primary: #0b86f4;
   --color-primary-hover: #0573d6;
+  --color-status-red: #dc2626;
   --color-text-dark: #1f2d3d;
   --color-text-medium: #657386;
   --color-text-muted: #8793a5;
@@ -555,9 +556,13 @@ body.resizing-chat {
 }
 
 .chat-create-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 86px;
   height: 34px;
   padding: 0 14px;
+  border: 1px solid transparent;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
@@ -578,10 +583,17 @@ body.resizing-chat {
 }
 
 .chat-create-btn.danger {
-  border: 1px solid var(--color-status-red);
+  border: 1px solid #dc2626;
   color: white;
-  background: var(--color-status-red);
+  background: #dc2626;
   box-shadow: 0 8px 16px rgba(198, 40, 40, 0.16);
+}
+
+.chat-create-btn.danger:hover,
+.chat-create-btn.danger:focus-visible {
+  border-color: #b91c1c;
+  background: #b91c1c;
+  outline: none;
 }
 
 /* Кастомный скроллбар для чата */
