@@ -9,6 +9,7 @@ const initialChatWorkspace = createEscostInitialWorkspace();
 
 const CHAT_WORKSPACE_STORAGE_KEY = 'escost.anrAsor.aiChatWorkspace.v1';
 let chatWorkspace = loadChatWorkspaceFromStorage();
+let isChatWorkspaceCollapsed = false;
 
 function cloneValue(value) {
   if (typeof structuredClone === 'function') return structuredClone(value);
@@ -17,22 +18,11 @@ function cloneValue(value) {
 
 function loadChatWorkspaceFromStorage() {
   try {
-    const rawWorkspace = window.localStorage?.getItem(CHAT_WORKSPACE_STORAGE_KEY);
-    if (!rawWorkspace) return cloneValue(createEscostInitialWorkspace());
-
-    const parsedWorkspace = JSON.parse(rawWorkspace);
-    if (!parsedWorkspace || !Array.isArray(parsedWorkspace.chats) || parsedWorkspace.chats.length === 0) {
-      return cloneValue(createEscostInitialWorkspace());
-    }
-
-    const hasActiveChat = parsedWorkspace.chats.some(chat => chat.id === parsedWorkspace.activeChatId);
-    return {
-      activeChatId: hasActiveChat ? parsedWorkspace.activeChatId : parsedWorkspace.chats[0].id,
-      chats: parsedWorkspace.chats
-    };
+    window.localStorage?.removeItem(CHAT_WORKSPACE_STORAGE_KEY);
   } catch (error) {
-    return cloneValue(createEscostInitialWorkspace());
+    // localStorage может быть недоступен; чат просто стартует с чистого состояния.
   }
+  return cloneValue(createEscostInitialWorkspace());
 }
 
 function createEscostInitialWorkspace() {
@@ -52,56 +42,15 @@ function createEscostInitialWorkspace() {
           selectedNodeId: null
         },
         createdAt: baseTimestamp,
-        updatedAt: '2026-07-03T09:34:00.000Z',
-        messages: [
-          {
-            id: 'escost_msg_1',
-            sender: 'ai',
-            timestamp: baseTimestamp,
-            text: 'Здравствуйте! Я ИИ-сметчик EsCost. Могу помочь разобраться с загрузкой АНР, проверкой предупреждений, выбором справочных значений и правилами работы с текущей сметой.',
-            attachments: [],
-            actions: []
-          },
-          {
-            id: 'escost_msg_2',
-            sender: 'user',
-            timestamp: '2026-07-03T09:28:00.000Z',
-            text: 'Как понять, почему строка попала в предупреждения?',
-            attachments: [],
-            actions: []
-          },
-          {
-            id: 'escost_msg_3',
-            sender: 'ai',
-            timestamp: '2026-07-03T09:29:00.000Z',
-            text: 'Откройте кнопку **Проверка ИИ**, выберите фильтр **Предупреждения** и карточку нужной позиции. В блоке сопоставления будет видно исходное значение АНР, выбранное значение АСОР, проверяемый атрибут и уровень уверенности. Если вариант корректный, подтвердите позицию; если нет — выберите другое значение из справочника.',
-            attachments: [],
-            actions: []
-          },
-          {
-            id: 'escost_msg_4',
-            sender: 'user',
-            timestamp: '2026-07-03T09:33:00.000Z',
-            text: 'Чат может сам изменить строку сметы?',
-            attachments: [],
-            actions: []
-          },
-          {
-            id: 'escost_msg_5',
-            sender: 'ai',
-            timestamp: '2026-07-03T09:34:00.000Z',
-            text: 'Нет. В этой версии чат только объясняет правила, навигацию и методологию. Он не меняет ячейки, не выбирает значения за пользователя и не привязан к конкретной области таблицы.',
-            attachments: [],
-            actions: []
-          }
-        ]
+        updatedAt: '2026-07-05T17:18:00.000Z',
+        messages: createLongAsorChatHistory()
       },
       {
         id: 'chat_rss_123',
         title: 'РСС №123',
         description: 'Методология расценок',
         participantsLabel: 'Подрядчик / ИИ-сметчик',
-        unreadCount: 1,
+        unreadCount: 0,
         context: {
           mode: 'methodology',
           projectTitle: 'РСС №123',
@@ -109,24 +58,7 @@ function createEscostInitialWorkspace() {
         },
         createdAt: '2026-07-03T08:40:00.000Z',
         updatedAt: '2026-07-03T08:58:00.000Z',
-        messages: [
-          {
-            id: 'rss_msg_1',
-            sender: 'user',
-            timestamp: '2026-07-03T08:40:00.000Z',
-            text: 'Почему у работы может быть выбрана именно эта группа работ?',
-            attachments: [],
-            actions: []
-          },
-          {
-            id: 'rss_msg_2',
-            sender: 'ai',
-            timestamp: '2026-07-03T08:41:00.000Z',
-            text: 'Группа работ определяется по ключу распознавания: тип объекта, специализация, соседние строки и найденные совпадения в справочнике. Если уверенность ниже порога, строка попадает в предупреждения и требует проверки сметчиком.',
-            attachments: [],
-            actions: []
-          }
-        ]
+        messages: []
       },
       {
         id: 'chat_sor_80513',
@@ -141,27 +73,82 @@ function createEscostInitialWorkspace() {
         },
         createdAt: '2026-07-03T07:50:00.000Z',
         updatedAt: '2026-07-03T08:05:00.000Z',
-        messages: [
-          {
-            id: 'sor_msg_1',
-            sender: 'ai',
-            timestamp: '2026-07-03T07:50:00.000Z',
-            text: 'Начните с загрузки документа, затем проверьте список предупреждений и ошибок переноса. Для нераспознанных строк система покажет исходные параметры АНР: номер, наименование, единицу измерения и объем.',
-            attachments: [],
-            actions: []
-          }
-        ]
+        messages: []
       }
     ]
   };
 }
 
+function createLongAsorChatHistory() {
+  const script = [
+    ['2026-06-28T09:12:00.000Z', 'user', 'Добрый день. Я впервые открываю эту смету. С чего начать проверку после загрузки АНР?'],
+    ['2026-06-28T09:13:00.000Z', 'ai', 'Начните с кнопки **Проверка ИИ** в нижней панели. В дровере откройте список позиций и проверьте вкладки **Предупреждения**, **Ошибки переноса** и **Не распознано**.'],
+    ['2026-06-28T09:18:00.000Z', 'user', 'Что означает вкладка “Всего создано”?'],
+    ['2026-06-28T09:19:00.000Z', 'ai', 'Это все строки АСОР, которые система сформировала из исходного АНР. Внутри могут быть как строки без замечаний, так и строки с предупреждениями или ошибками переноса.'],
+    ['2026-06-28T09:25:00.000Z', 'user', 'Если строка создана ИИ без предупреждений, мне нужно ее открывать?'],
+    ['2026-06-28T09:26:00.000Z', 'ai', 'Обычно нет. Такие строки можно просматривать выборочно. Основной поток проверки начинается с предупреждений, ошибок переноса и нераспознанных строк АНР.'],
+    ['2026-06-28T09:31:00.000Z', 'user', 'Где увидеть исходную строку АНР?'],
+    ['2026-06-28T09:32:00.000Z', 'ai', 'В карточке проверки откройте блок **Сопоставление АНР с АСОР**. Слева будет исходное значение АНР, справа — выбранное значение в АСОР.'],
+    ['2026-06-28T09:40:00.000Z', 'user', 'Чат может сам перейти к проблемной строке в таблице?'],
+    ['2026-06-28T09:41:00.000Z', 'ai', 'Нет. В текущей версии чат не управляет таблицей. Навигация выполняется через дровер проверки: выберите карточку позиции или используйте стрелки в списке позиций.'],
+
+    ['2026-06-29T10:04:00.000Z', 'user', 'Почему предупреждение появляется, если строка все-таки перенесена в АСОР?'],
+    ['2026-06-29T10:05:00.000Z', 'ai', 'Предупреждение означает, что строка перенесена, но уверенность сопоставления ниже порога или найдено несколько близких вариантов в справочнике. Сметчик должен подтвердить или выбрать другой вариант.'],
+    ['2026-06-29T10:11:00.000Z', 'user', 'Что считается ошибкой переноса?'],
+    ['2026-06-29T10:12:00.000Z', 'ai', '**Ошибка переноса** относится к строке, которая уже есть в АСОР, но содержит критичное отклонение: например, неверный вид работ, единицу измерения или норму расхода.'],
+    ['2026-06-29T10:20:00.000Z', 'user', 'А “Не распознано” чем отличается от ошибки переноса?'],
+    ['2026-06-29T10:21:00.000Z', 'ai', '**Не распознано** — это исходная строка АНР, которую система вообще не смогла применить в АСОР. Такой позиции нет в таблице, поэтому она разбирается отдельно в дровере.'],
+    ['2026-06-29T10:29:00.000Z', 'user', 'Если я вижу несколько вариантов справочника, какой выбирать?'],
+    ['2026-06-29T10:30:00.000Z', 'ai', 'Выбирайте вариант, который точнее соответствует исходной формулировке АНР, группе работ, единице измерения и контексту соседних строк. Процент рядом с вариантом показывает близость совпадения.'],
+    ['2026-06-29T10:37:00.000Z', 'user', 'После выбора справочника нужно нажимать “Применить”?'],
+    ['2026-06-29T10:38:00.000Z', 'ai', 'Да. Выбор кандидата меняет значение локально в карточке, а **Применить** фиксирует принятое решение для текущей позиции и переводит ее в обработанное состояние.'],
+
+    ['2026-07-01T11:02:00.000Z', 'user', 'Как понять, какой именно параметр проверяется в строке?'],
+    ['2026-07-01T11:03:00.000Z', 'ai', 'В заголовке блока сопоставления рядом со статусом есть плашка проверяемого атрибута: например, **Вид работ**, **Единица измерения**, **Норма расхода** или **Признак номинации**.'],
+    ['2026-07-01T11:08:00.000Z', 'user', 'Что делать, если выбранный вид работ выглядит похожим, но диапазон не тот?'],
+    ['2026-07-01T11:09:00.000Z', 'ai', 'Откройте список кандидатов в блоке сопоставления и выберите вариант с корректным диапазоном. После этого проверьте единицу измерения и примените изменение.'],
+    ['2026-07-01T11:17:00.000Z', 'user', 'Можно ли отправить строку на ручной разбор?'],
+    ['2026-07-01T11:18:00.000Z', 'ai', 'Да. Используйте кнопку **Ручной разбор**, если автоматическое сопоставление недостаточно надежно или вы не можете выбрать корректный вариант из справочника.'],
+    ['2026-07-01T11:27:00.000Z', 'user', 'Что произойдет после ручного разбора?'],
+    ['2026-07-01T11:28:00.000Z', 'ai', 'Позиция получит статус ручной проверки. Это сигнал команде, что строку нельзя закрыть автоматическим подтверждением и требуется отдельная обработка.'],
+    ['2026-07-01T11:36:00.000Z', 'user', 'Комментарии сохраняются вместе с применением?'],
+    ['2026-07-01T11:37:00.000Z', 'ai', 'Комментарии работают отдельно от применения значения. Их можно оставить в блоке комментариев, чтобы зафиксировать причину выбора или вопрос для коллег.'],
+
+    ['2026-07-03T14:06:00.000Z', 'user', 'Почему чат не меняет таблицу напрямую?'],
+    ['2026-07-03T14:07:00.000Z', 'ai', 'Это ограничение MVP. Чат объясняет правила и помогает ориентироваться, но не выполняет действия с ячейками, чтобы не смешивать консультацию и юридически значимое решение сметчика.'],
+    ['2026-07-03T14:16:00.000Z', 'user', 'Что лучше проверять сначала: предупреждения или нераспознанные строки?'],
+    ['2026-07-03T14:17:00.000Z', 'ai', 'Для рабочего потока начните с **Не распознано**, потому что эти строки вообще не попали в АСОР. Затем переходите к **Ошибкам переноса**, после этого — к предупреждениям.'],
+    ['2026-07-03T14:24:00.000Z', 'user', 'Если строк много, как быстро переходить по списку?'],
+    ['2026-07-03T14:25:00.000Z', 'ai', 'Выберите нужный фильтр в списке позиций и используйте стрелки справа. Они листают только позиции внутри активного фильтра.'],
+    ['2026-07-03T14:33:00.000Z', 'user', 'Почему при выборе карточки таблица иногда прокручивается?'],
+    ['2026-07-03T14:34:00.000Z', 'ai', 'Для созданных строк АСОР дровер синхронизирован с таблицей: он раскрывает родительские строки, прокручивает таблицу к позиции и подсвечивает проблемную ячейку.'],
+    ['2026-07-03T14:42:00.000Z', 'user', 'А для нераспознанной строки прокрутка будет?'],
+    ['2026-07-03T14:43:00.000Z', 'ai', 'Нет. Нераспознанная строка не имеет строки АСОР, поэтому интерфейс показывает ее исходные параметры в дровере без навигации по таблице.'],
+
+    ['2026-07-05T16:10:00.000Z', 'user', 'Мне нужно объяснить подрядчику, почему часть строк не закрыта автоматически. Как это сформулировать?'],
+    ['2026-07-05T16:11:00.000Z', 'ai', 'Можно сказать так: часть строк требует проверки, потому что система нашла несколько похожих справочных вариантов или не смогла надежно определить атрибуты строки АНР для переноса в АСОР.'],
+    ['2026-07-05T16:24:00.000Z', 'user', 'Что означает порог уверенности?'],
+    ['2026-07-05T16:25:00.000Z', 'ai', 'Порог уверенности — минимальное значение, выше которого сопоставление считается достаточно надежным. Если уверенность ниже порога, позиция попадает в предупреждения.'],
+    ['2026-07-05T16:39:00.000Z', 'user', 'Если уверенность 82%, а порог 85%, это обязательно ошибка?'],
+    ['2026-07-05T16:40:00.000Z', 'ai', 'Нет. Это предупреждение, а не фатальная ошибка. Система предлагает вариант, но просит сметчика проверить его вручную.'],
+    ['2026-07-05T16:58:00.000Z', 'user', 'Как завершить проверку текущей позиции?'],
+    ['2026-07-05T16:59:00.000Z', 'ai', 'Если предложенное значение корректно, нажмите **Подтвердить**. Если вы выбрали другой вариант из справочника, нажмите **Применить**. Если уверенности нет, отправьте позицию на ручной разбор.'],
+    ['2026-07-05T17:17:00.000Z', 'user', 'После обновления страницы эта переписка должна сохраниться?'],
+    ['2026-07-05T17:18:00.000Z', 'ai', 'Нет. Пользовательские сообщения не сохраняются после обновления страницы. Эта история нужна только как демонстрационный пример первого чата в прототипе.']
+  ];
+
+  return script.map(([timestamp, sender, text], index) => ({
+    id: `asor_demo_msg_${index + 1}`,
+    sender,
+    timestamp,
+    text,
+    attachments: [],
+    actions: []
+  }));
+}
+
 function persistChatWorkspace() {
-  try {
-    window.localStorage?.setItem(CHAT_WORKSPACE_STORAGE_KEY, JSON.stringify(chatWorkspace));
-  } catch (error) {
-    // localStorage может быть недоступен в приватном режиме; интерфейс остается рабочим в памяти страницы.
-  }
+  // История чата намеренно хранится только в памяти текущей страницы.
 }
 
 function getActiveChat() {
@@ -242,7 +229,6 @@ window.initAIDrawer = function() {
                   </svg>
                 </button>
               </div>
-              <p class="ai-chat-disclaimer">ИИ может ошибаться</p>
             </div>
           </div>
         </div>
@@ -319,16 +305,36 @@ function collapseChatWorkspaceAccordion() {
 function renderChatWorkspaceAccordion(options = {}) {
   const root = document.getElementById('chat-workspace-accordion');
   if (!root) return;
+  const drawer = document.getElementById('ai-drawer');
+  if (drawer) drawer.classList.toggle('chat-list-collapsed', isChatWorkspaceCollapsed);
+  root.classList.toggle('is-collapsed', isChatWorkspaceCollapsed);
 
   const previousScrollTop = options.preserveScroll
     ? root.querySelector('.chat-workspace-scroll')?.scrollTop || 0
     : 0;
   const activeChat = getActiveChat();
 
+  if (isChatWorkspaceCollapsed) {
+    root.innerHTML = `
+      <div class="chat-workspace-shell collapsed">
+        <button class="chat-create-trigger collapsed" type="button" onclick="window.openCreateChatDialog()" title="Новый чат" aria-label="Новый чат">
+          ${renderPlusIcon()}
+        </button>
+        <div class="chat-workspace-scroll collapsed">
+          <div class="chat-workspace-list collapsed">
+            ${chatWorkspace.chats.map(chat => renderCollapsedChatSessionRow(chat, chat.id === activeChat?.id)).join('')}
+          </div>
+        </div>
+        <div class="chat-workspace-bottom">${renderChatWorkspaceToggle(true)}</div>
+      </div>
+    `;
+    return;
+  }
+
   root.innerHTML = `
     <div class="chat-workspace-shell">
       <button class="chat-create-trigger" type="button" onclick="window.openCreateChatDialog()">
-        <span aria-hidden="true">+</span>
+        ${renderPlusIcon()}
         <span>Новый чат</span>
       </button>
       <div class="chat-workspace-scroll">
@@ -336,6 +342,7 @@ function renderChatWorkspaceAccordion(options = {}) {
           ${chatWorkspace.chats.map(chat => renderChatSessionRow(chat, chat.id === activeChat?.id)).join('')}
         </div>
       </div>
+      <div class="chat-workspace-bottom">${renderChatWorkspaceToggle(false)}</div>
     </div>
   `;
 
@@ -343,6 +350,63 @@ function renderChatWorkspaceAccordion(options = {}) {
     const scrollArea = root.querySelector('.chat-workspace-scroll');
     if (scrollArea) scrollArea.scrollTop = previousScrollTop;
   }
+}
+
+function renderChatWorkspaceToggle(isCollapsed) {
+  return `
+    <button class="chat-workspace-toggle" type="button" onclick="window.toggleChatWorkspaceAccordion()" title="${isCollapsed ? 'Развернуть список чатов' : 'Свернуть список чатов'}" aria-label="${isCollapsed ? 'Развернуть список чатов' : 'Свернуть список чатов'}" aria-expanded="${String(!isCollapsed)}">
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        ${isCollapsed
+          ? '<path d="m11.5 6 6 6-6 6"></path><path d="m6.5 6 6 6-6 6"></path>'
+          : '<path d="m12.5 6-6 6 6 6"></path><path d="m17.5 6-6 6 6 6"></path>'}
+      </svg>
+    </button>
+  `;
+}
+
+function renderPlusIcon() {
+  return `
+    <svg class="chat-plus-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+      <path d="M12 5v14"></path>
+      <path d="M5 12h14"></path>
+    </svg>
+  `;
+}
+
+function renderCollapsedChatSessionRow(chat, isCurrent) {
+  if (!chat) return '';
+  const unreadCount = Number(chat.unreadCount) || 0;
+  const title = escapeHtml(chat.title);
+  return `
+    <button
+      class="chat-session-dot ${isCurrent ? 'is-current' : ''} tone-${getChatToneIndex(chat)}"
+      type="button"
+      onclick="window.selectChatSession('${escapeHtml(chat.id)}')"
+      title="${title}"
+      aria-label="Открыть чат ${title}"
+      aria-current="${isCurrent ? 'true' : 'false'}"
+    >
+      <span>${escapeHtml(getChatInitial(chat))}</span>
+      ${unreadCount > 0 ? '<i aria-hidden="true"></i>' : ''}
+    </button>
+  `;
+}
+
+function getChatInitial(chat) {
+  const title = String(chat?.title || '').trim().toUpperCase();
+  if (title.startsWith('АСОР') || title.startsWith('ASOR')) return 'А';
+  if (title.startsWith('РСС') || title.startsWith('RSS')) return 'R';
+  if (title.startsWith('СОР') || title.startsWith('SOR')) return 'S';
+  return title.charAt(0) || 'Ч';
+}
+
+function getChatToneIndex(chat) {
+  const value = String(chat?.id || chat?.title || '');
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash + value.charCodeAt(index) * (index + 1)) % 5;
+  }
+  return hash;
 }
 
 function renderChatSessionRow(chat, isCurrent) {
@@ -562,6 +626,7 @@ function formatChatSessionDate(timestamp) {
 }
 
 window.toggleChatWorkspaceAccordion = function() {
+  isChatWorkspaceCollapsed = !isChatWorkspaceCollapsed;
   renderChatWorkspaceAccordion();
 };
 
@@ -671,6 +736,11 @@ function renderChatMessages() {
 
   let previousDayKey = '';
   const messages = getActiveChatMessages();
+  if (!messages.length) {
+    list.innerHTML = renderChatEmptyState();
+    return;
+  }
+
   list.innerHTML = messages.map(msg => {
     const dayKey = getMessageDayKey(msg.timestamp);
     const dateSeparator = dayKey !== previousDayKey ? renderDateSeparator(msg.timestamp) : '';
@@ -686,7 +756,6 @@ function renderChatMessages() {
       senderName = 'Оператор';
     }
 
-    const formattedTime = new Date(msg.timestamp).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
     const textHtml = parseMarkdown(msg.text);
     const avatarHtml = msg.sender === 'user'
       ? ''
@@ -699,7 +768,6 @@ function renderChatMessages() {
         <div class="chat-message-content">
           <div class="message-meta">
             <span class="message-sender font-weight-600">${senderName}</span>
-            <span class="message-time">${formattedTime}</span>
           </div>
           <div class="chat-bubble ${bubbleClass}">
             <div class="bubble-text">${textHtml}</div>
@@ -711,6 +779,22 @@ function renderChatMessages() {
   }).join('');
 
   scrollToBottom();
+}
+
+function renderChatEmptyState() {
+  return `
+    <div class="chat-empty-state" role="status">
+      <span class="chat-empty-visual" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path d="M6.2 5.5h11.6a3 3 0 0 1 3 3v4.9a3 3 0 0 1-3 3h-4.8l-4.5 3v-3H6.2a3 3 0 0 1-3-3V8.5a3 3 0 0 1 3-3Z"></path>
+          <path d="M8.2 10h7.6"></path>
+          <path d="M8.2 12.8h4.9"></path>
+        </svg>
+      </span>
+      <strong>Сообщений пока нет</strong>
+      <p>Задайте вопрос по текущей смете, проверке АНР или работе с интерфейсом EsCost.</p>
+    </div>
+  `;
 }
 
 function getMessageDayKey(timestamp) {
@@ -736,21 +820,9 @@ function formatMessageDateLabel(timestamp) {
   const date = new Date(timestamp);
   if (Number.isNaN(date.getTime())) return 'Дата не указана';
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const targetDate = new Date(date);
-  targetDate.setHours(0, 0, 0, 0);
-
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  if (targetDate.getTime() === today.getTime()) return 'Сегодня';
-  if (targetDate.getTime() === yesterday.getTime()) return 'Вчера';
-
   return date.toLocaleDateString('ru-RU', {
-    day: 'numeric',
-    month: 'long',
+    day: '2-digit',
+    month: '2-digit',
     year: 'numeric'
   });
 }
