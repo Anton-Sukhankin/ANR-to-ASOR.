@@ -391,6 +391,30 @@ button {
   stroke-linejoin: round;
 }
 
+.ai-chat-toolbar-button {
+  gap: 6px;
+}
+
+.ai-chat-toolbar-button .ai-chat-trigger-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--blue);
+  line-height: 0;
+}
+
+.ai-chat-toolbar-button .ai-chat-trigger-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .segmented {
   display: inline-flex;
   align-items: center;

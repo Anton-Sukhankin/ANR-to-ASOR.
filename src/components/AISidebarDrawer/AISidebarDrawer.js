@@ -885,8 +885,9 @@ function setupResizeHandle() {
   document.addEventListener('mousemove', (e) => {
     if (!isResizing) return;
     const newWidth = window.innerWidth - e.clientX;
-    if (newWidth >= 670 && newWidth <= 1270) {
-      drawer.style.width = `${newWidth}px`;
+    const minWidth = drawer.classList.contains('chat-list-collapsed') ? 560 : 670;
+    if (newWidth >= minWidth && newWidth <= 1270) {
+      drawer.style.setProperty('width', `${newWidth}px`, 'important');
     }
   });
 

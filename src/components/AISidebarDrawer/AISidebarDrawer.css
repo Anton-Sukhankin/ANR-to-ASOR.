@@ -32,7 +32,10 @@
   z-index: 1000;
   display: flex;
   transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    min-width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   border-left: 1px solid var(--color-border);
 }
 
@@ -55,7 +58,7 @@ body.ai-drawer-open.ai-chat-open .ai-drawer.chat-list-collapsed {
   position: absolute;
   top: 0;
   left: 0;
-  width: 6px;
+  width: 8px;
   height: 100%;
   cursor: ew-resize;
   background-color: transparent;
@@ -65,13 +68,13 @@ body.ai-drawer-open.ai-chat-open .ai-drawer.chat-list-collapsed {
 .ai-drawer-resize-handle::before {
   content: "";
   position: absolute;
-  left: 50%;
-  top: 14px;
-  bottom: 14px;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 2px;
-  border-radius: 999px;
+  border-radius: 0;
   background: transparent;
-  transform: translateX(-50%);
+  transform: none;
   transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -83,13 +86,17 @@ body.ai-drawer-open.ai-chat-open .ai-drawer.chat-list-collapsed {
 .ai-drawer-resize-handle:hover::before,
 .ai-drawer-resize-handle.active::before {
   background: hsl(208, 82%, 66%);
-  box-shadow: 0 0 0 4px hsla(208, 88%, 55%, 0.12);
+  box-shadow: 1px 0 0 hsla(208, 88%, 55%, 0.12);
 }
 
 /* Класс на body при ресайзе для отключения выделения текста */
 body.resizing-chat {
   user-select: none !important;
   cursor: ew-resize !important;
+}
+
+body.resizing-chat .ai-drawer {
+  transition: none;
 }
 
 /* 3. Внутренняя структура чата */
@@ -188,6 +195,7 @@ body.resizing-chat {
   grid-template-columns: 350px minmax(0, 1fr);
   gap: 0;
   background-color: var(--chat-feed-bg);
+  transition: grid-template-columns 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ai-drawer.chat-list-collapsed .ai-drawer-main {
@@ -202,6 +210,10 @@ body.resizing-chat {
   padding: 14px;
   background: hsl(212, 42%, 97%);
   border-right: 1px solid hsl(213, 26%, 90%);
+  transition:
+    padding 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-workspace-accordion.is-collapsed {
@@ -218,6 +230,7 @@ body.resizing-chat {
   border-radius: 14px;
   background: transparent;
   box-shadow: none;
+  transition: gap 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chat-workspace-shell.collapsed {
@@ -258,7 +271,7 @@ body.resizing-chat {
 
 .chat-workspace-toggle:hover,
 .chat-workspace-toggle:focus-visible {
-  color: var(--color-primary);
+  color: var(--color-text-dark);
   border-color: hsl(var(--primary-base), 78%, 66%);
   background: #fff;
   box-shadow: 0 6px 14px rgba(21, 101, 192, 0.1);
@@ -539,7 +552,7 @@ body.resizing-chat {
 .chat-session-edit-btn:hover,
 .chat-session-edit-btn:focus-visible {
   background: hsl(213, 32%, 94%);
-  color: var(--color-primary);
+  color: #435169;
 }
 
 .chat-session-delete-btn:hover,
@@ -591,9 +604,15 @@ body.resizing-chat {
 }
 
 .chat-create-trigger:hover {
+  color: #435169;
   background: #fff;
   border-color: hsl(var(--primary-base), 78%, 66%);
   box-shadow: 0 6px 14px rgba(21, 101, 192, 0.1);
+}
+
+.chat-create-trigger span,
+.chat-create-trigger .chat-plus-icon {
+  color: inherit;
 }
 
 .chat-plus-icon {
@@ -915,7 +934,7 @@ body.resizing-chat {
   background: #eaf5ff;
   color: var(--color-primary);
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1;
   letter-spacing: 0.01em;
 }
@@ -940,7 +959,7 @@ body.resizing-chat {
 
 .chat-message-row.ai .message-sender {
   color: var(--color-primary);
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .message-time {
