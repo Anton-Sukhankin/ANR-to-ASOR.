@@ -357,8 +357,8 @@ function renderChatWorkspaceToggle(isCollapsed) {
     <button class="chat-workspace-toggle" type="button" onclick="window.toggleChatWorkspaceAccordion()" title="${isCollapsed ? 'Развернуть список чатов' : 'Свернуть список чатов'}" aria-label="${isCollapsed ? 'Развернуть список чатов' : 'Свернуть список чатов'}" aria-expanded="${String(!isCollapsed)}">
       <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
         ${isCollapsed
-          ? '<path d="m11.5 6 6 6-6 6"></path><path d="m6.5 6 6 6-6 6"></path>'
-          : '<path d="m12.5 6-6 6 6 6"></path><path d="m17.5 6-6 6 6 6"></path>'}
+          ? '<path d="m12.5 6-6 6 6 6"></path><path d="m17.5 6-6 6 6 6"></path>'
+          : '<path d="m11.5 6 6 6-6 6"></path><path d="m6.5 6 6 6-6 6"></path>'}
       </svg>
     </button>
   `;
