@@ -3776,6 +3776,10 @@ body.ai-drawer-open.ai-chat-open .ai-drawer {
   min-width: 8px;
 }
 
+.detail-actions .is-demo-hidden {
+  display: none;
+}
+
 .detail-actions .review-manual-action {
   color: #475569;
   border-color: #cbd5e1;

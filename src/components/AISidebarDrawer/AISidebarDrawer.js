@@ -34,7 +34,7 @@ function createEscostInitialWorkspace() {
         id: 'chat_asor_67408',
         title: 'АСОР №67408',
         description: 'Текущий документ',
-        participantsLabel: 'Подрядчик / ИИ-сметчик',
+        participantsLabel: 'Подрядчик / ИИ-ассистент',
         unreadCount: 0,
         context: {
           mode: 'estimate-document',
@@ -49,7 +49,7 @@ function createEscostInitialWorkspace() {
         id: 'chat_rss_123',
         title: 'РСС №123',
         description: 'Методология расценок',
-        participantsLabel: 'Подрядчик / ИИ-сметчик',
+        participantsLabel: 'Подрядчик / ИИ-ассистент',
         unreadCount: 0,
         context: {
           mode: 'methodology',
@@ -64,7 +64,7 @@ function createEscostInitialWorkspace() {
         id: 'chat_sor_80513',
         title: 'СОР №80513',
         description: 'Онбординг подрядчика',
-        participantsLabel: 'Подрядчик / ИИ-сметчик',
+        participantsLabel: 'Подрядчик / ИИ-ассистент',
         unreadCount: 0,
         context: {
           mode: 'onboarding',
@@ -194,7 +194,7 @@ window.initAIDrawer = function() {
               </svg>
             </span>
             <div class="ai-header-copy">
-              <h4 class="ai-header-title">ИИ-сметчик EsCost</h4>
+              <h4 class="ai-header-title">ИИ-ассистент S.Cost</h4>
               <span class="ai-header-context" id="chat-context-text">Контекст: текущая смета · АНР → АСОР</span>
             </div>
           </div>
@@ -202,7 +202,7 @@ window.initAIDrawer = function() {
         </div>
 
         <div class="ai-drawer-main">
-          <nav class="chat-workspace-accordion" id="chat-workspace-accordion" aria-label="Список чатов ИИ-сметчика"></nav>
+          <nav class="chat-workspace-accordion" id="chat-workspace-accordion" aria-label="Список чатов ИИ-ассистента"></nav>
 
           <div class="ai-chat-thread">
             <div class="ai-drawer-messages" id="ai-drawer-messages-list"></div>
@@ -211,7 +211,7 @@ window.initAIDrawer = function() {
               <span class="typing-dot"></span>
               <span class="typing-dot"></span>
               <span class="typing-dot"></span>
-              <span class="typing-text">ИИ-сметчик думает...</span>
+              <span class="typing-text">ИИ-ассистент думает...</span>
             </div>
 
             <div class="ai-drawer-footer">
@@ -611,7 +611,7 @@ function renderUnreadIcon() {
 
 function formatChatSessionMeta(chat) {
   const updatedLabel = formatChatSessionDate(chat.updatedAt);
-  const participants = chat.participantsLabel || 'Сметчик / ИИ-сметчик';
+  const participants = chat.participantsLabel || 'Сметчик / ИИ-ассистент';
   return `${updatedLabel} · ${participants}`;
 }
 
@@ -694,7 +694,7 @@ window.confirmCreateChat = function() {
     id: chatId,
     title,
     description: 'Новый чат добавлен',
-    participantsLabel: 'Сметчик / ИИ-сметчик',
+    participantsLabel: 'Сметчик / ИИ-ассистент',
     unreadCount: 0,
     context: getCurrentChatContext(),
     createdAt: now,
@@ -747,7 +747,7 @@ function renderChatMessages() {
     previousDayKey = dayKey;
 
     let bubbleClass = 'bubble-ai';
-    let senderName = 'ИИ-Сметчик';
+    let senderName = 'ИИ-ассистент';
     if (msg.sender === 'user') {
       bubbleClass = 'bubble-user';
       senderName = 'Вы';
@@ -792,7 +792,7 @@ function renderChatEmptyState() {
         </svg>
       </span>
       <strong>Сообщений пока нет</strong>
-      <p>Задайте вопрос по текущей смете, проверке АНР или работе с интерфейсом EsCost.</p>
+      <p>Задайте вопрос по текущей смете, проверке АНР или работе с интерфейсом S.Cost.</p>
     </div>
   `;
 }

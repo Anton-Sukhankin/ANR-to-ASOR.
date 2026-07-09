@@ -123,8 +123,7 @@ const state = {
 const reviewFilters = [
   { key: "created", label: "Всего создано" },
   { key: "warning", label: "Предупреждения" },
-  { key: "transfer-error", label: "Ошибки переноса" },
-  { key: "unrecognized", label: "Не распознано" }
+  { key: "transfer-error", label: "Ошибки переноса" }
 ];
 
 const issueTypeLabels = {
@@ -139,7 +138,7 @@ const issueTypeLabels = {
 };
 
 const rows = buildRowsFromProjectData(projectData);
-const issues = cloneData(projectData.issues || []);
+const issues = cloneData(projectData.issues || []).map(normalizeReviewIssue);
 const sourceAnrRows = cloneData(projectData.sourceAnrRows || []);
 const matchDecisions = cloneData(projectData.matchDecisions || []);
 const referenceCandidates = cloneData(projectData.referenceCandidates || []);
@@ -149,6 +148,17 @@ const processingLogEvents = cloneData(projectData.processingLogEvents || []);
 
 function cloneData(value) {
   return JSON.parse(JSON.stringify(value || []));
+}
+
+function normalizeReviewIssue(issue) {
+  if (!issue || isUnrecognizedIssue(issue)) return issue;
+  if (issue.severity === "error" && issue.rowId) {
+    return {
+      ...issue,
+      severity: "warning"
+    };
+  }
+  return issue;
 }
 
 function buildRowsFromProjectData(data) {
@@ -676,6 +686,9 @@ function renderReviewButton() {
 function renderReviewDrawer() {
   const drawer = document.getElementById("reviewDrawer");
   if (!drawer) return;
+  if (!reviewFilters.some((filter) => filter.key === state.review.activeFilter)) {
+    state.review.activeFilter = "transfer-error";
+  }
   const filteredIssues = getFilteredIssues();
   if (state.review.drawerOpen && !state.review.selectedIssueId) {
     state.review.selectedIssueId = getDefaultReviewIssueId();
@@ -698,6 +711,11 @@ function setupAiChatEvents() {
   const trigger = document.getElementById("btn-trigger-ai-chat");
   if (!trigger) return;
   trigger.addEventListener("click", () => {
+    const chatDrawer = document.getElementById("ai-drawer");
+    const willOpenChat = !chatDrawer?.classList.contains("open");
+    if (willOpenChat && state.review.drawerOpen) {
+      closeReviewDrawer();
+    }
     window.toggleAIDrawer?.();
   });
 }
@@ -778,7 +796,7 @@ function renderReviewList() {
       const sourceRow = getIssueSourceRow(issue);
       const active = state.review.selectedIssueId === issue.id ? " active" : "";
       const isUnrecognized = isUnrecognizedIssue(issue);
-      const showIssueTags = ["created", "unrecognized"].includes(state.review.activeFilter);
+      const showIssueTags = ["created", "transfer-error"].includes(state.review.activeFilter);
       const reviewCopy = getReviewCopy(issue);
       const issueTags = showIssueTags
         ? '<span class="issue-card-tags"><span class="issue-tag ' + reviewStateClass(issue) + '">' + reviewStateLabel(issue) + '</span>' + (issue.status === "sent-to-manual" ? '' : '<span class="issue-tag status">' + statusLabel(issue.status) + '</span>') + '</span>'
@@ -902,7 +920,7 @@ function renderReviewDetail() {
     '<div class="detail-actions">' +
       '<button class="review-secondary-action" type="button" data-review-action="cancel">Отмена</button>' +
       '<span class="detail-actions-spacer" aria-hidden="true"></span>' +
-      '<button class="review-manual-action" type="button" data-review-action="manual" ' + (manualDisabled ? 'disabled' : '') + '>Ручной разбор</button>' +
+      '<button class="review-manual-action is-demo-hidden" type="button" data-review-action="manual" ' + (manualDisabled ? 'disabled' : '') + '>Ручной разбор</button>' +
       '<button class="review-primary-action" type="button" data-review-action="commit" ' + (footerState.disabled ? 'disabled' : '') + '>' + footerState.label + '</button>' +
     '</div>' +
   '</div>';
@@ -937,7 +955,7 @@ function renderUnrecognizedIssueDetail(detail, issue) {
     '<div class="detail-actions">' +
       '<button class="review-secondary-action" type="button" data-review-action="cancel">Отмена</button>' +
       '<span class="detail-actions-spacer" aria-hidden="true"></span>' +
-      '<button class="review-manual-action" type="button" data-review-action="manual" ' + (manualDisabled ? 'disabled' : '') + '>Ручной разбор</button>' +
+      '<button class="review-manual-action is-demo-hidden" type="button" data-review-action="manual" ' + (manualDisabled ? 'disabled' : '') + '>Ручной разбор</button>' +
       '<button class="review-primary-action" type="button" data-review-action="commit" disabled>Подтвердить</button>' +
     '</div>' +
   '</div>';
@@ -1332,8 +1350,7 @@ function getFilteredIssues() {
   return getReviewItems().filter((issue) => {
     const row = findRow(rows, issue.rowId);
     if (state.review.activeFilter === "warning") return !isUnrecognizedIssue(issue) && issue.severity === "warning" && isIssueActiveInTable(issue);
-    if (state.review.activeFilter === "transfer-error") return !isUnrecognizedIssue(issue) && issue.severity === "error" && isIssueActiveInTable(issue);
-    if (state.review.activeFilter === "unrecognized") return isUnrecognizedIssue(issue) && isIssueActiveInTable(issue);
+    if (state.review.activeFilter === "transfer-error") return isUnrecognizedIssue(issue) && isIssueActiveInTable(issue);
     return row && ["ai-generated", "mixed"].includes(row.sourceType);
   });
 }
@@ -1353,13 +1370,11 @@ function getReviewCounts() {
     return row && ["ai-generated", "mixed"].includes(row.sourceType);
   }).length;
   const openWarnings = reviewItems.filter((issue) => !isUnrecognizedIssue(issue) && issue.severity === "warning" && isIssueActiveInTable(issue)).length;
-  const openTransferErrors = reviewItems.filter((issue) => !isUnrecognizedIssue(issue) && issue.severity === "error" && isIssueActiveInTable(issue)).length;
-  const unrecognized = reviewItems.filter((issue) => isUnrecognizedIssue(issue) && isIssueActiveInTable(issue)).length;
+  const openTransferErrors = reviewItems.filter((issue) => isUnrecognizedIssue(issue) && isIssueActiveInTable(issue)).length;
   return {
     createdRows,
     openWarnings,
     openTransferErrors,
-    unrecognized,
     openIssues: reviewItems.length
   };
 }
@@ -1367,7 +1382,6 @@ function getReviewCounts() {
 function getReviewFilterCount(key, counts) {
   if (key === "warning") return counts.openWarnings;
   if (key === "transfer-error") return counts.openTransferErrors;
-  if (key === "unrecognized") return counts.unrecognized;
   return counts.createdRows;
 }
 
@@ -1510,6 +1524,7 @@ function walkRows(items, callback, parentId = null) {
 }
 
 function openReviewDrawer(issueId = null) {
+  window.closeAIDrawer?.();
   const nextIssueId = issueId || getDefaultReviewIssueId();
   state.review.drawerOpen = true;
   if (nextIssueId) {
