@@ -1,7 +1,29 @@
 ﻿/* ==========================================================================
-   СТИЛИ БОКОВОГО ЧАТА С ИИ (AI SIDEBAR DRAWER)
-   S.Cost / src / components / AISidebarDrawer / AISidebarDrawer.css
+   ПЕРЕНОСИМЫЙ БОКОВОЙ ЧАТ С ИИ
+   Все обязательные дизайн-токены определены на корневом .ai-drawer.
    ========================================================================== */
+
+:where(.ai-chat-mount),
+:where(.ai-chat-mount) *,
+:where(.ai-chat-mount) *::before,
+:where(.ai-chat-mount) *::after {
+  box-sizing: border-box;
+}
+
+:where(.ai-chat-mount) button,
+:where(.ai-chat-mount) input,
+:where(.ai-chat-mount) textarea {
+  margin: 0;
+  font: inherit;
+}
+
+:where(.ai-chat-mount) button {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+}
 
 /* 1. Основной контейнер выдвижной панели */
 .ai-drawer {
@@ -45,11 +67,6 @@
 
 .ai-drawer.chat-list-collapsed {
   width: calc(var(--ai-drawer-default-width) - 278px) !important;
-  min-width: 560px;
-}
-
-body.ai-drawer-open.ai-chat-open .ai-drawer.chat-list-collapsed {
-  width: min(calc(var(--review-drawer-visible-width) - 220px), calc(var(--ai-drawer-default-width) - 278px)) !important;
   min-width: 560px;
 }
 
@@ -118,7 +135,7 @@ body.resizing-chat .ai-drawer {
   background-color: var(--color-bg-card);
 }
 
-.header-title-block {
+.ai-drawer .header-title-block {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1140,7 +1157,7 @@ body.resizing-chat .ai-drawer {
   background-color: var(--color-bg-card);
 }
 
-.input-container {
+.ai-drawer .input-container {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1152,7 +1169,7 @@ body.resizing-chat .ai-drawer {
   transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.input-container:focus-within {
+.ai-drawer .input-container:focus-within {
   border-color: var(--color-primary);
   background-color: hsl(210, 38%, 96%);
   box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.12);

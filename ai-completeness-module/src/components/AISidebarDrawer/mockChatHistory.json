@@ -1,0 +1,356 @@
+{
+  "activeChatId": "chat_general",
+  "chats": [
+    {
+      "id": "chat_general",
+      "title": "Общий чат",
+      "description": "Открыт сейчас",
+      "participantsLabel": "Сметчик / ИИ-сметчик",
+      "unreadCount": 0,
+      "context": {
+        "mode": "general",
+        "projectTitle": "Задание на АСОР Бриз Корпус 19",
+        "selectedNodeId": null
+      },
+      "createdAt": "2026-05-23T10:12:00.000Z",
+      "updatedAt": "2026-05-26T08:46:15.000Z",
+      "messages": [
+        {
+          "id": "msg_general_1",
+          "sender": "user",
+          "timestamp": "2026-05-23T10:12:00.000Z",
+          "text": "Какие именно ошибки ты нашёл в файле Приложение №1 (смета)? Расскажи подробнее.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "msg_general_2",
+          "sender": "ai",
+          "timestamp": "2026-05-23T10:12:15.000Z",
+          "text": "В файле `Приложение №1_РСС__СП_5_оч_1_эт_Компл_А1-корп_19_СС_БРИЗ-25-02-26.xlsx` на **Листе 2 (Строка 1124)** я обнаружил критическое расхождение сметной расценки с нормативной базой АСОР. Превышение лимита стоимости составляет **+14%**.",
+          "attachments": [],
+          "actions": [
+            {
+              "id": "action_apply_estimate",
+              "label": "Скорректировать цену строки 1124",
+              "payload": {
+                "action": "recalc_row",
+                "row_id": "1124",
+                "new_price": 1120000
+              }
+            },
+            {
+              "id": "action_call_human",
+              "label": "Позвать оператора",
+              "payload": {
+                "action": "escalate"
+              }
+            }
+          ]
+        },
+        {
+          "id": "msg_general_3",
+          "sender": "user",
+          "timestamp": "2026-05-25T12:05:00.000Z",
+          "text": "Проверь, изменился ли статус после добавления договора подряда и коммерческого предложения.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "msg_general_4",
+          "sender": "ai",
+          "timestamp": "2026-05-25T12:06:40.000Z",
+          "text": "Договор подряда найден и приложен, но по коммерческому предложению №142 по-прежнему есть расхождение: файл не найден среди загруженных вложений. Статус комплектности остается: **требует проверки**.",
+          "attachments": [],
+          "actions": [
+            {
+              "id": "action_recalculate_completeness",
+              "label": "Пересчитать комплектность",
+              "payload": {
+                "action": "recalculate_completeness",
+                "row_id": "package_completeness"
+              }
+            }
+          ]
+        },
+        {
+          "id": "msg_general_5",
+          "sender": "user",
+          "timestamp": "2026-05-26T08:45:00.000Z",
+          "text": "Сформируй короткое резюме по текущим критическим замечаниям перед отправкой подрядчику.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "msg_general_6",
+          "sender": "ai",
+          "timestamp": "2026-05-26T08:46:15.000Z",
+          "text": "Критическим остается отсутствие коммерческого предложения №142, на которое есть ссылка в сметном пакете. Также требуется контроль строки 1124 из-за превышения нормативного значения базы АСОР. Рекомендую запросить недостающее КП и после загрузки выполнить повторный расчет комплектности.",
+          "attachments": [],
+          "actions": [
+            {
+              "id": "action_accept_summary",
+              "label": "Согласиться",
+              "payload": {
+                "action": "accept_summary",
+                "row_id": "critical_summary"
+              }
+            },
+            {
+              "id": "action_reject_summary",
+              "label": "Не согласиться",
+              "payload": {
+                "action": "reject_summary",
+                "row_id": "critical_summary"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chat_drawings_archive",
+      "title": "Чертежи_Архив.zip",
+      "description": "Контекст проектных материалов",
+      "participantsLabel": "Сметчик / ИИ-сметчик",
+      "unreadCount": 2,
+      "context": {
+        "mode": "selected-document",
+        "selectedNodeId": "zip-drawings"
+      },
+      "createdAt": "2026-05-26T08:30:00.000Z",
+      "updatedAt": "2026-05-26T08:45:00.000Z",
+      "messages": [
+        {
+          "id": "chat_drawings_msg_1",
+          "sender": "user",
+          "timestamp": "2026-05-26T08:30:00.000Z",
+          "text": "Проверь архив чертежей: нужно понять, все ли листы рабочей документации извлечены.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_drawings_msg_2",
+          "sender": "ai",
+          "timestamp": "2026-05-26T08:32:10.000Z",
+          "text": "Архив распакован. Найдены разделы КР и АР, но по листу `КР_лист_04.pdf` требуется ручная проверка качества OCR.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_drawings_msg_3",
+          "sender": "operator",
+          "timestamp": "2026-05-26T08:41:00.000Z",
+          "text": "Подтверждаю: лист КР_04 читается частично, нужна повторная выгрузка из исходной CAD-системы.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_drawings_msg_4",
+          "sender": "ai",
+          "timestamp": "2026-05-26T08:45:00.000Z",
+          "text": "Я отметил архив как требующий проверки и связал замечание с позицией `Чертежи_Архив.zip` в дереве вложений.",
+          "attachments": [],
+          "actions": []
+        }
+      ]
+    },
+    {
+      "id": "chat_estimate_school",
+      "title": "Смета_Школа_01",
+      "description": "Проверка сметной позиции",
+      "participantsLabel": "Сметчик / ИИ-сметчик",
+      "unreadCount": 1,
+      "context": {
+        "mode": "estimate-review",
+        "selectedNodeId": null
+      },
+      "createdAt": "2026-05-24T16:05:00.000Z",
+      "updatedAt": "2026-05-24T16:20:00.000Z",
+      "messages": [
+        {
+          "id": "chat_estimate_school_msg_1",
+          "sender": "user",
+          "timestamp": "2026-05-24T16:05:00.000Z",
+          "text": "Создай отдельный контекст для проверки сметы школы и сравнения расценок по монтажным работам.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_estimate_school_msg_2",
+          "sender": "ai",
+          "timestamp": "2026-05-24T16:12:30.000Z",
+          "text": "Контекст создан. Я выделил 18 позиций с повышенной стоимостью монтажа и сгруппировал их по разделам ведомости.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_estimate_school_msg_3",
+          "sender": "ai",
+          "timestamp": "2026-05-24T16:20:00.000Z",
+          "text": "Непрочитанное уточнение: по разделу вентиляции найдено 3 позиции, где требуется подтверждение коэффициента стесненности.",
+          "attachments": [],
+          "actions": []
+        }
+      ]
+    },
+    {
+      "id": "chat_contract_19",
+      "title": "Договор_подряда_№19",
+      "description": "Проверка договорных ссылок",
+      "participantsLabel": "Сметчик / Оператор / ИИ-сметчик",
+      "unreadCount": 1,
+      "context": {
+        "mode": "contract-review",
+        "selectedNodeId": null
+      },
+      "createdAt": "2026-05-24T09:15:00.000Z",
+      "updatedAt": "2026-05-24T09:34:00.000Z",
+      "messages": [
+        {
+          "id": "chat_contract_19_msg_1",
+          "sender": "user",
+          "timestamp": "2026-05-24T09:15:00.000Z",
+          "text": "Проверь, закрывает ли договор подряда №19 требования задания на АСОР.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_contract_19_msg_2",
+          "sender": "ai",
+          "timestamp": "2026-05-24T09:18:20.000Z",
+          "text": "Договор найден в пакете и сопоставлен с заданием. Основные реквизиты совпадают, но приложение с графиком поставки отсутствует.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_contract_19_msg_3",
+          "sender": "operator",
+          "timestamp": "2026-05-24T09:26:00.000Z",
+          "text": "График поставки запросили у подрядчика, ожидаем отдельным файлом.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_contract_19_msg_4",
+          "sender": "ai",
+          "timestamp": "2026-05-24T09:34:00.000Z",
+          "text": "Непрочитанное обновление: после повторной проверки график поставки всё ещё не найден среди вложений.",
+          "attachments": [],
+          "actions": []
+        }
+      ]
+    },
+    {
+      "id": "chat_offer_142",
+      "title": "Коммерческое_предложение_№142",
+      "description": "Недостающее КП",
+      "participantsLabel": "Сметчик / ИИ-сметчик",
+      "unreadCount": 3,
+      "context": {
+        "mode": "commercial-offer",
+        "selectedNodeId": null
+      },
+      "createdAt": "2026-05-23T18:40:00.000Z",
+      "updatedAt": "2026-05-23T19:05:00.000Z",
+      "messages": [
+        {
+          "id": "chat_offer_142_msg_1",
+          "sender": "user",
+          "timestamp": "2026-05-23T18:40:00.000Z",
+          "text": "Проверь, есть ли в пакете коммерческое предложение №142 или оно только упоминается в тексте.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_offer_142_msg_2",
+          "sender": "ai",
+          "timestamp": "2026-05-23T18:43:00.000Z",
+          "text": "В тексте задания и сметы есть ссылка на КП №142, но файл с таким именем или реквизитами не найден.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_offer_142_msg_3",
+          "sender": "user",
+          "timestamp": "2026-05-23T18:50:00.000Z",
+          "text": "Проверь похожие названия, возможно КП лежит в письме как вложение без номера.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_offer_142_msg_4",
+          "sender": "ai",
+          "timestamp": "2026-05-23T18:58:00.000Z",
+          "text": "Найдено похожее вложение `КП_поставщика_материалы.pdf`, но номер 142 в нём не подтверждается.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_offer_142_msg_5",
+          "sender": "ai",
+          "timestamp": "2026-05-23T19:05:00.000Z",
+          "text": "Рекомендую запросить у подрядчика КП №142 отдельным файлом. До загрузки этого документа статус комплектности останется критическим.",
+          "attachments": [],
+          "actions": [
+            {
+              "id": "action_request_offer_142",
+              "label": "Запросить КП №142",
+              "payload": {
+                "action": "request_document",
+                "document": "КП №142"
+              }
+            },
+            {
+              "id": "action_ignore_offer_142",
+              "label": "Не учитывать КП",
+              "payload": {
+                "action": "ignore_requirement",
+                "document": "КП №142"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chat_volumes_sheet",
+      "title": "Ведомость_объемов.xlsx",
+      "description": "Объемы работ",
+      "participantsLabel": "Сметчик / ИИ-сметчик",
+      "unreadCount": 0,
+      "context": {
+        "mode": "volume-sheet",
+        "selectedNodeId": null
+      },
+      "createdAt": "2026-05-22T11:05:00.000Z",
+      "updatedAt": "2026-05-22T11:18:00.000Z",
+      "messages": [
+        {
+          "id": "chat_volumes_sheet_msg_1",
+          "sender": "user",
+          "timestamp": "2026-05-22T11:05:00.000Z",
+          "text": "Проверь ведомость объемов и сопоставь её с рабочей документацией.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_volumes_sheet_msg_2",
+          "sender": "ai",
+          "timestamp": "2026-05-22T11:12:00.000Z",
+          "text": "Ведомость прочитана. По основным позициям объемы совпадают с листами КР, но по земляным работам требуется сверка с разделом ПЗУ.",
+          "attachments": [],
+          "actions": []
+        },
+        {
+          "id": "chat_volumes_sheet_msg_3",
+          "sender": "user",
+          "timestamp": "2026-05-22T11:18:00.000Z",
+          "text": "Принял. Оставим этот чат как рабочий контекст для последующей сверки.",
+          "attachments": [],
+          "actions": []
+        }
+      ]
+    }
+  ]
+}

@@ -1866,6 +1866,311 @@ window.SCOST_PROJECT_DATA = {
   const issues = data.issues || [];
   const processingLogEvents = data.processingLogEvents || [];
 
+  data.checks = data.checks || {};
+  data.checks.completeness = data.checks.completeness || {
+    summary: {
+      documentsTotal: 12,
+      processingCount: 1,
+      warningCount: 2,
+      errorCount: 1
+    },
+    requirements: [
+      {
+        id: "cmp-required-note",
+        kind: "required-document",
+        group: "Требуемые входящие документы",
+        title: "Пояснительная записка",
+        result: "Обязательный документ не найден среди входящих файлов.",
+        status: "not-completed"
+      },
+      {
+        id: "cmp-required-quantities",
+        kind: "required-document",
+        group: "Требуемые входящие документы",
+        title: "Ведомость объемов работ",
+        result: "Документ найден и обработан.",
+        status: "completed",
+        linkedFileId: "cmp-file-quantities"
+      },
+      {
+        id: "cmp-required-rd",
+        kind: "required-document",
+        group: "Требуемые входящие документы",
+        title: "Рабочая документация",
+        result: "Файлы найдены, один файл еще обрабатывается.",
+        status: "processing",
+        linkedFileId: "cmp-file-rd-pdf"
+      },
+      {
+        id: "cmp-required-source-archive",
+        kind: "required-document",
+        group: "Требуемые входящие документы",
+        title: "Архив исходных данных",
+        result: "Файл получен, но не был обработан. Загрузите архив повторно.",
+        status: "error",
+        linkedFileId: "cmp-file-source-archive"
+      },
+      {
+        id: "cmp-special-estimate",
+        kind: "special-condition",
+        group: "Особые условия",
+        title: "Состав проектной документации соответствует виду работ",
+        result: "Не найден документ, подтверждающий выполнение условия.",
+        status: "not-completed"
+      },
+      {
+        id: "cmp-special-approval",
+        kind: "special-condition",
+        group: "Особые условия",
+        title: "Ведомость объемов работ утверждена",
+        result: "Утверждающая подпись найдена в связанном документе.",
+        status: "completed",
+        linkedFileId: "cmp-file-quantities"
+      }
+    ],
+    files: [
+      {
+        id: "cmp-file-package",
+        kind: "parent",
+        name: "Комплект_документации_АСОР_67408.zip",
+        status: "ready",
+        declaredType: "Комплект рабочей документации",
+        detectedType: "Архив проектной документации",
+        comment: "Основной комплект от инициатора. Проверить состав рабочей документации и ведомость объемов работ.",
+        downloadable: true,
+        children: [
+          {
+            id: "cmp-file-rd-archive",
+            kind: "archive",
+            name: "РД_АОВ.zip",
+            status: "ready",
+            declaredType: "Архив рабочей документации",
+            detectedType: "ZIP-архив",
+            downloadable: true,
+            children: [
+              {
+                id: "cmp-file-quantities",
+                kind: "extracted",
+                name: "Ведомость_объемов_работ.xlsx",
+                status: "ready",
+                declaredType: "Ведомость объемов работ",
+                detectedType: "Таблица XLSX",
+                downloadable: true
+              },
+              {
+                id: "cmp-file-rd-pdf",
+                kind: "extracted",
+                name: "АОВ_Рабочая_документация.pdf",
+                status: "processing",
+                declaredType: "Рабочая документация",
+                detectedType: "Документ PDF",
+                downloadable: true
+              },
+              {
+                id: "cmp-file-scheme",
+                kind: "extracted",
+                name: "Схема_помещений.dwg",
+                status: "error",
+                declaredType: "Графическая документация",
+                detectedType: "Формат не определен",
+                downloadable: true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "cmp-file-source-archive",
+        kind: "parent",
+        name: "Исходные_данные_АСОР_67408.zip",
+        status: "error",
+        declaredType: "Исходные данные",
+        detectedType: "ZIP-архив",
+        comment: "Архив загружен повторно после ошибки первичной обработки.",
+        downloadable: true,
+        children: []
+      }
+    ]
+  };
+  data.checks.rdChanges = data.checks.rdChanges || {
+    changes: [
+      {
+        id: "rd-change-001",
+        rowId: "1.1.1",
+        rowNumber: "1.1.1",
+        name: "Кабель-канал мини ПВХ TMC 50x20 мм DKC 00313",
+        svLevel: "SV 2",
+        previousVolume: "252,000",
+        proposedVolume: "294,000",
+        reviewState: "warning",
+        warningReason: "Автоматически созданная строка ранее была изменена вручную.",
+        similarRows: [
+          {
+            rowId: "1.1.2",
+            rowNumber: "1.1.2",
+            name: "Крышка кабель-канала плоская белая для мини-канала TMC",
+            svLevel: "SV 0",
+            currentVolume: "223,000",
+            similarityPercent: 84
+          },
+          {
+            rowId: "1.2.1",
+            rowNumber: "1.2.1",
+            name: "Кабель-канал одноканальный DKC 00317 ПВХ",
+            svLevel: "SV 1",
+            currentVolume: "357,000",
+            similarityPercent: 79
+          }
+        ]
+      },
+      {
+        id: "rd-change-002",
+        rowId: "1.2.1",
+        rowNumber: "1.2.1",
+        name: "Кабель-канал одноканальный DKC 00317 ПВХ",
+        svLevel: "SV 1",
+        previousVolume: "357,000",
+        proposedVolume: "0,000",
+        reviewState: "warning",
+        warningReason: "Строка отсутствует в новой версии рабочей документации.",
+        similarRows: [
+          {
+            rowId: "1.1.1",
+            rowNumber: "1.1.1",
+            name: "Кабель-канал мини ПВХ TMC 50x20 мм DKC 00313",
+            svLevel: "SV 2",
+            currentVolume: "252,000",
+            similarityPercent: 81
+          },
+          {
+            rowId: "1.1.2",
+            rowNumber: "1.1.2",
+            name: "Крышка кабель-канала плоская белая для мини-канала TMC",
+            svLevel: "SV 0",
+            currentVolume: "223,000",
+            similarityPercent: 73
+          }
+        ]
+      },
+      {
+        id: "rd-change-003",
+        rowId: "2.1.1",
+        rowNumber: "2.1.1",
+        name: "Модуль автоматический КБ Пожарной Автоматики",
+        svLevel: "SV 2",
+        previousVolume: "0,000",
+        proposedVolume: "392,000",
+        reviewState: "warning",
+        warningReason: "В новой версии рабочей документации появилась строка.",
+        similarRows: [
+          {
+            rowId: "2.2.1",
+            rowNumber: "2.2.1",
+            name: "Модуль релейный адресный с контролем линии",
+            svLevel: "SV 1",
+            currentVolume: "526,000",
+            similarityPercent: 84
+          },
+          {
+            rowId: "2.2",
+            rowNumber: "2.2",
+            name: "Монтаж модуля адресного релейного согласования",
+            svLevel: "SV 0",
+            currentVolume: "526,000",
+            similarityPercent: 71
+          }
+        ]
+      },
+      {
+        id: "rd-change-004",
+        rowId: "1.1.2",
+        rowNumber: "1.1.2",
+        name: "Крышка кабель-канала плоская белая для мини-канала TMC",
+        svLevel: "SV 0",
+        previousVolume: "198,000",
+        proposedVolume: "223,000",
+        reviewState: "auto-applied",
+        warningReason: "",
+        similarRows: [
+          {
+            rowId: "1.1.1",
+            rowNumber: "1.1.1",
+            name: "Кабель-канал мини ПВХ TMC 50x20 мм DKC 00313",
+            svLevel: "SV 2",
+            currentVolume: "252,000",
+            similarityPercent: 86
+          },
+          {
+            rowId: "1.2.1",
+            rowNumber: "1.2.1",
+            name: "Кабель-канал одноканальный DKC 00317 ПВХ",
+            svLevel: "SV 1",
+            currentVolume: "357,000",
+            similarityPercent: 72
+          }
+        ]
+      },
+      {
+        id: "rd-change-005",
+        rowId: "1.3",
+        rowNumber: "1.3",
+        name: "Монтаж трубы ПВХ гофрированной Дн16",
+        svLevel: "SV 1",
+        previousVolume: "468,000",
+        proposedVolume: "491,000",
+        reviewState: "applied",
+        warningReason: "",
+        similarRows: [
+          {
+            rowId: "1.3.1",
+            rowNumber: "1.3.1",
+            name: "Труба ПВХ гофрированная легкая с протяжкой Д16 DKC 91916",
+            svLevel: "SV 0",
+            currentVolume: "500,000",
+            similarityPercent: 92
+          },
+          {
+            rowId: "1.2",
+            rowNumber: "1.2",
+            name: "Монтаж кабель-каналов ПВХ шириной до 30 мм включительно",
+            svLevel: "SV 1",
+            currentVolume: "386,000",
+            similarityPercent: 68
+          }
+        ]
+      },
+      {
+        id: "rd-change-006",
+        rowId: "1.4.1",
+        rowNumber: "1.4.1",
+        name: "Кабель ВВГнг(А)-LS 3x1,5-0,66 ГОСТ 31996-2012",
+        svLevel: "SV 2",
+        previousVolume: "567,000",
+        proposedVolume: "604,000",
+        reviewState: "cancelled",
+        warningReason: "",
+        similarRows: [
+          {
+            rowId: "1.5.1",
+            rowNumber: "1.5.1",
+            name: "Кабель монтажный МКШнг(А)-LS 5x0,75 мм",
+            svLevel: "SV 1",
+            currentVolume: "672,000",
+            similarityPercent: 75
+          },
+          {
+            rowId: "1.6.1",
+            rowNumber: "1.6.1",
+            name: "Кабель монтажный МКШнг(А)-LS 2x0,75 мм",
+            svLevel: "SV 2",
+            currentVolume: "429,000",
+            similarityPercent: 72
+          }
+        ]
+      }
+    ]
+  };
+
   const existingRowIds = new Set(asorRows.map((row) => row.id));
   const existingSourceIds = new Set(sourceAnrRows.map((row) => row.id));
   const existingDecisionIds = new Set(matchDecisions.map((decision) => decision.id));

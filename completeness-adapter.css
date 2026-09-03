@@ -1,0 +1,2135 @@
+/* D-CMP-04 source-style adapter.
+   The visual primitives come from ai-completeness-module; this file only
+   isolates them inside the existing review drawer and adapts the agreed flow. */
+
+.completeness-source-host {
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-heading: var(--font-sans);
+  --primary-base: 206;
+  --color-primary: hsl(var(--primary-base), 88%, 44%);
+  --color-primary-hover: hsl(var(--primary-base), 88%, 37%);
+  --color-primary-soft: hsl(var(--primary-base), 90%, 95%);
+  --color-primary-light: hsl(var(--primary-base), 90%, 95%);
+  --color-bg-main: hsl(210, 26%, 96%);
+  --color-bg-card: hsl(0, 0%, 100%);
+  --color-bg-contrast: hsl(210, 30%, 99%);
+  --color-border: hsl(210, 20%, 86%);
+  --color-border-strong: hsl(210, 22%, 78%);
+  --color-text-dark: hsl(215, 30%, 16%);
+  --color-text-medium: hsl(214, 18%, 38%);
+  --color-text-muted: hsl(212, 12%, 56%);
+  --color-status-gray: hsl(0, 0%, 62%);
+  --color-status-green: hsl(122, 46%, 34%);
+  --color-status-yellow: hsl(30, 100%, 48%);
+  --color-status-red: hsl(0, 66%, 47%);
+  --color-status-blue: hsl(212, 80%, 42%);
+  --shadow-sm: 0 2px 6px rgba(10, 25, 40, 0.05);
+  --shadow-md: 0 10px 24px rgba(12, 30, 49, 0.08);
+  --shadow-lg: 0 20px 45px rgba(10, 20, 35, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --transition-fast: 0.18s ease;
+  --transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+  overflow-x: hidden;
+  color: var(--color-text-dark);
+  background: var(--color-bg-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.completeness-source-host,
+.completeness-source-host *,
+.completeness-source-host *::before,
+.completeness-source-host *::after {
+  box-sizing: border-box;
+  letter-spacing: 0;
+}
+
+.completeness-source-host :where(h2, h3, h4, h5, p, ul, ol, li, fieldset, legend) {
+  margin: 0;
+  padding: 0;
+}
+
+.completeness-source-host button,
+.completeness-source-host input {
+  font-family: inherit;
+}
+
+.completeness-source-host button {
+  cursor: pointer;
+}
+
+.completeness-overview,
+.completeness-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Block-level hover and flat surfaces for the completeness mode. */
+
+.completeness-dashboard.rve-dashboard-card,
+.completeness-confirmation,
+.completeness-requirement-block.metadata-card,
+.completeness-files-accordion.tree-shell,
+.completeness-filter-panel.filtering-panel,
+.completeness-detail-file-head,
+.completeness-detail-page .metadata-section,
+.completeness-detail-page .superadmin-details {
+  box-shadow: none !important;
+}
+
+.completeness-dashboard.rve-dashboard-card,
+.completeness-confirmation,
+.completeness-requirement-block.metadata-card,
+.completeness-files-accordion.tree-shell,
+.completeness-detail-file-head,
+.completeness-detail-page .metadata-section {
+  outline: 1px solid transparent;
+  outline-offset: 0;
+  transition: outline-color var(--transition-fast);
+}
+
+.completeness-dashboard.rve-dashboard-card:hover,
+.completeness-confirmation:hover,
+.completeness-requirement-block.metadata-card:hover,
+.completeness-files-accordion.tree-shell:hover,
+.completeness-detail-file-head:hover,
+.completeness-detail-page .metadata-section:hover {
+  outline-color: var(--color-primary);
+}
+
+.completeness-dashboard.rve-dashboard-card:hover {
+  border-color: var(--color-primary);
+}
+
+.completeness-source-host .completeness-summary-head:hover,
+.completeness-source-host .completeness-dashboard-status:hover {
+  outline: 0;
+  box-shadow: none;
+}
+
+.completeness-source-host .completeness-summary-head:focus-visible,
+.completeness-source-host .completeness-dashboard-status:focus-visible {
+  outline: 2px solid hsl(214, 18%, 72%);
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.completeness-source-host .completeness-requirements-head:hover,
+.completeness-source-host .completeness-requirements-head:focus-visible {
+  background: hsl(210, 30%, 99%);
+}
+
+.completeness-source-host .completeness-files-head:hover,
+.completeness-source-host .completeness-files-head:focus-visible {
+  background: hsl(210, 38%, 98%);
+}
+
+.completeness-source-host .completeness-dashboard-status:hover,
+.completeness-source-host .completeness-dashboard-status:focus-visible {
+  background: hsl(var(--primary-base), 88%, 98%);
+}
+
+.completeness-source-host .overall-status-card:hover .overall-status-icon,
+.completeness-source-host .overall-status-icon:focus-visible {
+  box-shadow: none;
+}
+
+.completeness-source-host .pipeline-overview-summary:hover .accordion-arrow,
+.completeness-source-host .pipeline-overview-summary:focus-visible .accordion-arrow,
+.completeness-source-host .superadmin-summary:hover .accordion-arrow,
+.completeness-source-host .superadmin-summary:focus-visible .accordion-arrow {
+  border-color: hsl(214, 24%, 88%);
+  color: hsl(215, 24%, 18%);
+  background: #fff;
+  box-shadow: none;
+}
+
+/* Source RVE dashboard */
+
+.completeness-dashboard.rve-dashboard-card {
+  flex: 0 0 auto;
+  border-color: var(--color-border);
+  border-radius: 18px;
+  box-shadow: none;
+}
+
+.completeness-dashboard-status.overall-status-card.completeness-overall-alert {
+  align-items: center;
+  width: calc(100% - 16px);
+  min-height: 56px;
+  margin: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-status-red);
+  border-radius: 8px;
+  color: var(--color-status-red);
+  background: #fff;
+  box-shadow: none;
+  cursor: default;
+  text-align: left;
+}
+
+.completeness-dashboard-status.overall-status-card.completeness-overall-alert.overall-processing {
+  border-color: hsl(var(--primary-base), 72%, 64%);
+  color: hsl(var(--primary-base), 88%, 36%);
+  background: hsl(var(--primary-base), 88%, 97%);
+}
+
+.completeness-dashboard-status.overall-status-card.completeness-overall-alert.overall-success {
+  border-color: var(--color-status-green);
+  color: var(--color-status-green);
+}
+
+.completeness-dashboard-status-icon.overall-status-icon.tree-check-summary-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border-radius: 8px;
+  background: hsl(0, 72%, 97%);
+}
+
+.completeness-dashboard-status.overall-status-card.completeness-overall-alert.overall-processing
+  .completeness-dashboard-status-icon {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.completeness-dashboard-status-copy.overall-status-main.tree-check-summary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.completeness-dashboard-status-copy .overall-status-title {
+  color: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.completeness-dashboard-status-copy .overall-status-description {
+  color: var(--color-text-medium);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.completeness-overall-alert-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.completeness-recheck-action.tree-recalc-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: hsl(215, 24%, 28%);
+  background: transparent;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.completeness-recheck-action.tree-recalc-btn:hover {
+  border: 0;
+  color: hsl(209, 88%, 42%);
+  background: hsl(208, 100%, 96%);
+  box-shadow: none;
+}
+
+.completeness-recheck-action.tree-recalc-btn:focus-visible {
+  border: 0;
+  color: hsl(209, 88%, 42%);
+  background: hsl(208, 100%, 96%);
+  outline: 2px solid rgba(23, 122, 210, 0.24);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
+.completeness-recheck-action.tree-recalc-btn svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+.completeness-recheck-action.tree-recalc-btn:disabled {
+  border: 0;
+  color: hsl(215, 12%, 58%);
+  background: transparent;
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.completeness-recheck-action.tree-recalc-btn:disabled:hover {
+  border: 0;
+  color: hsl(215, 12%, 58%);
+  background: transparent;
+  box-shadow: none;
+}
+
+.completeness-overall-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: inherit;
+  background: transparent;
+}
+
+.completeness-overall-toggle:hover,
+.completeness-overall-toggle:focus-visible {
+  outline: none;
+}
+
+.completeness-overall-toggle:hover .position-accordion-icon,
+.completeness-overall-toggle:focus-visible .position-accordion-icon {
+  color: var(--blue);
+  border-color: #a9ccec;
+  background: #f8fbff;
+}
+
+.completeness-overall-toggle:focus-visible .position-accordion-icon {
+  box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.18);
+}
+
+.completeness-dashboard-body {
+  border: 0;
+}
+
+.completeness-dashboard-body[hidden],
+.completeness-pipeline-grid[hidden],
+.completeness-log-list[hidden] {
+  display: none !important;
+}
+
+.completeness-dashboard-metrics.rve-summary-cards {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-height: 240px;
+}
+
+.completeness-dashboard-metric.rve-summary-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  min-height: 100px;
+  padding: 18px 24px;
+  border-right: 1px solid hsl(214, 18%, 80%);
+  border-bottom: 1px solid hsl(214, 18%, 80%);
+}
+
+.completeness-dashboard-metric.profile {
+  grid-column: span 2;
+}
+
+.completeness-dashboard-metric:nth-child(4),
+.completeness-dashboard-metric:last-child {
+  border-right: 0;
+}
+
+.completeness-dashboard-metric:nth-child(n + 5) {
+  border-bottom: 0;
+}
+
+.completeness-dashboard-label.rve-summary-label,
+.completeness-dashboard-metric .rve-summary-note {
+  color: hsl(216, 14%, 47%);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.completeness-dashboard-metric .rve-summary-value {
+  margin-top: 12px;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.08;
+  cursor: help;
+}
+
+.completeness-dashboard-progress.rve-summary-progress {
+  height: 6px;
+  margin-top: 8px;
+}
+
+.completeness-confirmation {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border: 1px solid hsl(214, 24%, 86%);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-summary-head {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  color: var(--color-text-medium);
+  background: hsl(210, 30%, 99%);
+  text-align: left;
+}
+
+.completeness-source-host .completeness-requirements-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--color-border);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #728197;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 10px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.completeness-summary-head-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.completeness-summary-head-meta b {
+  min-width: 22px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  font-size: 11px;
+  text-align: center;
+}
+
+.completeness-requirement-block.metadata-card {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-requirement-group-head.classification-section-head {
+  display: flex;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  color: inherit;
+  background: #fff;
+  text-align: left;
+}
+
+.completeness-requirement-group-title {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.completeness-requirement-group-title h3 {
+  overflow: hidden;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #728197;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 10px;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.completeness-requirement-group-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.completeness-requirement-group-actions > b {
+  margin: 0;
+}
+
+.completeness-requirement-list[hidden] {
+  display: none !important;
+}
+
+.completeness-requirement-list.cross-links-list {
+  gap: 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+}
+
+.completeness-requirement-row.cross-link-item {
+  min-height: 72px;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+}
+
+.completeness-requirement-row.cross-link-item:last-child {
+  border-bottom: 0;
+}
+
+.completeness-requirement-copy strong,
+.completeness-requirement-copy > span {
+  display: block;
+}
+
+.completeness-requirement-copy.cross-link-content {
+  gap: 0;
+}
+
+.completeness-requirement-copy strong {
+  color: var(--color-text-dark);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.completeness-requirement-copy > span {
+  margin-top: 8px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.completeness-requirement-file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  color: var(--color-primary);
+  background: transparent;
+  font-size: 11px;
+}
+
+.completeness-requirement-file-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Source tree shell */
+
+.completeness-files-accordion.tree-shell {
+  height: auto;
+  min-height: 0;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-files-head.tree-toolbar {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.completeness-files-head .tree-toolbar-main {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.completeness-files-head .tree-toolbar-title {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #728197;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 10px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.completeness-files-head .completeness-summary-head-meta {
+  display: none;
+}
+
+.completeness-files-head-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.completeness-tree-legend.tree-status-legend {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.completeness-tree-legend .tree-status-dot,
+.completeness-tree-legend .tree-status-empty {
+  box-sizing: border-box;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+}
+
+.completeness-summary-panel[hidden] {
+  display: none !important;
+}
+
+.completeness-files-panel {
+  display: block;
+  min-height: 0;
+  max-height: none;
+  padding: 0;
+}
+
+.completeness-tree-problem-summary.tree-check-summary {
+  display: flex;
+  min-height: 56px;
+  margin: 16px 0 8px;
+  padding: 10px 12px;
+}
+
+.completeness-tree-problem-summary .tree-check-summary-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.completeness-tree-problem-summary .tree-check-summary-text strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.completeness-tree-problem-summary .tree-check-summary-text small {
+  color: var(--color-text-medium);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.completeness-tree-problem-summary .tree-check-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.completeness-tree-problem-summary .tree-recalc-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.completeness-tree-tools.tree-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid hsl(214, 24%, 91%);
+  border-radius: 10px;
+  background: hsl(210, 30%, 99%);
+}
+
+.completeness-tree-search.tree-search-field {
+  flex: 1 1 auto;
+}
+
+.completeness-tree-filter.tree-filter-btn {
+  width: 34px;
+  height: 34px;
+}
+
+.completeness-tree-filter.tree-filter-btn > span {
+  display: inline-flex;
+}
+
+.tree-filter-control {
+  position: relative;
+  display: inline-flex;
+}
+
+.completeness-tree-scroll.tree-scroll-area {
+  height: 460px;
+  max-height: 460px;
+  min-height: 260px;
+  margin-top: 10px;
+  padding: 8px 0 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  background: #fff;
+}
+
+.completeness-file-tree.tree-nodes-list {
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.completeness-file-tree-row.tree-row {
+  display: flex;
+  grid-template-columns: none;
+  align-items: stretch;
+  width: 100%;
+  min-height: 58px;
+  margin: 0;
+  padding-left: 0;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+  outline: 0;
+  transition: background-color 0.14s ease;
+}
+
+.completeness-file-tree-node.tree-node-item + .completeness-file-tree-node.tree-node-item,
+.completeness-file-tree-children.nested-tree-group {
+  margin-top: 2px;
+}
+
+.completeness-file-tree-row.tree-row-attention-review {
+  border-left-color: transparent;
+}
+
+.completeness-file-tree-row.tree-row-attention-failed {
+  border-left-color: transparent;
+}
+
+.completeness-file-tree-row.tree-row-attention-review::before,
+.completeness-file-tree-row.tree-row-attention-failed::before {
+  width: 2px;
+}
+
+.completeness-file-tree-row.tree-row:hover,
+.completeness-file-tree-row.tree-row:focus-within {
+  border-color: transparent;
+  background: hsl(206, 100%, 97%);
+  box-shadow: none;
+}
+
+.completeness-file-tree-row.tree-row:focus-visible {
+  outline: 0;
+  box-shadow: inset 0 0 0 2px rgba(21, 101, 192, 0.25);
+}
+
+.completeness-file-tree-row.tree-row.active {
+  background: var(--color-primary-light);
+  box-shadow: none;
+}
+
+.completeness-file-tree-row.tree-row.active .node-name-text {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.completeness-file-tree-item.tree-td.col-tree-name {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  width: calc(100% - 48px);
+  min-width: 0;
+  padding-top: 10px;
+  padding-right: 12px;
+  padding-bottom: 10px;
+  background: transparent;
+}
+
+.completeness-file-tree-row .col-tree-actions {
+  display: flex;
+  flex: 0 0 44px;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  padding: 0 8px 0 0;
+}
+
+.completeness-tree-download {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid #cbd7e6;
+  border-radius: 6px;
+  color: #526174;
+  background: #fff;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  cursor: pointer;
+  transform: translateX(4px);
+  transition: opacity 0.14s ease, visibility 0.14s ease, transform 0.14s ease, color 0.14s ease, border-color 0.14s ease, background-color 0.14s ease;
+}
+
+.completeness-tree-download span,
+.completeness-tree-download svg {
+  width: 18px;
+  height: 18px;
+}
+
+.completeness-tree-download svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.completeness-file-tree-row:hover .completeness-tree-download,
+.completeness-file-tree-row:focus-within .completeness-tree-download {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.completeness-tree-download:hover,
+.completeness-tree-download:focus-visible {
+  color: #1265a8;
+  border-color: #76b5ec;
+  background: #eef7ff;
+  outline: none;
+}
+
+.completeness-file-tree-toggle.tree-toggle,
+.completeness-file-tree-toggle-placeholder.tree-toggle-placeholder {
+  display: inline-flex;
+  align-self: auto;
+  width: 24px;
+  height: 24px;
+  min-height: 24px;
+  padding: 0;
+  border-radius: 24px;
+}
+
+.completeness-file-extension.node-file-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 0;
+}
+
+.completeness-file-extension.node-file-icon .icon-label {
+  font-weight: 500;
+}
+
+.completeness-file-tree-copy.node-main-text {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.completeness-file-tree-copy .node-name-text {
+  max-width: none;
+  color: var(--color-text-dark);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.completeness-file-tree-copy .node-subline {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.completeness-file-tree-copy .node-type-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completeness-file-tree-copy .node-size-text {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.source-status-sr {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* The original filtering panel is kept visually intact but placed inline. */
+
+.completeness-filter-panel.filtering-panel.completeness-filter-inline {
+  position: relative;
+  inset: auto;
+  z-index: 3;
+  display: flex;
+  width: 100%;
+  height: min(580px, calc(100dvh - 140px));
+  min-height: min(420px, calc(100dvh - 140px));
+  max-height: min(580px, calc(100dvh - 140px));
+  margin: 0 0 12px;
+  padding: 0;
+  overflow: hidden;
+  transform: none;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-filter-panel .filtering-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px 16px 16px;
+  border-bottom: 1px solid hsl(214, 24%, 88%);
+  background: #fff;
+}
+
+.completeness-filter-panel .filtering-header h2 {
+  font-size: 15px;
+}
+
+.completeness-filter-panel .filtering-groups {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  max-height: none;
+  padding: 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.completeness-filter-panel .filtering-accordion {
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.completeness-filter-panel .filtering-accordion-head {
+  min-height: 48px;
+  padding: 0 12px;
+}
+
+.completeness-filter-panel .filtering-options {
+  display: flex;
+  max-height: none;
+  gap: 4px;
+  padding: 0 10px 10px;
+  overflow: visible;
+}
+
+.completeness-filter-panel .filtering-options[hidden] {
+  display: none;
+}
+
+.completeness-filter-panel .filtering-option {
+  min-height: 36px;
+  padding: 7px 8px;
+}
+
+.completeness-filter-panel .filtering-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  box-sizing: border-box;
+  width: 100%;
+  flex: 0 0 auto;
+  padding: 14px 16px 16px;
+  border-top: 1px solid hsl(214, 24%, 88%);
+  background: #fff;
+}
+
+.review-drawer .completeness-filter-panel .filtering-accordion:hover,
+.review-drawer .completeness-filter-panel .filtering-accordion.open,
+.review-drawer .completeness-filter-panel .filtering-accordion.open:hover {
+  box-shadow: none;
+}
+
+/* File detail uses the same flat block hierarchy as the review modes. */
+
+.completeness-detail-page {
+  gap: 12px;
+  --completeness-description-font-size: 12px;
+  --completeness-description-font-weight: 500;
+  --completeness-description-line-height: 16px;
+  --completeness-item-title-font-size: 14px;
+  --completeness-item-title-font-weight: 500;
+  --completeness-item-title-line-height: 18px;
+}
+
+.completeness-detail-file-head.metadata-header {
+  position: relative;
+  top: auto;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.completeness-detail-title-back.metadata-icon-action {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-medium);
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-detail-title-back.metadata-icon-action:hover,
+.completeness-detail-title-back.metadata-icon-action:focus-visible {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: #fff;
+}
+
+.completeness-detail-title-back.metadata-icon-action svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.completeness-detail-file-copy.metadata-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+}
+
+.completeness-detail-file-copy .metadata-filename {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completeness-detail-file-copy .metadata-file-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.completeness-detail-file-copy .metadata-file-meta span:not(:last-child)::after {
+  width: 4px;
+  height: 4px;
+  margin-left: 8px;
+}
+
+.completeness-detail-menu.metadata-header-actions {
+  grid-column: 3;
+  justify-self: end;
+  margin-left: auto;
+}
+
+.completeness-detail-menu-popover.metadata-actions-dropdown {
+  display: block;
+}
+
+.completeness-detail-menu-popover.metadata-actions-dropdown a,
+.completeness-detail-menu-popover.metadata-actions-dropdown button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 0;
+  color: var(--color-text-dark);
+  background: transparent;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.completeness-detail-section.metadata-section {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-detail-section-head.pipeline-overview-summary,
+.completeness-detail-section-head.logs-summary,
+.completeness-detail-section-label {
+  width: 100%;
+  min-height: 46px;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  color: #728197;
+  background: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 10px;
+  text-transform: uppercase;
+}
+
+.completeness-detail-section .section-title,
+.completeness-logs-section .logs-summary-title {
+  min-height: 0;
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: 0;
+  text-transform: inherit;
+}
+
+.completeness-pipeline-grid.pipeline-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  border: 0;
+}
+
+.completeness-pipeline-stage.pipeline-stage-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  min-width: 0;
+  min-height: 164px;
+  padding: 12px 10px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+  text-align: center;
+}
+
+.completeness-pipeline-stage .pipeline-stage-copy {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  text-align: center;
+}
+
+.completeness-pipeline-stage .pipeline-stage-icon-wrap {
+  width: 58px;
+  height: 58px;
+  align-self: center;
+}
+
+.completeness-pipeline-stage .pipeline-stage-icon svg {
+  width: 31px;
+  height: 31px;
+}
+
+.completeness-pipeline-stage .pipeline-state-badge {
+  top: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-width: 2px;
+}
+
+.completeness-pipeline-stage .pipeline-state-badge svg {
+  width: 13px;
+  height: 13px;
+}
+
+.completeness-pipeline-stage .pipeline-stage-icon {
+  color: var(--pipeline-tone);
+}
+
+.completeness-pipeline-stage .pipeline-state-badge {
+  color: #fff;
+}
+
+.completeness-pipeline-stage .pipeline-stage-icon path,
+.completeness-pipeline-stage .pipeline-stage-icon circle,
+.completeness-pipeline-stage .pipeline-state-badge path,
+.completeness-pipeline-stage .pipeline-state-badge circle {
+  fill: none;
+  stroke: currentColor;
+}
+
+.completeness-pipeline-stage .pipeline-stage-title {
+  color: var(--color-text-dark);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.completeness-pipeline-stage .pipeline-stage-status {
+  color: var(--pipeline-tone);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+.completeness-pipeline-stage .pipeline-stage-message {
+  min-height: 48px;
+  color: var(--color-text-medium);
+  -webkit-line-clamp: 3;
+  font-size: var(--completeness-description-font-size);
+  font-weight: var(--completeness-description-font-weight);
+  line-height: var(--completeness-description-line-height);
+  text-align: center;
+}
+
+.completeness-detail-section-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.completeness-classification-section .classification-section-head {
+  margin: 0;
+}
+
+.completeness-classification-section.metadata-section {
+  overflow: hidden;
+}
+
+.completeness-classification-card.classification-card {
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 82px;
+  align-items: stretch;
+  gap: 0;
+  min-height: 76px;
+  margin: 12px;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.completeness-classification-card.classification-card::before {
+  content: none;
+}
+
+.completeness-classification-card > .completeness-classification-comparison {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: stretch;
+  gap: 0;
+  min-width: 0;
+  min-height: 76px;
+  padding: 0;
+  border: 0;
+  background: #fff;
+}
+
+.completeness-classification-card > .completeness-classification-comparison:first-child {
+  border: 0;
+}
+
+.completeness-classification-comparison::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: #dbe3ed;
+  content: "";
+}
+
+.completeness-classification-card .classification-type-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  min-height: 0;
+  padding: 12px;
+  border: 0;
+  background: transparent;
+  z-index: 1;
+}
+
+.completeness-classification-card .classification-match-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  border: 1px solid #d6e0ec;
+  border-radius: 50%;
+  color: var(--color-text-dark);
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(30, 48, 72, 0.1);
+  transform: translate(-50%, -50%);
+}
+
+.completeness-classification-card .classification-match-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.completeness-classification-card .classification-match-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.completeness-classification-card .classification-type-ai {
+  padding-left: 24px;
+}
+
+.completeness-classification-card .classification-label {
+  color: #7b8797;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+}
+
+.completeness-classification-card .classification-value {
+  min-width: 0;
+  overflow: hidden;
+  color: #26384f;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completeness-classification-section .completeness-detail-section-label .classification-confidence-label {
+  display: inline-flex;
+  flex: 0 1 auto;
+  max-width: 52%;
+  align-items: center;
+  margin-left: auto;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completeness-classification-card .classification-confidence {
+  --confidence-ring: hsl(126, 34%, 40%);
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  justify-self: center;
+  width: 58px;
+  height: 58px;
+  min-height: 0;
+  padding: 0;
+  border-radius: 999px;
+  color: var(--color-text-dark);
+  background: conic-gradient(var(--confidence-ring) var(--confidence-value), hsl(214, 24%, 90%) 0);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0;
+  gap: 0;
+  z-index: 1;
+}
+
+.completeness-classification-card > .classification-confidence {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  gap: 0;
+}
+
+.completeness-classification-card .classification-confidence::before {
+  position: absolute;
+  inset: 7px;
+  border-radius: inherit;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.04);
+  content: "";
+}
+
+.completeness-classification-card .classification-confidence span {
+  position: relative;
+  z-index: 1;
+}
+
+.completeness-classification-card .classification-confidence.confidence-green {
+  --confidence-ring: hsl(126, 34%, 40%);
+}
+
+.completeness-classification-card .classification-confidence.confidence-yellow {
+  --confidence-ring: hsl(30, 72%, 46%);
+}
+
+.completeness-classification-card .classification-confidence.confidence-red {
+  --confidence-ring: hsl(0, 48%, 48%);
+}
+
+.completeness-classification-card:has(+ .completeness-classification-message) {
+  margin-bottom: 0;
+}
+
+.completeness-classification-message {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  margin: 8px 12px 12px;
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+  color: #765317;
+  background: #fff9ec;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.completeness-classification-message > span:first-child {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: #c48712;
+}
+
+.completeness-classification-message > span:first-child svg {
+  width: 18px;
+  height: 18px;
+}
+
+.completeness-classification-message > span:last-child {
+  min-width: 0;
+}
+
+.completeness-links-section .completeness-link-list,
+.completeness-comments-section .completeness-detail-comments {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.completeness-links-section .completeness-link-list {
+  padding: 0;
+}
+
+.completeness-comments-section .completeness-detail-comments {
+  padding: 12px;
+}
+
+.completeness-links-section .cross-link-content,
+.completeness-requirement-row .cross-link-content {
+  min-width: 0;
+}
+
+.completeness-links-section .cross-link-text,
+.completeness-links-section .cross-link-context,
+.completeness-requirement-row .cross-link-content strong,
+.completeness-requirement-row .cross-link-content > span {
+  overflow-wrap: anywhere;
+}
+
+.completeness-detail-page .completeness-links-section .cross-link-context,
+.completeness-detail-page .completeness-logs-section .log-entry p {
+  font-size: var(--completeness-description-font-size);
+  font-weight: var(--completeness-description-font-weight);
+  line-height: var(--completeness-description-line-height);
+}
+
+.completeness-comments-section .document-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.completeness-comments-section .document-comment-item {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding: 10px 12px;
+  border: 1px solid hsl(214, 24%, 92%);
+  border-radius: 10px;
+  background: hsl(210, 36%, 99%);
+}
+
+.completeness-comments-section .document-comment-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.completeness-comments-section .document-comment-author {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-dark);
+  font-size: var(--completeness-item-title-font-size);
+  font-weight: var(--completeness-item-title-font-weight);
+  line-height: var(--completeness-item-title-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.completeness-comments-section .document-comment-date {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.completeness-comments-section .document-comment-text {
+  margin: 0;
+  color: var(--color-text-medium);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.completeness-detail-page .completeness-logs-section .log-entry strong {
+  color: var(--color-text-dark);
+  font-size: var(--completeness-item-title-font-size);
+  font-weight: var(--completeness-item-title-font-weight);
+  line-height: var(--completeness-item-title-line-height);
+}
+
+.completeness-logs-section.logs-accordion {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.completeness-logs-section .logs-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 24px;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 14px;
+}
+
+.completeness-logs-section .logs-content {
+  padding: 12px 14px 14px;
+}
+
+@media (max-width: 820px) {
+  .completeness-source-host {
+    padding: 10px;
+  }
+
+  .completeness-dashboard-metrics.rve-summary-cards,
+  .completeness-pipeline-grid.pipeline-overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .completeness-files-head.tree-toolbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+
+  .completeness-tree-legend.tree-status-legend {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .completeness-tree-problem-summary.tree-check-summary {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .completeness-tree-problem-summary .tree-check-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .completeness-dashboard-status.overall-status-card.completeness-overall-alert {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .completeness-overall-alert-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .completeness-classification-card.classification-card {
+    grid-template-columns: minmax(0, 1fr) 72px;
+  }
+
+  .completeness-classification-card .classification-confidence {
+    grid-column: auto;
+    justify-self: center;
+    margin: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .completeness-dashboard-metrics.rve-summary-cards,
+  .completeness-pipeline-grid.pipeline-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .completeness-confirmation {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .completeness-confirmation-actions {
+    grid-column: 1 / -1;
+  }
+
+  .completeness-tree-scroll.tree-scroll-area {
+    max-height: 420px;
+  }
+}
+
+/* Shared status-tag contract for every review-drawer mode. */
+.review-drawer {
+  --review-tag-height: 20px;
+  --review-tag-min-width: 44px;
+  --review-tag-max-width: 180px;
+  --review-tag-padding-x: 8px;
+  --review-tag-radius: 4px;
+  --review-tag-font-size: 10px;
+  --review-tag-font-weight: 500;
+  --review-tag-line-height: 18px;
+}
+
+.review-drawer .review-kicker,
+.review-drawer .issue-tag,
+.review-drawer .match-chip,
+.review-drawer .rd-change-level,
+.review-drawer .cross-link-badge,
+.review-drawer .classification-confidence-label > strong {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: var(--review-tag-min-width);
+  max-width: min(var(--review-tag-max-width), 100%);
+  height: var(--review-tag-height);
+  min-height: var(--review-tag-height);
+  padding: 0 var(--review-tag-padding-x);
+  overflow: hidden;
+  border-radius: var(--review-tag-radius);
+  font-size: var(--review-tag-font-size);
+  font-weight: var(--review-tag-font-weight);
+  line-height: var(--review-tag-line-height);
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Drawer blocks use one hover signal: the outer border turns blue. */
+.review-drawer .position-accordion:hover,
+.review-drawer .normalization-panel:hover,
+.review-drawer .result-ai-panel:hover,
+.review-drawer .result-logic-head:hover,
+.review-drawer .reference-panel:hover,
+.review-drawer .comments-accordion:hover,
+.review-drawer .info-card:hover,
+.review-drawer .completeness-dashboard.rve-dashboard-card:hover,
+.review-drawer .completeness-confirmation:hover,
+.review-drawer .completeness-requirement-block.metadata-card:hover,
+.review-drawer .completeness-files-accordion.tree-shell:hover,
+.review-drawer .completeness-filter-panel.filtering-panel:hover,
+.review-drawer .filtering-accordion:hover,
+.review-drawer .completeness-detail-file-head:hover,
+.review-drawer .completeness-detail-page .metadata-section:hover,
+.review-drawer .completeness-logs-section.logs-accordion:hover,
+.review-drawer .cross-links-list:hover {
+  border-color: var(--blue) !important;
+  outline: 0 !important;
+  filter: none;
+  transform: none;
+}
+
+/* A hovered header does not repaint the accordion content. */
+.review-drawer .position-accordion-head:hover,
+.review-drawer .result-ai-head:hover,
+.review-drawer .reference-head:hover,
+.review-drawer .comments-accordion-head:hover,
+.review-drawer .match-panel-head:hover {
+  background: #fff;
+}
+
+.review-drawer .position-accordion-head:hover,
+.review-drawer .result-ai-head:hover {
+  color: #728197;
+}
+
+.review-drawer .completeness-files-head:hover {
+  color: var(--color-text-medium);
+  background: transparent;
+}
+
+.review-drawer .completeness-dashboard-status:hover {
+  background: #fff;
+}
+
+.review-drawer .completeness-detail-section-head:hover {
+  background: transparent;
+  outline: 0;
+}
+
+.review-drawer .filtering-accordion-head:hover {
+  background: #fff;
+  outline: 0;
+}
+
+/* Cards use a quiet gray fill with a slight blue tint; their parent block keeps the blue border. */
+.review-drawer {
+  --review-card-hover-bg: hsl(210, 24%, 97%);
+}
+
+.review-drawer .issue-card:hover,
+.review-drawer .candidate-list li:hover,
+.review-drawer .completeness-file-tree-row.tree-row:hover,
+.review-drawer .cross-link-item:hover,
+.review-drawer .completeness-classification-card.classification-card:hover,
+.review-drawer .completeness-pipeline-stage.pipeline-stage-card:hover,
+.review-drawer .filtering-option:hover,
+.review-drawer .document-comment-item:hover,
+.review-drawer .comment-message:hover {
+  background: var(--review-card-hover-bg) !important;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer .issue-card:not(.active):hover,
+.review-drawer .candidate-list li:hover {
+  border-color: #d7e1ed !important;
+}
+
+.review-drawer .issue-card.active:hover {
+  border-color: var(--blue) !important;
+}
+
+.review-drawer .rd-changes-accordion .rd-change-card.active:hover,
+.review-drawer .rd-similar-accordion .rd-similar-card:hover {
+  background: var(--review-card-hover-bg) !important;
+  box-shadow: none;
+}
+
+.review-drawer .completeness-dashboard-metric.rve-summary-card:hover {
+  background: #fff !important;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer .completeness-requirement-block .completeness-requirement-row.cross-link-item:hover {
+  background: #fff !important;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer .rd-changes-accordion .rd-change-card > .rd-change-comparison,
+.review-drawer .rd-changes-accordion .rd-change-card > .rd-change-comparison > .rd-change-volume,
+.review-drawer .rd-changes-accordion .rd-change-card > .rd-change-reason-shell {
+  background: transparent !important;
+}
+
+.review-drawer .completeness-classification-card.classification-card:hover {
+  border-color: var(--color-border) !important;
+}
+
+.review-drawer .completeness-pipeline-stage.pipeline-stage-card:hover {
+  border-color: var(--pipeline-border) !important;
+}
+
+/* File-detail hover belongs to the top-level section, not to its nested cards. */
+.review-drawer .completeness-detail-page .completeness-pipeline-stage.pipeline-stage-card:hover,
+.review-drawer .completeness-detail-page .completeness-classification-card.classification-card:hover,
+.review-drawer .completeness-detail-page .completeness-links-section .cross-link-item:hover {
+  background: #fff !important;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer .completeness-detail-page .completeness-comments-section .document-comment-item:hover {
+  border-color: hsl(214, 24%, 92%) !important;
+  background: hsl(210, 36%, 99%) !important;
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer .filtering-accordion:hover {
+  box-shadow: none;
+}
+
+.review-drawer .filtering-accordion.open:hover {
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.review-drawer .completeness-file-tree-row.tree-row:hover {
+  border-color: transparent !important;
+  background: #f3f4f6 !important;
+  box-shadow: none;
+}
+
+.review-drawer .completeness-file-tree-row.tree-row.active:hover {
+  background: #f3f4f6 !important;
+}
+
+/* Accordion affordances remain visually unchanged while their container is hovered. */
+.review-drawer .position-accordion-head:hover .position-accordion-icon,
+.review-drawer .result-ai-head:hover .position-accordion-icon,
+.review-drawer .completeness-requirement-group-head:hover .position-accordion-icon,
+.review-drawer .completeness-files-head:hover .position-accordion-icon,
+.review-drawer .reference-head:hover .reference-accordion-icon,
+.review-drawer .comments-accordion-head:hover .comments-accordion-icon,
+.review-drawer .normalization-panel:hover .match-accordion-icon {
+  border-color: #cbd7e6;
+  color: #526174;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(27, 49, 77, 0.06);
+}
+
+.review-drawer .result-logic-head:hover {
+  color: #26384f;
+  background: #f6f8fb;
+  box-shadow: none;
+}
+
+.review-drawer .result-logic-head:hover i {
+  color: #4f46e5;
+}
+
+.review-drawer .overall-status-card:hover .overall-status-glyph {
+  opacity: 1;
+  transform: none;
+}
+
+.review-drawer .overall-status-card:hover .overall-summary-toggle-glyph {
+  opacity: 0;
+  transform: translateY(2px) scale(0.92);
+}
+
+/* Completeness surfaces stay visually stable on hover. Interactive rows and
+   controls retain their own affordances. */
+.review-drawer[data-review-mode="completeness"] :is(
+  .completeness-dashboard.rve-dashboard-card,
+  .completeness-confirmation,
+  .completeness-requirement-block.metadata-card,
+  .completeness-files-accordion.tree-shell,
+  .completeness-filter-panel.filtering-panel,
+  .filtering-accordion,
+  .completeness-detail-file-head,
+  .completeness-detail-page .metadata-section,
+  .completeness-logs-section.logs-accordion,
+  .cross-links-list
+):hover {
+  border-color: var(--color-border) !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer[data-review-mode="completeness"] .completeness-files-accordion.tree-shell:hover {
+  border-color: hsl(214, 24%, 88%) !important;
+}
+
+.review-drawer[data-review-mode="completeness"] :is(
+  .completeness-dashboard.rve-dashboard-card,
+  .completeness-confirmation,
+  .completeness-requirement-block.metadata-card,
+  .completeness-files-accordion.tree-shell,
+  .completeness-filter-panel.filtering-panel,
+  .filtering-accordion,
+  .completeness-detail-file-head,
+  .completeness-detail-page .metadata-section,
+  .completeness-logs-section.logs-accordion,
+  .cross-links-list
+) {
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+.review-drawer[data-review-mode="completeness"] .completeness-dashboard-status:hover,
+.review-drawer[data-review-mode="completeness"] .completeness-requirements-head:hover,
+.review-drawer[data-review-mode="completeness"] .completeness-files-head:hover,
+.review-drawer[data-review-mode="completeness"] .completeness-detail-section-head:hover {
+  background: #fff;
+  outline: 0;
+  box-shadow: none;
+}
+
+.review-drawer[data-review-mode="completeness"] .completeness-detail-page :is(
+  .completeness-pipeline-stage.pipeline-stage-card,
+  .completeness-classification-card.classification-card,
+  .cross-link-item
+):hover {
+  background: #fff !important;
+  box-shadow: none !important;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer[data-review-mode="completeness"] .completeness-detail-page .completeness-pipeline-stage.pipeline-stage-card:hover {
+  border-color: var(--pipeline-border) !important;
+}
+
+.review-drawer[data-review-mode="completeness"] .completeness-detail-page .completeness-classification-card.classification-card:hover {
+  border-color: var(--color-border) !important;
+}
+
+.review-drawer[data-review-mode="completeness"] .completeness-detail-page .document-comment-item,
+.review-drawer[data-review-mode="completeness"] .completeness-detail-page .document-comment-item:hover {
+  border-color: hsl(214, 24%, 92%) !important;
+  background: hsl(210, 36%, 99%) !important;
+  box-shadow: none !important;
+  filter: none;
+  transform: none;
+}
+
+/* ANR and RD section containers stay static; list cards and controls keep
+   their own interaction feedback. */
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) :is(
+  .position-accordion,
+  .normalization-panel,
+  .result-ai-panel,
+  .reference-panel,
+  .comments-accordion,
+  .info-card,
+  .result-logic-head
+) {
+  outline: 0;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) .position-accordion:hover {
+  border-color: #cfd9e7 !important;
+  border-bottom-color: var(--line) !important;
+  outline: 0 !important;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) :is(
+  .normalization-panel,
+  .result-ai-panel,
+  .reference-panel,
+  .comments-accordion
+):hover {
+  border-color: #cfd9e7 !important;
+  outline: 0 !important;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) .info-card:hover {
+  border-color: #dbe3ed !important;
+  outline: 0 !important;
+  filter: none;
+  transform: none;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) :is(
+  .position-accordion-head,
+  .result-ai-head,
+  .reference-head,
+  .comments-accordion-head,
+  .match-panel-head
+):hover {
+  background: #fff;
+  box-shadow: none;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) .position-accordion-head:hover,
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) .result-ai-head:hover {
+  color: #728197;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) .result-logic-head:hover {
+  border-color: #dbe3ed !important;
+  color: #26384f;
+  background: #f6f8fb;
+  box-shadow: none;
+}
+
+.review-drawer:is([data-review-mode="anr"], [data-review-mode="rd-changes"]) .result-logic-head:hover i {
+  color: #4f46e5;
+}
+
+/* Outer content surfaces use the same radius as the ANR accordion blocks. */
+.review-drawer {
+  --review-content-block-radius: 10px;
+}
+
+.review-drawer :is(
+  .position-accordion,
+  .normalization-panel,
+  .result-ai-panel,
+  .reference-panel,
+  .comments-accordion,
+  .completeness-dashboard.rve-dashboard-card,
+  .completeness-confirmation,
+  .completeness-requirement-block.metadata-card,
+  .completeness-files-accordion.tree-shell,
+  .completeness-filter-panel.filtering-panel,
+  .completeness-detail-file-head.metadata-header,
+  .completeness-detail-section.metadata-section
+) {
+  border-radius: var(--review-content-block-radius);
+}
+
+/* The files accordion follows the same 46px header contract as requirement groups. */
+.review-drawer .completeness-files-accordion.tree-shell {
+  padding: 0;
+}
+
+.review-drawer .completeness-files-head.tree-toolbar {
+  min-height: 46px;
+  padding: 0 14px;
+}
+
+.review-drawer .completeness-files-panel {
+  padding: 0 16px 16px;
+}
+
+.review-drawer .completeness-files-accordion.collapsed .completeness-tree-legend {
+  display: none;
+}

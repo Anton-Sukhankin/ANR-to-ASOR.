@@ -1,13 +1,34 @@
 ﻿/* ===========================================================================
-   AI SIDEBAR DRAWER
-   S.Cost / src / components / AISidebarDrawer / AISidebarDrawer.js
+   PORTABLE AI CHAT DRAWER
+   Публичная интеграция выполняется через window.SCostAIChat.
    =========================================================================== */
 
+const CHAT_WORKSPACE_STORAGE_KEY = 'escost.anrAsor.aiChatWorkspace.v1';
 const defaultChatHistory = [];
 
-const initialChatWorkspace = createEscostInitialWorkspace();
+const defaultAIChatHostAdapter = {
+  getMountElement: () => document.getElementById('ai-sidebar-drawer-root'),
+  getTriggerElement: () => document.getElementById('btn-trigger-ai-chat'),
+  getContext: () => ({
+    mode: 'general',
+    projectTitle: 'Контекст не выбран',
+    selectedNodeId: null,
+    selectedNodeName: null
+  }),
+  getContextLabel: context => `Контекст: ${context?.projectTitle || 'не выбран'}`,
+  getSuggestedChatTitle: context => context?.selectedNodeName || 'Новый чат',
+  getInitialWorkspace: createEscostInitialWorkspace,
+  loadWorkspace: null,
+  saveWorkspace: null,
+  sendMessage: null,
+  onBeforeOpen: null,
+  onOpenChange: null,
+  onAttachFile: null,
+  onAction: null
+};
 
-const CHAT_WORKSPACE_STORAGE_KEY = 'escost.anrAsor.aiChatWorkspace.v1';
+let aiChatHostAdapter = { ...defaultAIChatHostAdapter };
+let initialChatWorkspace = createEscostInitialWorkspace();
 let chatWorkspace = loadChatWorkspaceFromStorage();
 let isChatWorkspaceCollapsed = false;
 
@@ -16,13 +37,33 @@ function cloneValue(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function configureAIChat(hostAdapter = {}) {
+  aiChatHostAdapter = {
+    ...defaultAIChatHostAdapter,
+    ...hostAdapter
+  };
+  initialChatWorkspace = cloneValue(
+    aiChatHostAdapter.getInitialWorkspace?.() || createEscostInitialWorkspace()
+  );
+  chatWorkspace = loadChatWorkspaceFromStorage();
+
+  if (document.getElementById('ai-drawer')) {
+    updateAIDrawerContext();
+    renderChatWorkspaceAccordion();
+    renderChatMessages();
+  }
+}
+
+window.configureAIChat = configureAIChat;
+
 function loadChatWorkspaceFromStorage() {
   try {
-    window.localStorage?.removeItem(CHAT_WORKSPACE_STORAGE_KEY);
+    const storedWorkspace = aiChatHostAdapter.loadWorkspace?.(CHAT_WORKSPACE_STORAGE_KEY);
+    if (storedWorkspace?.chats?.length) return cloneValue(storedWorkspace);
   } catch (error) {
-    // localStorage может быть недоступен; чат просто стартует с чистого состояния.
+    console.warn('[AIChat] Не удалось загрузить историю чатов.', error);
   }
-  return cloneValue(createEscostInitialWorkspace());
+  return cloneValue(initialChatWorkspace);
 }
 
 function createEscostInitialWorkspace() {
@@ -148,7 +189,14 @@ function createLongAsorChatHistory() {
 }
 
 function persistChatWorkspace() {
-  // История чата намеренно хранится только в памяти текущей страницы.
+  try {
+    aiChatHostAdapter.saveWorkspace?.(
+      CHAT_WORKSPACE_STORAGE_KEY,
+      cloneValue(chatWorkspace)
+    );
+  } catch (error) {
+    console.warn('[AIChat] Не удалось сохранить историю чатов.', error);
+  }
 }
 
 function getActiveChat() {
@@ -177,8 +225,9 @@ function escapeHtml(value) {
 }
 
 window.initAIDrawer = function() {
-  const sceneRoot = document.getElementById('ai-sidebar-drawer-root');
+  const sceneRoot = aiChatHostAdapter.getMountElement?.();
   if (!sceneRoot) return;
+  sceneRoot.classList.add('ai-chat-mount');
 
   sceneRoot.innerHTML = `
     <div id="ai-drawer" class="ai-drawer">
@@ -217,7 +266,7 @@ window.initAIDrawer = function() {
             <div class="ai-drawer-footer">
               <div class="input-container">
                 <textarea class="ai-chat-textarea" id="ai-chat-input" placeholder="Задать вопрос по смете или интерфейсу..." rows="1"></textarea>
-                <button class="btn-attach-file" onclick="alert('Прикрепление файлов: выберите документ для добавления в контекст чата ИИ.')" title="Прикрепить файл" aria-label="Прикрепить файл">
+                <button class="btn-attach-file" id="btn-attach-file-btn" type="button" title="Прикрепить файл" aria-label="Прикрепить файл">
                   <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
                     <path d="M8.5 12.5 14.9 6.1a3.2 3.2 0 1 1 4.5 4.5L10.2 19.8a5 5 0 0 1-7.1-7.1l8.6-8.6a6.7 6.7 0 0 1 9.5 9.5l-8.6 8.6"></path>
                   </svg>
@@ -247,22 +296,13 @@ window.initAIDrawer = function() {
 };
 
 function getAIDrawerContextLabel() {
-  const projectTitle = getCurrentProjectTitle();
-  const reviewDrawer = document.getElementById('reviewDrawer');
-  const reviewTitle = document.getElementById('reviewContextTitle')?.textContent?.trim();
-  const reviewStatus = document.getElementById('reviewCollisionType')?.textContent?.trim();
-
-  if (reviewDrawer?.getAttribute('aria-hidden') === 'false' && reviewTitle) {
-    const statusLabel = reviewStatus ? ` · ${reviewStatus}` : '';
-    return `Контекст: проверка позиции · ${reviewTitle}${statusLabel}`;
-  }
-
-  return `Контекст: текущая смета · ${projectTitle} · АНР → АСОР`;
+  const context = getCurrentChatContext();
+  return aiChatHostAdapter.getContextLabel?.(context)
+    || `Контекст: ${context.projectTitle || 'не выбран'}`;
 }
 
 function getCurrentProjectTitle() {
-  const title = document.querySelector('.title-row h1')?.textContent?.trim();
-  return title || 'АСОР №67408';
+  return getCurrentChatContext().projectTitle || 'Контекст не выбран';
 }
 
 function updateAIDrawerContext() {
@@ -278,6 +318,8 @@ window.toggleAIDrawer = function() {
   const drawer = document.getElementById('ai-drawer');
   if (!drawer) return;
 
+  const willOpen = !drawer.classList.contains('open');
+  if (willOpen && aiChatHostAdapter.onBeforeOpen?.() === false) return;
   const isOpen = drawer.classList.toggle('open');
   document.body.classList.toggle('ai-chat-open', isOpen);
   if (isOpen) {
@@ -289,13 +331,16 @@ window.toggleAIDrawer = function() {
   } else {
     collapseChatWorkspaceAccordion();
   }
+  aiChatHostAdapter.onOpenChange?.(isOpen);
 };
 
 window.closeAIDrawer = function() {
   const drawer = document.getElementById('ai-drawer');
+  const wasOpen = drawer?.classList.contains('open') || false;
   if (drawer) drawer.classList.remove('open');
   document.body.classList.remove('ai-chat-open');
   collapseChatWorkspaceAccordion();
+  if (wasOpen) aiChatHostAdapter.onOpenChange?.(false);
 };
 
 function collapseChatWorkspaceAccordion() {
@@ -711,22 +756,20 @@ window.confirmCreateChat = function() {
 };
 
 function getSuggestedChatTitle() {
-  const selectedNode = window.activeTreeNodeId && window.findMetadataNodeById
-    ? window.findMetadataNodeById(window.activeTreeNodeId)
-    : null;
-  return selectedNode?.name || 'Новый чат: контекст не выбран';
+  const context = getCurrentChatContext();
+  return aiChatHostAdapter.getSuggestedChatTitle?.(context)
+    || context.selectedNodeName
+    || 'Новый чат';
 }
 
 function getCurrentChatContext() {
-  const selectedNode = window.activeTreeNodeId && window.findMetadataNodeById
-    ? window.findMetadataNodeById(window.activeTreeNodeId)
-    : null;
-
+  const context = aiChatHostAdapter.getContext?.() || {};
   return {
-    mode: window.metadataPanelState?.mode || (selectedNode ? 'selected-document' : 'general'),
-    projectTitle: getCurrentProjectTitle(),
-    selectedNodeId: selectedNode?.id || null,
-    selectedNodeName: selectedNode?.name || null
+    mode: context.mode || 'general',
+    projectTitle: context.projectTitle || 'Контекст не выбран',
+    selectedNodeId: context.selectedNodeId || null,
+    selectedNodeName: context.selectedNodeName || null,
+    ...context
   };
 }
 
@@ -767,7 +810,7 @@ function renderChatMessages() {
         ${avatarHtml}
         <div class="chat-message-content">
           <div class="message-meta">
-            <span class="message-sender font-weight-600">${senderName}</span>
+            <span class="message-sender">${senderName}</span>
           </div>
           <div class="chat-bubble ${bubbleClass}">
             <div class="bubble-text">${textHtml}</div>
@@ -907,7 +950,7 @@ function setupOutsideClickClose() {
     const drawer = document.getElementById('ai-drawer');
     if (!drawer?.classList.contains('open')) return;
 
-    const trigger = document.getElementById('btn-trigger-ai-chat');
+    const trigger = aiChatHostAdapter.getTriggerElement?.();
     const clickedInsideDrawer = drawer.contains(event.target);
     const clickedTrigger = trigger?.contains(event.target);
 
@@ -919,6 +962,7 @@ function setupOutsideClickClose() {
 function setupInputHandlers() {
   const input = document.getElementById('ai-chat-input');
   const sendBtn = document.getElementById('btn-send-message-btn');
+  const attachBtn = document.getElementById('btn-attach-file-btn');
   if (!input) return;
 
   input.addEventListener('input', () => {
@@ -934,6 +978,14 @@ function setupInputHandlers() {
   });
 
   if (sendBtn) sendBtn.addEventListener('click', handleUserSendMessage);
+  if (attachBtn) {
+    attachBtn.addEventListener('click', () => {
+      aiChatHostAdapter.onAttachFile?.({
+        chat: cloneValue(getActiveChat()),
+        context: getCurrentChatContext()
+      });
+    });
+  }
 }
 
 function handleUserSendMessage() {
@@ -956,54 +1008,68 @@ function handleUserSendMessage() {
 
   input.value = '';
   input.style.height = 'auto';
-  simulateAiResponse(text);
+  void requestAiResponse(text);
 }
 
-function simulateAiResponse(userText) {
+async function requestAiResponse(userText) {
   const typing = document.getElementById('typing-indicator');
   if (typing) typing.style.display = 'flex';
   scrollToBottom();
 
-  setTimeout(() => {
-    if (typing) typing.style.display = 'none';
-
-    let aiText = 'Я отвечаю в контексте текущей сметы и правил АНР → АСОР. Могу подсказать, где найти нужный блок, как проверить предупреждение или почему строка могла попасть в ошибки переноса.';
-    let aiActions = [];
-    const lowerText = userText.toLowerCase();
-
-    if (lowerText.includes('создат') || lowerText.includes('строк')) {
-      aiText = 'Чтобы создать или проверить строку, откройте текущую смету, перейдите к панели **Проверка ИИ** и выберите нужный тип позиций. Для созданных строк отображается сопоставление АНР с АСОР, для нераспознанных — исходные параметры АНР и причина, почему строка не была применена.';
-    } else if (lowerText.includes('фильтр') || lowerText.includes('отфильтр')) {
-      aiText = 'Фильтрация находится в блоке **Список позиций**. Используйте вкладки **Всего создано**, **Предупреждения**, **Ошибки переноса** и **Не распознано**. Стрелки справа листают позиции только внутри выбранного фильтра.';
-    } else if (lowerText.includes('ошиб') || lowerText.includes('не распозн')) {
-      aiText = 'Ошибки делятся на два типа. **Ошибки переноса** относятся к строкам, которые уже есть в АСОР, но требуют исправления. **Не распознано** — это исходные строки АНР, которые система не смогла применить в АСОР, поэтому по ним нет строки в таблице.';
-    } else if (lowerText.includes('цена') || lowerText.includes('расцен') || lowerText.includes('группа') || lowerText.includes('материал')) {
-      aiText = 'Методологически система сопоставляет исходный текст АНР со справочниками АСОР и показывает уровень уверенности. Если найдено несколько близких вариантов или уверенность ниже порога, сметчик выбирает корректное значение вручную и подтверждает результат.';
-    } else if (lowerText.includes('привет') || lowerText.includes('здравствуй')) {
-      aiText = 'Здравствуйте! Я помогу с навигацией по интерфейсу, проверкой предупреждений и методологическими вопросами по сметным позициям.';
-    }
-
+  try {
+    const response = aiChatHostAdapter.sendMessage
+      ? await aiChatHostAdapter.sendMessage({
+          text: userText,
+          chat: cloneValue(getActiveChat()),
+          context: getCurrentChatContext()
+        })
+      : {
+          text: 'Провайдер ответов не подключён. Настройте `sendMessage` в адаптере проекта.',
+          actions: []
+        };
+    const normalizedResponse = typeof response === 'string' ? { text: response } : (response || {});
     pushMessageToActiveChat({
       id: `msg_ai_${Date.now()}`,
       sender: 'ai',
       timestamp: new Date().toISOString(),
-      text: aiText,
-      attachments: [],
-      actions: aiActions
+      text: normalizedResponse.text || 'Ответ не содержит текста.',
+      attachments: normalizedResponse.attachments || [],
+      actions: normalizedResponse.actions || []
     });
+  } catch (error) {
+    pushMessageToActiveChat({
+      id: `msg_ai_error_${Date.now()}`,
+      sender: 'ai',
+      timestamp: new Date().toISOString(),
+      text: 'Не удалось получить ответ. Повторите попытку или проверьте подключение провайдера сообщений.',
+      attachments: [],
+      actions: []
+    });
+    console.error('[AIChat] Ошибка провайдера сообщений.', error);
+  } finally {
+    if (typing) typing.style.display = 'none';
     renderChatWorkspaceAccordion();
     renderChatMessages();
-  }, 900);
+  }
 }
 
-window.triggerChatAction = function(actionId, actionType, rowId) {
+window.triggerChatAction = async function(actionId, actionType, rowId) {
+  const hostResult = await aiChatHostAdapter.onAction?.({
+    actionId,
+    actionType,
+    rowId,
+    chat: cloneValue(getActiveChat()),
+    context: getCurrentChatContext()
+  });
+  if (hostResult === false) return;
+  const result = typeof hostResult === 'string' ? { text: hostResult } : (hostResult || {});
   pushMessageToActiveChat({
     id: `msg_info_${Date.now()}`,
     sender: 'ai',
     timestamp: new Date().toISOString(),
-    text: 'В текущей версии ИИ-чат не выполняет автоматические действия с таблицей. Я могу объяснить следующий шаг, но изменение строки выполняется только пользователем в интерфейсе проверки.',
-    attachments: [],
-    actions: []
+    text: result.text || 'Действие передано приложению.',
+    attachments: result.attachments || [],
+    actions: result.actions || []
   });
   renderChatWorkspaceAccordion();
   renderChatMessages();
@@ -1013,3 +1079,25 @@ function scrollToBottom() {
   const list = document.getElementById('ai-drawer-messages-list');
   if (list) list.scrollTop = list.scrollHeight;
 }
+
+window.SCostAIChat = {
+  configure: configureAIChat,
+  init: () => window.initAIDrawer(),
+  open: () => {
+    const drawer = document.getElementById('ai-drawer');
+    if (drawer && !drawer.classList.contains('open')) window.toggleAIDrawer();
+  },
+  close: () => window.closeAIDrawer(),
+  toggle: () => window.toggleAIDrawer(),
+  updateContext: updateAIDrawerContext,
+  getState: () => cloneValue(chatWorkspace),
+  setState: workspace => {
+    if (!workspace?.chats || !Array.isArray(workspace.chats)) {
+      throw new TypeError('AIChat.setState ожидает объект workspace с массивом chats.');
+    }
+    chatWorkspace = cloneValue(workspace);
+    persistChatWorkspace();
+    renderChatWorkspaceAccordion();
+    renderChatMessages();
+  }
+};

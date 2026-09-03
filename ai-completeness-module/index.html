@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S.Cost — Интеллектуальный анализ и комплектность смет</title>
+  
+  <!-- Современные шрифты Google Fonts (Inter и Outfit) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Глобальные и компонентные стили проекта -->
+  <link rel="stylesheet" href="src/index.css">
+  <link rel="stylesheet" href="src/components/AICompletenessTab/AICompletenessTab.css">
+  <link rel="stylesheet" href="src/components/FileTree/FileTree.css">
+  <link rel="stylesheet" href="src/components/Filtering/filtering.css">
+  <link rel="stylesheet" href="src/components/MetadataPanel/MetadataPanel.css">
+  <link rel="stylesheet" href="src/components/AISidebarDrawer/AISidebarDrawer.css">
+  <link rel="stylesheet" href="src/components/ThreadedRemarks/ThreadedRemarks.css">
+</head>
+<body>
+
+  <!-- СЦЕНА 1: Главный каркас приложения S.Cost -->
+  <div class="scost-viewport">
+    
+    <!-- Шапка страницы -->
+    <header class="scost-header" data-project-title="Задание на АСОР Бриз Корпус 19">
+      <div class="header-left">
+        <span class="doc-title">Документы</span>
+      </div>
+    </header>
+
+    <!-- Основная контентная область (Вьюпорт) -->
+    <main class="scost-main-content">
+      <!-- Вкладочный segment-control внутри рабочей области -->
+      <nav class="scost-tabs-navigation" aria-label="Переключение режимов работы с документами">
+        <button class="tab-btn active" id="tab-standard" type="button">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" focusable="false">
+              <path d="M5 5.5h10"></path>
+              <path d="M5 10h10"></path>
+              <path d="M5 14.5h7"></path>
+            </svg>
+          </span>
+          <span>Загруженные документы</span>
+        </button>
+        <button class="tab-btn" id="tab-ai" type="button">
+          <span class="tab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M12 3.25l1.55 4.2a3.7 3.7 0 0 0 2.2 2.2L19.95 11l-4.2 1.55a3.7 3.7 0 0 0-2.2 2.2L12 18.95l-1.55-4.2a3.7 3.7 0 0 0-2.2-2.2L4.05 11l4.2-1.35a3.7 3.7 0 0 0 2.2-2.2L12 3.25Z"></path>
+              <path d="M5.5 15.25l.55 1.5a1.5 1.5 0 0 0 .9.9l1.5.55-1.5.55a1.5 1.5 0 0 0-.9.9l-.55 1.5-.55-1.5a1.5 1.5 0 0 0-.9-.9l-1.5-.55 1.5-.55a1.5 1.5 0 0 0 .9-.9l.55-1.5Z"></path>
+              <path d="M18.25 3.25l.45 1.2a1.25 1.25 0 0 0 .75.75l1.2.45-1.2.45a1.25 1.25 0 0 0-.75.75l-.45 1.2-.45-1.2a1.25 1.25 0 0 0-.75-.75l-1.2-.45 1.2-.45a1.25 1.25 0 0 0 .75-.75l.45-1.2Z"></path>
+            </svg>
+          </span>
+          <span>ИИ-Анализ комплектности</span>
+          <span class="notification-indicator red-pulse" id="ai-alert-dot" style="display: none;">!</span>
+        </button>
+      </nav>
+
+      <div class="scost-tab-stage">
+      
+      <!-- ВКЛАДКА 1: Стандартная загрузка (из референса) -->
+      <section class="tab-content-pane active" id="pane-standard">
+        <!-- Сюда встроится стандартный список документов -->
+        <div id="standard-upload-root"></div>
+      </section>
+
+      <!-- ВКЛАДКА 2: ИИ-Анализ комплектности (Двухпанельный дашборд) -->
+      <section class="tab-content-pane" id="pane-ai">
+        
+        <div id="tree-summary-cards-root"></div>
+
+        <!-- Сплит-панель (Дерево + Детализация) -->
+        <div class="ai-split-layout">
+          <!-- Левая колонка (60% по умолчанию): рекурсивное дерево вложений -->
+          <div class="split-pane-left">
+            <div id="file-tree-root"></div>
+          </div>
+
+          <div class="split-resize-handle" id="ai-split-resize-handle" role="separator" aria-orientation="vertical" aria-label="Изменить ширину блоков" tabindex="0"></div>
+
+          <!-- Правая колонка (40% по умолчанию): панель метаданных и сменные интерфейсы -->
+          <div class="split-pane-right">
+            <div id="metadata-panel-root"></div>
+          </div>
+        </div>
+
+      </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- СЦЕНА 2: Выдвижной масштабируемый боковой ИИ-чат -->
+  <div id="ai-sidebar-drawer-root"></div>
+
+  <!-- Кнопка быстрого вызова ИИ-чата на правом краю экрана -->
+  <button class="ai-chat-trigger-btn" id="btn-trigger-ai-chat" title="Открыть ИИ-ассистента" aria-hidden="true" tabindex="-1">
+    <span class="ai-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false">
+        <path d="M12 3.25l1.55 4.2a3.7 3.7 0 0 0 2.2 2.2L19.95 11l-4.2 1.55a3.7 3.7 0 0 0-2.2 2.2L12 18.95l-1.55-4.2a3.7 3.7 0 0 0-2.2-2.2L4.05 11l4.2-1.35a3.7 3.7 0 0 0 2.2-2.2L12 3.25Z"></path>
+        <path d="M5.5 15.25l.55 1.5a1.5 1.5 0 0 0 .9.9l1.5.55-1.5.55a1.5 1.5 0 0 0-.9.9l-.55 1.5-.55-1.5a1.5 1.5 0 0 0-.9-.9l-1.5-.55 1.5-.55a1.5 1.5 0 0 0 .9-.9l.55-1.5Z"></path>
+        <path d="M18.25 3.25l.45 1.2a1.25 1.25 0 0 0 .75.75l1.2.45-1.2.45a1.25 1.25 0 0 0-.75.75l-.45 1.2-.45-1.2a1.25 1.25 0 0 0-.75-.75l-1.2-.45 1.2-.45a1.25 1.25 0 0 0 .75-.75l.45-1.2Z"></path>
+      </svg>
+    </span>
+  </button>
+
+  <!-- Подключаем JavaScript-логику компонентов поочередно (Обычные скрипты для обхода CORS file://) -->
+  <script src="src/components/AICompletenessTab/StandardUploadTab.js"></script>
+  <script src="src/components/FileTree/FileTree.js"></script>
+  <script src="src/components/Filtering/filtering.js"></script>
+  <script src="src/components/MetadataPanel/MetadataPanel.js"></script>
+  <script src="src/components/AISidebarDrawer/AISidebarDrawer.js"></script>
+  <script src="src/app.js"></script>
+
+</body>
+</html>
+

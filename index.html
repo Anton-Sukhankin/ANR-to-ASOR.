@@ -3,9 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>S.Cost table prototype</title>
-    <link rel="stylesheet" href="styles.css?v=data-foundation" />
-    <link rel="stylesheet" href="src/components/AISidebarDrawer/AISidebarDrawer.css?v=escost-chat" />
+    <meta name="description" content="Проверочная версия прототипа переноса сметных данных из АНР в АСОР." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="АНР → АСОР" />
+    <meta property="og:description" content="Проверка переноса сметных данных" />
+    <meta property="og:image" content="https://anr-asor-check-67408.armadaopera.chatgpt.site/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="АНР → АСОР" />
+    <meta name="twitter:description" content="Проверка переноса сметных данных" />
+    <meta name="twitter:image" content="https://anr-asor-check-67408.armadaopera.chatgpt.site/og.png" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>АНР → АСОР — проверка переноса сметных данных</title>
+    <link rel="icon" href="data:," />
+    <!-- local-file-styles:start -->
+    <link rel="stylesheet" href="styles.css?v=global-tooltip-1" />
+    <link rel="stylesheet" href="ai-completeness-module/src/components/FileTree/FileTree.css?v=d-cmp-source-2" />
+    <link rel="stylesheet" href="ai-completeness-module/src/components/MetadataPanel/MetadataPanel.css?v=d-cmp-source-2" />
+    <link rel="stylesheet" href="ai-completeness-module/src/components/Filtering/filtering.css?v=d-cmp-source-2" />
+    <link rel="stylesheet" href="completeness-adapter.css?v=accordion-height-1" />
+    <link rel="stylesheet" href="chat-transfer-package/src/AIChat.css?v=portable-chat" />
+    <link rel="stylesheet" href="chat-transfer-package/adapters/scost-prototype-adapter.css?v=portable-chat" />
+    <!-- local-file-styles:end -->
   </head>
   <body>
     <header class="app-header">
@@ -83,14 +103,14 @@
               </svg>
             </button>
           </div>
-          <button class="ai-review-button" id="openReviewDrawer" type="button" aria-label="Открыть проверку ИИ-позиций">
+          <button class="ai-review-button" id="openReviewDrawer" type="button" aria-label="Открыть проверку документа">
             <span class="ai-review-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false">
                 <path d="M12 3l1.9 5.3L19 10l-5.1 1.7L12 17l-1.9-5.3L5 10l5.1-1.7Z"></path>
                 <path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8Z"></path>
               </svg>
             </span>
-            <span id="reviewButtonText">Проверка ИИ</span>
+            <span id="reviewButtonText">Проверка</span>
           </button>
           <button class="ai-review-button ai-chat-toolbar-button btn-trigger-ai-chat" id="btn-trigger-ai-chat" type="button" title="Открыть ИИ-ассистента" aria-label="Открыть ИИ-ассистента">
             <span class="ai-chat-trigger-icon" aria-hidden="true">
@@ -154,39 +174,82 @@
         </div>
       </section>
 
-      <aside class="review-drawer" id="reviewDrawer" aria-label="Проверка ИИ-позиций" aria-hidden="true">
+      <aside class="review-drawer" id="reviewDrawer" aria-label="Проверка документа" aria-hidden="true">
         <div class="review-drawer-head">
-          <div class="review-title-block">
-            <h2 id="reviewContextTitle">Проверка позиций</h2>
-            <div class="review-header-meta" id="reviewHeaderMeta"></div>
+          <div class="review-header-main">
+            <span class="review-header-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M9 5h6"></path>
+                <path d="M9 3h6a2 2 0 0 1 2 2v1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V5a2 2 0 0 1 2-2Z"></path>
+                <path d="m8.5 14 2.2 2.2 4.8-4.8"></path>
+              </svg>
+            </span>
+            <div class="review-title-block">
+              <h2 id="reviewContextTitle">Проверка</h2>
+              <p class="review-header-description" id="reviewHeaderMeta">Проверьте комплектность, сопоставление АНР и изменения РД</p>
+            </div>
           </div>
           <div class="review-head-actions">
-            <p class="review-kicker" id="reviewCollisionType">Проверка ИИ</p>
-            <button class="review-close" id="closeReviewDrawer" type="button" aria-label="Закрыть">×</button>
+            <button class="review-close" id="closeReviewDrawer" type="button" aria-label="Закрыть проверку" title="Закрыть">
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="m6 6 12 12"></path><path d="M18 6 6 18"></path></svg>
+            </button>
           </div>
         </div>
-        <div class="review-body">
-          <section class="position-accordion collapsed" id="positionAccordion">
-            <button class="position-accordion-head" id="positionAccordionToggle" type="button" aria-expanded="false" aria-controls="positionAccordionPanel">
-              <span>Список позиций</span>
-              <span class="position-accordion-icon" id="positionAccordionIcon" aria-hidden="true">
-                <svg class="accordion-arrow-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="m7 10 5 5 5-5"></path>
-                </svg>
-              </span>
-            </button>
-            <div class="position-accordion-panel" id="positionAccordionPanel">
-              <div class="position-control-row">
-                <div class="review-filters" id="reviewFilters" aria-label="Фильтры проверки"></div>
-                <div class="review-position-nav" aria-label="Навигация по позициям">
-                  <button class="review-nav-button" id="prevReviewIssue" type="button" title="Предыдущая позиция" aria-label="Предыдущая позиция"></button>
-                  <button class="review-nav-button" id="nextReviewIssue" type="button" title="Следующая позиция" aria-label="Следующая позиция"></button>
+        <div class="review-mode-tabs" id="reviewModeTabs" role="tablist" aria-label="Вид проверки">
+          <button class="review-mode-tab" id="reviewModeCompleteness" type="button" role="tab" aria-selected="false" aria-controls="reviewModeContent" tabindex="-1" data-review-mode="completeness"><span class="review-mode-label">Комплектность</span><span class="review-mode-attention-count" hidden></span></button>
+          <button class="review-mode-tab active" id="reviewModeAnr" type="button" role="tab" aria-selected="true" aria-controls="reviewModeContent" data-review-mode="anr"><span class="review-mode-label">АНР</span><span class="review-mode-attention-count" hidden></span></button>
+          <button class="review-mode-tab" id="reviewModeRdChanges" type="button" role="tab" aria-selected="false" aria-controls="reviewModeContent" tabindex="-1" data-review-mode="rd-changes"><span class="review-mode-label">Изменения РД</span><span class="review-mode-attention-count" hidden></span></button>
+        </div>
+        <div class="review-body" id="reviewModeContent" role="tabpanel" aria-labelledby="reviewModeAnr">
+          <div class="review-mode-placeholder" id="reviewModePlaceholder" hidden></div>
+          <div class="review-completeness-content completeness-source-host" id="reviewCompletenessContent" hidden aria-live="polite"></div>
+          <div class="review-rd-content" id="reviewRdContent" hidden>
+            <section class="position-accordion rd-changes-accordion expanded" id="rdChangesAccordion">
+              <button class="position-accordion-head" id="rdChangesAccordionToggle" type="button" aria-expanded="true" aria-controls="rdChangesAccordionPanel">
+                <span>Список изменений</span>
+                <span class="position-accordion-icon" id="rdChangesAccordionIcon" aria-hidden="true">
+                  <svg class="accordion-arrow-icon is-open" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="m7 10 5 5 5-5"></path>
+                  </svg>
+                </span>
+              </button>
+              <div class="position-accordion-panel" id="rdChangesAccordionPanel">
+                <div class="position-control-row">
+                  <div class="review-filters" id="rdReviewFilters" aria-label="Фильтры изменений РД"></div>
+                  <div class="review-position-nav" aria-label="Навигация по изменениям РД">
+                    <button class="review-nav-button" id="prevRdChange" type="button" title="Предыдущее изменение" aria-label="Предыдущее изменение"></button>
+                    <button class="review-nav-button" id="nextRdChange" type="button" title="Следующее изменение" aria-label="Следующее изменение"></button>
+                  </div>
                 </div>
+                <div class="review-list" id="rdReviewList" aria-label="Список изменений РД" aria-live="polite"></div>
               </div>
-              <div class="review-list" id="reviewList" aria-label="Список предупреждений и ошибок"></div>
-            </div>
-          </section>
-          <div class="review-detail" id="reviewDetail" aria-label="Карточка проверки"></div>
+            </section>
+            <div class="review-detail" id="rdReviewDetail" aria-label="Выбранное изменение РД" aria-live="polite"></div>
+            <div class="rd-bulk-footer" id="rdBulkFooter" hidden></div>
+          </div>
+          <div class="review-anr-content" id="reviewAnrContent">
+            <section class="position-accordion collapsed" id="positionAccordion">
+              <button class="position-accordion-head" id="positionAccordionToggle" type="button" aria-expanded="false" aria-controls="positionAccordionPanel">
+                <span>Список позиций</span>
+                <span class="position-accordion-icon" id="positionAccordionIcon" aria-hidden="true">
+                  <svg class="accordion-arrow-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="m7 10 5 5 5-5"></path>
+                  </svg>
+                </span>
+              </button>
+              <div class="position-accordion-panel" id="positionAccordionPanel">
+                <div class="position-control-row">
+                  <div class="review-filters" id="reviewFilters" aria-label="Фильтры проверки"></div>
+                  <div class="review-position-nav" aria-label="Навигация по позициям">
+                    <button class="review-nav-button" id="prevReviewIssue" type="button" title="Предыдущая позиция" aria-label="Предыдущая позиция"></button>
+                    <button class="review-nav-button" id="nextReviewIssue" type="button" title="Следующая позиция" aria-label="Следующая позиция"></button>
+                  </div>
+                </div>
+                <div class="review-list" id="reviewList" aria-label="Список предупреждений и ошибок"></div>
+              </div>
+            </section>
+            <div class="review-detail" id="reviewDetail" aria-label="Карточка проверки"></div>
+          </div>
         </div>
       </aside>
     </main>
@@ -218,10 +281,17 @@
       </div>
     </footer>
 
+    <div class="rd-bulk-dialog-root" id="rdBulkDialogRoot" hidden></div>
+    <div class="review-toast-region" id="reviewToastRegion" aria-live="polite" aria-atomic="true" hidden></div>
     <div id="ai-sidebar-drawer-root"></div>
 
-    <script src="data/project-data.js?v=data-foundation"></script>
-    <script src="src/components/AISidebarDrawer/AISidebarDrawer.js?v=escost-chat"></script>
-    <script src="app.js?v=data-foundation"></script>
+    <!-- local-file-scripts:start -->
+    <script src="data/project-data.js?v=d-cmp-source-2"></script>
+    <script src="ai-completeness-module/src/components/FileTree/mockTreeData.bundle.js?v=complete-detail-data-1"></script>
+    <script src="chat-transfer-package/src/AIChat.js?v=portable-chat"></script>
+    <script src="chat-transfer-package/src/demo-provider.js?v=portable-chat"></script>
+    <script src="chat-transfer-package/adapters/scost-prototype-adapter.js?v=portable-chat"></script>
+    <script src="app.js?v=accordion-stable-2"></script>
+    <!-- local-file-scripts:end -->
   </body>
 </html>

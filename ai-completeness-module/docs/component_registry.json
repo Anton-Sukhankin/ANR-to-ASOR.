@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "purpose": "Карта связей между UI-файлами прототипа, mock-данными и документацией. Используется как маршрут проверки документации после изменений интерфейса.",
+  "sync_policy": {
+    "mode": "UI + Docs",
+    "rule": "При изменении UI, поведения, данных, статусов, селекторов или пользовательских сценариев нужно проверить связанные документы из registry и обновить те, которые затронуты изменением.",
+    "final_response_requirement": "В финальном ответе нужно явно указать, какие документы обновлены, либо что документация проверена и изменений не потребовала."
+  },
+  "global_docs": [
+    {
+      "path": "docs/README.md",
+      "role": "Оглавление и входная точка документации проекта"
+    },
+    {
+      "path": "docs/project_structure_map.md",
+      "role": "Карта структуры проекта и правила размещения файлов"
+    },
+    {
+      "path": "docs/design_system_statuses.md",
+      "role": "Общие статусы, цветовая индикация и правила отображения состояний"
+    },
+    {
+      "path": "docs/ui_docs_sync_workflow.md",
+      "role": "Инструкция UI + Docs для обновления документации после правок интерфейса"
+    },
+    {
+      "path": "README.md",
+      "role": "Паспорт переносимого пакета ИИ-Анализа комплектности"
+    },
+    {
+      "path": "module_manifest.json",
+      "role": "Машинно-читаемый состав переносимого пакета"
+    }
+  ],
+  "components": {
+    "AppShell": {
+      "title": "Каркас приложения и глобальная оркестрация",
+      "scope": "Шапка с title страницы, вкладки, подключение компонентов, мост событий и симуляторы пересчета",
+      "ui_files": [
+        "index.html",
+        "src/index.css",
+        "src/app.js"
+      ],
+      "data_files": [],
+      "primary_docs": [
+        "docs/project_structure_map.md",
+        "docs/README.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "docs/design_system_statuses.md",
+          "review_when": "Меняются общие статусы, цвета, бейджи или правила индикации"
+        },
+        {
+          "path": "src/components/AICompletenessTab/ai_completeness_tab.md",
+          "review_when": "Меняются вкладки, верхний статус анализа или сценарий перехода во вкладку ИИ-Анализа"
+        }
+      ]
+    },
+    "AICompletenessTab": {
+      "title": "Вкладка загрузки и ИИ-Анализа комплектности",
+      "scope": "Макро-сетка вкладок, стандартный список загруженных документов, алерты вкладки и вход в сценарий анализа комплектности",
+      "ui_files": [
+        "src/components/AICompletenessTab/StandardUploadTab.js",
+        "src/components/AICompletenessTab/AICompletenessTab.css"
+      ],
+      "data_files": [],
+      "primary_docs": [
+        "src/components/AICompletenessTab/ai_completeness_tab.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "docs/design_system_statuses.md",
+          "review_when": "Меняются статусы, алерты, цветовая индикация или правила отображения ошибки комплектности"
+        },
+        {
+          "path": "docs/README.md",
+          "review_when": "Меняется назначение вкладки или название компонента в оглавлении"
+        }
+      ]
+    },
+    "FileTree": {
+      "title": "Дерево вложений и статусы обработки",
+      "scope": "Древовидная структура документов, строки файлов, раскрытие/сворачивание, статусы Р/Ч/К, сводная статистика, алерт комплектности, меню действий и фильтрационные атрибуты",
+      "ui_files": [
+        "src/components/FileTree/FileTree.js",
+        "src/components/FileTree/FileTree.css"
+      ],
+      "data_files": [
+        "src/components/FileTree/mockTreeData.json"
+      ],
+      "primary_docs": [
+        "src/components/FileTree/file_tree_and_pipelines.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "docs/design_system_statuses.md",
+          "review_when": "Меняются статусы обработки, цвета, индикаторы, легенды или состояния пайплайна"
+        },
+        {
+          "path": "docs/project_structure_map.md",
+          "review_when": "Меняется состав файлов компонента или добавляются новые типы ресурсов"
+        },
+        {
+          "path": "docs/README.md",
+          "review_when": "Меняется назначение дерева, название компонента или ссылка в оглавлении"
+        },
+        {
+          "path": "src/components/MetadataPanel/metadata_panel.md",
+          "review_when": "Меняется контракт выбора строки дерева или данные, которые передаются в правую панель"
+        },
+        {
+          "path": "src/components/Filtering/filtering.md",
+          "review_when": "Меняется открытие панели фильтрации из дерева, набор фильтруемых атрибутов или логика применения фильтров"
+        }
+      ]
+    },
+    "MetadataPanel": {
+      "title": "Панель метаданных выбранного документа",
+      "scope": "Правая панель сведений, логи обработки, confidence, требования комплектности, cross-links и действия по выбранному файлу",
+      "ui_files": [
+        "src/components/MetadataPanel/MetadataPanel.js",
+        "src/components/MetadataPanel/MetadataPanel.css"
+      ],
+      "data_files": [
+        "src/assets/metadata-empty-illustration.png"
+      ],
+      "primary_docs": [
+        "src/components/MetadataPanel/metadata_panel.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "src/components/FileTree/file_tree_and_pipelines.md",
+          "review_when": "Меняется связь дерева с панелью метаданных или набор данных выбранного документа"
+        },
+        {
+          "path": "docs/design_system_statuses.md",
+          "review_when": "Меняются статусы, логи, цветовая индикация или правила отображения ошибок"
+        },
+        {
+          "path": "docs/README.md",
+          "review_when": "Меняется назначение панели или название компонента в оглавлении"
+        }
+      ]
+    },
+    "AISidebarDrawer": {
+      "title": "Боковой ИИ-чат",
+      "scope": "Выдвижная панель чата, история сообщений, контекст документа, действия ассистента, resize и markdown-ответы",
+      "ui_files": [
+        "src/components/AISidebarDrawer/AISidebarDrawer.js",
+        "src/components/AISidebarDrawer/AISidebarDrawer.css"
+      ],
+      "data_files": [
+        "src/components/AISidebarDrawer/mockChatHistory.json"
+      ],
+      "primary_docs": [
+        "src/components/AISidebarDrawer/ai_sidebar_drawer.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "docs/README.md",
+          "review_when": "Меняется назначение чата или название компонента в оглавлении"
+        },
+        {
+          "path": "src/components/FileTree/file_tree_and_pipelines.md",
+          "review_when": "Меняется сценарий передачи выбранного документа в контекст чата"
+        }
+      ]
+    },
+    "ThreadedRemarks": {
+      "title": "Тред-система замечаний",
+      "scope": "GitLab-like обсуждения по строкам сметы, статусы тредов, блокировки и mock-данные замечаний",
+      "ui_files": [
+        "src/components/ThreadedRemarks/ThreadedRemarks.css"
+      ],
+      "data_files": [
+        "src/components/ThreadedRemarks/mockRemarksData.json"
+      ],
+      "primary_docs": [
+        "src/components/ThreadedRemarks/threaded_remarks_system.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "docs/README.md",
+          "review_when": "Меняется назначение тредов или название компонента в оглавлении"
+        },
+        {
+          "path": "docs/design_system_statuses.md",
+          "review_when": "Меняются статусы замечаний, блокировок или цветовая индикация"
+        }
+      ]
+    },
+    "Filtering": {
+      "title": "Панель фильтрации документов",
+      "scope": "Встроенная в правую область панель фильтрации дерева документов, группы фильтров, чекбоксы, счетчики, сброс, черновое состояние и применение фильтров к FileTree",
+      "ui_files": [
+        "src/components/Filtering/filtering.js",
+        "src/components/Filtering/filtering.css"
+      ],
+      "data_files": [],
+      "primary_docs": [
+        "src/components/Filtering/filtering.md"
+      ],
+      "conditional_docs": [
+        {
+          "path": "src/components/FileTree/file_tree_and_pipelines.md",
+          "review_when": "Меняется связь фильтрации с деревом, поиск, отображение найденных узлов или контекст родителей"
+        },
+        {
+          "path": "src/components/MetadataPanel/metadata_panel.md",
+          "review_when": "Меняется размещение фильтрации в правой панели, возврат к метаданным или состояние выбранного документа"
+        },
+        {
+          "path": "src/components/AISidebarDrawer/ai_sidebar_drawer.md",
+          "review_when": "Меняется видимость кнопки вызова AI-чата во время открытой фильтрации"
+        },
+        {
+          "path": "docs/design_system_statuses.md",
+          "review_when": "Меняются статусы, цветовые индикаторы или правила визуальной кодировки фильтров"
+        },
+        {
+          "path": "docs/project_structure_map.md",
+          "review_when": "Меняется состав файлов компонента Filtering или структура проекта"
+        },
+        {
+          "path": "docs/README.md",
+          "review_when": "Меняется назначение компонента или ссылка в оглавлении"
+        }
+      ]
+    }
+  }
+}

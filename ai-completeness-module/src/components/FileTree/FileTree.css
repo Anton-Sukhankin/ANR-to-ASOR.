@@ -1,0 +1,1573 @@
+/* ==========================================================================
+   СТИЛИ ВКЛАДКИ 2: РЕКУРСИВНОЕ ДЕРЕВО И СТАТУСЫ РАГ
+   S.Cost / src / components / FileTree / FileTree.css
+   ========================================================================== */
+
+/* Контейнер дерева */
+.tree-nodes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Шапка таблицы дерева (Симметрия с Таблицей 1) */
+.tree-table-header {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--color-bg-main);
+  border-bottom: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tree-th {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.tree-th:not(:last-child) {
+  border-right: none;
+}
+
+/* Сетка колонок дерева (Жесткие пропорции для идеального выравнивания) */
+.col-tree-name {
+  flex: 0 0 42%;
+  min-width: 320px;
+  padding-right: 16px;
+}
+
+/* Строка дерева вложений (Представляет собой жесткий контейнер ячеек) */
+.tree-row {
+  display: flex;
+  align-items: stretch; /* Растягиваем ячейки по высоте */
+  border-bottom: none;
+  cursor: pointer;
+  background-color: var(--color-bg-card);
+  transition: background-color var(--transition-fast);
+  user-select: none;
+  min-height: 44px;
+}
+
+/* Эффекты при наведении */
+.tree-row:hover {
+  background-color: hsl(var(--primary-base), 25%, 98%);
+}
+
+/* Активное выделенное состояние строки */
+.tree-row.active {
+  background-color: var(--color-primary-light);
+}
+
+.tree-row.active .node-name-text {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Ячейки строки дерева */
+.tree-td {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  padding: 10px 12px;
+  transition: var(--transition-fast);
+}
+
+/* Вертикальные границы между ячейками (Эффект таблицы) */
+.tree-td:not(:last-child) {
+  border-right: none;
+}
+
+/* Активный левый маркер первой ячейки (Без сдвига контента через inset box-shadow) */
+.tree-row.active .col-tree-name {
+  box-shadow: none;
+}
+
+.tree-row:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(21, 101, 192, 0.25);
+}
+
+/* Стрелки и маркеры дерева */
+.tree-arrow {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  color: var(--color-text-muted);
+  margin-right: 6px;
+  cursor: pointer;
+  transition: transform var(--transition-normal);
+}
+
+.tree-bullet {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin-right: 6px;
+  opacity: 0.5;
+}
+
+.node-name-text {
+  font-weight: 500;
+  color: var(--color-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+}
+
+.node-size-text {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-left: 6px;
+}
+
+/* Бейдж типа ИИ-документа */
+.ai-detected-type-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: var(--color-primary-light);
+  border: 1px solid rgba(21, 101, 192, 0.15);
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+/* Вложенные списки потомков */
+.nested-tree-group {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none; /* Сворачиваем по умолчанию */
+  position: relative;
+}
+
+.nested-tree-group::before {
+  content: none;
+}
+
+/* Развернутое состояние папки */
+.tree-node-item.expanded > .nested-tree-group {
+  display: block;
+  animation: slideDownFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. КРУГЛЫЕ РАГ-ИНДИКАТОРЫ (Дизайн-система) */
+.rag-dots-wrapper {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.rag-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  position: relative;
+  transition: transform var(--transition-fast), background-color var(--transition-normal);
+}
+
+.rag-dot:hover {
+  transform: scale(1.3);
+}
+
+/* Описание состояний точек РАГ */
+.rag-dot.status-gray {
+  background-color: var(--color-status-gray);
+  opacity: 0.35;
+  border: none;
+  box-shadow: none;
+}
+
+.rag-dot.status-green {
+  background-color: var(--color-status-green);
+  border: 1px solid transparent;
+}
+
+.rag-dot.status-yellow {
+  background-color: var(--color-status-yellow);
+  border: 1px solid transparent;
+}
+
+.rag-dot.status-red {
+  background-color: var(--color-status-red);
+  border: 1px solid transparent;
+  animation: soft-pulse-red 2s infinite;
+}
+
+.rag-dot.status-blue {
+  background-color: var(--color-status-blue);
+  border: 1px solid transparent;
+}
+
+/* Мягкая пульсация для красных ошибочных файлов в дереве */
+@keyframes soft-pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.4); }
+  70% { box-shadow: 0 0 0 4px rgba(198, 40, 40, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0); }
+}
+
+/* Анимированный спиннер для ячейки статуса РАГ в процессе */
+.rag-dot.status-loading {
+  background-color: transparent !important;
+  border: 2px solid rgba(0, 0, 0, 0.15) !important;
+  border-left-color: var(--color-primary) !important;
+  border-radius: 50%;
+  animation: spin 1s linear infinite !important;
+  box-shadow: none !important;
+}
+
+/* UI refresh overrides */
+.tree-table-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, hsl(210, 35%, 99%), hsl(210, 30%, 97%));
+}
+
+.tree-row {
+  min-height: 46px;
+}
+
+.tree-row:hover {
+  background-color: hsl(var(--primary-base), 75%, 97%);
+}
+
+.tree-row.active {
+  background: linear-gradient(90deg, hsl(206, 100%, 96%), hsl(206, 70%, 98%));
+}
+
+.tree-td {
+  font-size: 12.5px;
+}
+
+.node-name-text {
+  max-width: 320px;
+}
+
+.ai-detected-type-badge {
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.rag-dot {
+  width: 11px;
+  height: 11px;
+}
+
+@media (max-width: 980px) {
+  .tree-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .tree-table-header,
+  .tree-row {
+    min-width: 760px;
+  }
+
+  #file-tree-root {
+    overflow-x: auto;
+  }
+}
+
+/* UX structure refresh */
+#file-tree-root {
+  height: 100%;
+  min-height: 0;
+}
+
+.split-pane-left:has(#file-tree-root) {
+  overflow: hidden;
+}
+
+.tree-shell {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+
+.tree-fixed-head {
+  position: relative;
+  z-index: 4;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: -16px -16px 0;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+}
+
+.tree-scroll-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding-top: 8px;
+  overscroll-behavior: contain;
+}
+
+.tree-scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tree-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tree-scroll-area::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: hsl(214, 12%, 78%);
+  background-clip: content-box;
+}
+
+.tree-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 10px;
+  background: hsl(210, 38%, 98%);
+}
+
+.tree-toolbar-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.tree-toolbar-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#tree-summary-cards-root {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rve-dashboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(15, 35, 55, 0.06);
+}
+
+.rve-dashboard-success {
+  border-color: hsl(143, 40%, 84%);
+  background: #fff;
+}
+
+.rve-dashboard-processing {
+  border-color: hsl(var(--primary-base), 72%, 86%);
+  background: #fff;
+}
+
+.rve-dashboard-warning {
+  border-color: hsl(36, 88%, 82%);
+  background: #fff;
+}
+
+.rve-dashboard-error {
+  border-color: hsl(0, 72%, 86%);
+  background: #fff;
+}
+
+.overall-status-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 104px;
+  padding: 14px 16px;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(15, 35, 55, 0.06);
+}
+
+.rve-dashboard-card .overall-status-card {
+  align-items: flex-start;
+  min-height: auto;
+  padding: 24px 28px 22px;
+  border: 0;
+  border-bottom: 1px solid hsl(214, 24%, 88%);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.overall-status-icon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  color: hsl(214, 16%, 38%);
+  background: hsl(214, 28%, 95%);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.overall-status-card:hover .overall-status-icon {
+  box-shadow: 0 0 0 3px hsla(var(--primary-base), 78%, 52%, 0.1);
+}
+
+.overall-status-icon:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px hsla(var(--primary-base), 78%, 52%, 0.18);
+}
+
+.overall-status-glyph,
+.overall-summary-toggle-glyph {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.overall-summary-toggle-glyph {
+  opacity: 0;
+  transform: translateY(2px) scale(0.92);
+}
+
+.overall-status-card:hover .overall-status-glyph,
+.overall-status-icon:focus-visible .overall-status-glyph {
+  opacity: 0;
+  transform: translateY(-2px) scale(0.9);
+}
+
+.overall-status-card:hover .overall-summary-toggle-glyph,
+.overall-status-icon:focus-visible .overall-summary-toggle-glyph {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.overall-status-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.overall-summary-toggle-glyph svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.35;
+}
+
+.overall-status-main {
+  min-width: 0;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.overall-status-title {
+  color: hsl(220, 31%, 16%);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.16;
+}
+
+.overall-status-description {
+  max-width: 860px;
+  color: hsl(216, 15%, 42%);
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+
+.overall-success {
+  border-color: hsl(143, 40%, 84%);
+  background: linear-gradient(180deg, #fff 0%, hsl(143, 55%, 98%) 100%);
+}
+
+.overall-success .overall-status-icon {
+  color: var(--color-status-green);
+  background: hsl(143, 54%, 94%);
+}
+
+.overall-processing {
+  border-color: hsl(var(--primary-base), 72%, 86%);
+  background: linear-gradient(180deg, #fff 0%, hsl(var(--primary-base), 90%, 98%) 100%);
+}
+
+.overall-processing .overall-status-icon {
+  color: var(--color-primary);
+  background: hsl(var(--primary-base), 84%, 95%);
+}
+
+.overall-warning {
+  border-color: hsl(36, 88%, 82%);
+  background: linear-gradient(180deg, #fff 0%, hsl(36, 100%, 98%) 100%);
+}
+
+.overall-warning .overall-status-icon {
+  color: hsl(32, 100%, 43%);
+  background: hsl(36, 100%, 94%);
+}
+
+.overall-error {
+  border-color: hsl(0, 72%, 86%);
+  background: linear-gradient(180deg, #fff 0%, hsl(0, 86%, 98%) 100%);
+}
+
+.overall-error .overall-status-icon {
+  color: var(--color-status-red);
+  background: hsl(0, 78%, 96%);
+}
+
+.rve-dashboard-card.is-summary-collapsed .overall-status-card {
+  border-bottom: 0;
+}
+
+.rve-dashboard-card .overall-status-card.overall-success,
+.rve-dashboard-card .overall-status-card.overall-processing,
+.rve-dashboard-card .overall-status-card.overall-warning,
+.rve-dashboard-card .overall-status-card.overall-error {
+  background: #fff;
+}
+
+.rve-summary-cards {
+  display: grid;
+  grid-template-columns: 1.15fr 1.55fr 0.85fr 1fr 1.15fr 0.85fr 1.65fr;
+  gap: 0;
+  align-items: stretch;
+  max-height: 180px;
+  overflow: hidden;
+  border-top: 0;
+  opacity: 1;
+  transform: translateY(0);
+  transition: max-height 220ms ease, opacity 180ms ease, transform 220ms ease;
+}
+
+.rve-dashboard-card.is-summary-collapsed .rve-summary-cards {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+}
+
+.rve-summary-card {
+  min-width: 0;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 18px 24px;
+  border-right: 1px solid hsl(214, 18%, 80%);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.rve-summary-card:last-child {
+  border-right: 0;
+}
+
+.rve-summary-label,
+.rve-summary-note {
+  overflow: hidden;
+  color: hsl(216, 14%, 47%);
+  font-size: 11px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+}
+
+.rve-summary-value {
+  margin-top: 6px;
+  color: hsl(220, 31%, 16%);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.rve-summary-note {
+  margin-top: 4px;
+}
+
+.rve-summary-requirements .rve-summary-value,
+.rve-summary-complete .rve-summary-value {
+  color: var(--color-status-green);
+}
+
+.rve-summary-processing .rve-summary-value {
+  color: var(--color-primary);
+}
+
+.rve-summary-warnings .rve-summary-value {
+  color: hsl(32, 100%, 43%);
+}
+
+.rve-summary-errors .rve-summary-value {
+  color: var(--color-status-red);
+}
+
+.rve-summary-progress {
+  width: 100%;
+  height: 6px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: hsl(214, 18%, 89%);
+}
+
+.rve-summary-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-status-green);
+}
+
+.rve-summary-profile .rve-summary-value {
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.tree-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid hsl(214, 24%, 91%);
+  border-radius: 10px;
+  background: hsl(210, 30%, 99%);
+}
+
+.tree-search-field {
+  min-width: 0;
+  flex: 1 1 auto;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 9px;
+  background: #fff;
+  color: hsl(215, 14%, 45%);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.tree-search-field:hover {
+  border-color: hsl(209, 72%, 72%);
+  background: hsl(210, 50%, 99%);
+}
+
+.tree-search-field:focus-within {
+  border-color: hsl(209, 88%, 45%);
+  box-shadow: 0 0 0 3px rgba(23, 122, 210, 0.12);
+}
+
+.tree-search-icon {
+  flex: 0 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(215, 13%, 48%);
+}
+
+.tree-search-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-search-field input {
+  min-width: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-dark);
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+.tree-search-field input::placeholder {
+  color: hsl(216, 12%, 58%);
+}
+
+.tree-filter-control {
+  position: relative;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+}
+
+.tree-filter-btn {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 9px;
+  background: #fff;
+  color: hsl(215, 14%, 38%);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.tree-filter-btn:hover {
+  border-color: hsl(209, 72%, 72%);
+  background: hsl(208, 100%, 96%);
+  color: hsl(209, 88%, 45%);
+}
+
+.tree-filter-btn.active {
+  border-color: hsl(209, 88%, 45%);
+  background: hsl(208, 100%, 94%);
+  color: hsl(209, 88%, 42%);
+}
+
+.tree-filter-btn:focus-visible {
+  outline: none;
+  border-color: hsl(209, 88%, 45%);
+  box-shadow: 0 0 0 3px rgba(23, 122, 210, 0.14);
+}
+
+.tree-filter-btn svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-filter-badge {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 4px 10px rgba(23, 122, 210, 0.22);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  z-index: 2;
+}
+
+.tree-filter-badge:hover {
+  background: var(--color-status-red);
+  transform: scale(1.05);
+  box-shadow: 0 5px 12px rgba(198, 40, 40, 0.22);
+}
+
+.tree-filter-badge-count,
+.tree-filter-badge-reset {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.tree-filter-badge-reset {
+  opacity: 0;
+  transform: scale(0.75);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.tree-filter-badge:hover .tree-filter-badge-count {
+  opacity: 0;
+  transform: scale(0.75);
+}
+
+.tree-filter-badge:hover .tree-filter-badge-reset {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tree-problem-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--color-status-red);
+}
+
+.tree-problem-count,
+.tree-problem-position {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.tree-problem-nav-btn {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--color-status-red);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.tree-problem-nav-btn:hover {
+  background: hsl(0, 68%, 94%);
+}
+
+.tree-check-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.tree-check-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.tree-check-summary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.tree-check-summary-text strong {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.tree-check-summary-text span {
+  color: var(--color-text-medium);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.tree-check-summary.summary-critical {
+  background: #fff;
+  border-color: var(--color-status-red);
+  color: var(--color-status-red);
+}
+
+.tree-check-summary-icon {
+  display: inline-flex;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: hsl(0, 72%, 97%);
+  color: var(--color-status-red);
+}
+
+.tree-check-summary-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-check-summary.summary-warning {
+  background: hsl(38, 100%, 96%);
+  color: hsl(30, 100%, 36%);
+}
+
+.tree-check-summary.summary-warning .tree-check-summary-icon {
+  background: hsl(38, 100%, 96%);
+  color: hsl(30, 100%, 36%);
+}
+
+.tree-check-summary.summary-ok {
+  background: hsl(122, 36%, 97%);
+  color: var(--color-status-green);
+}
+
+.tree-summary-close-btn {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: hsl(122, 36%, 94%);
+  color: var(--color-status-green);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.tree-summary-close-btn:hover {
+  background: hsl(122, 36%, 90%);
+  color: hsl(122, 46%, 28%);
+}
+
+.tree-summary-close-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.16);
+}
+
+.tree-summary-close-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-recalc-btn {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 9px;
+  background: #fff;
+  color: hsl(215, 14%, 38%);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.tree-recalc-btn:hover {
+  border-color: hsl(209, 72%, 72%);
+  background: hsl(208, 100%, 96%);
+  color: hsl(209, 88%, 45%);
+}
+
+.tree-recalc-btn:focus-visible {
+  outline: none;
+  border-color: hsl(209, 88%, 45%);
+  box-shadow: 0 0 0 3px rgba(23, 122, 210, 0.14);
+}
+
+.tree-recalc-btn svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-text-medium);
+}
+
+.legend-sep {
+  display: none;
+}
+
+.legend-chip {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: none;
+  border-radius: 8px;
+  background: hsl(210, 12%, 96%);
+  box-shadow: none;
+  font-weight: 800;
+  font-size: 11px;
+  color: var(--color-text-medium);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: var(--color-status-gray);
+}
+
+.tree-status-dot {
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: var(--color-status-gray);
+}
+
+.tree-status-empty {
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+  flex: 0 0 10px;
+  border: 1px solid hsl(142, 42%, 72%);
+  border-radius: 50%;
+  background: hsl(142, 54%, 92%);
+}
+
+.tree-status-dot.status-processing {
+  background: var(--color-status-blue);
+}
+
+.tree-status-dot.status-review {
+  background: var(--color-status-yellow);
+}
+
+.tree-status-dot.status-failed {
+  background: var(--color-status-red);
+}
+
+.tree-row.active .rag-dot {
+  transform: scale(1.1);
+}
+
+/* Document-list tree redesign */
+.tree-table-header {
+  display: flex;
+  align-items: center;
+}
+
+.col-tree-name {
+  flex: 1 1 auto;
+  min-width: 520px;
+}
+
+.col-tree-actions {
+  flex: 0 0 44px;
+  justify-content: center;
+  align-self: stretch;
+  padding-left: 4px;
+  padding-right: 8px;
+}
+
+.tree-row {
+  min-height: 58px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.tree-row-attention-review::before,
+.tree-row-attention-failed::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1.5px;
+  border-radius: 0;
+  pointer-events: none;
+}
+
+.tree-row-attention-review::before {
+  background: var(--color-status-yellow);
+}
+
+.tree-row-attention-failed::before {
+  background: var(--color-status-red);
+}
+
+.tree-td {
+  min-width: 0;
+}
+
+/* No vertical separator before the status block (2-column layout). */
+.tree-row .tree-td:not(:last-child) {
+  border-right: none !important;
+}
+
+.tree-row-search-match {
+  background: hsl(208, 100%, 97%);
+  box-shadow: inset 0 0 0 1px rgba(23, 122, 210, 0.14);
+}
+
+.tree-row-search-match .node-name-text {
+  color: hsl(215, 24%, 18%);
+  font-weight: 700;
+}
+
+.tree-search-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 14px;
+  border: 1px dashed hsl(214, 24%, 86%);
+  border-radius: 10px;
+  background: hsl(210, 30%, 99%);
+  color: hsl(216, 14%, 48%);
+  text-align: center;
+}
+
+.tree-search-empty strong {
+  color: var(--color-text-dark);
+  font-size: 13px;
+}
+
+.tree-search-empty span {
+  font-size: 12px;
+}
+
+.tree-toggle,
+.tree-toggle-placeholder {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  flex: 0 0 24px;
+}
+
+.tree-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 24px;
+  background: #fff;
+  color: hsl(215, 24%, 18%);
+  font-size: 0;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tree-toggle-icon {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.tree-toggle-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-toggle[aria-expanded="true"] .tree-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.tree-toggle:hover {
+  border-color: hsl(208, 84%, 76%);
+  background: hsl(208, 100%, 96%);
+  color: hsl(209, 88%, 45%);
+  box-shadow: 0 2px 6px rgba(23, 122, 210, 0.12);
+}
+
+.tree-toggle:active {
+  transform: translateY(1px);
+}
+
+.tree-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(23, 122, 210, 0.18);
+  border-color: rgba(23, 122, 210, 0.45);
+}
+
+.node-file-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+  flex: 0 0 32px;
+  color: #4b5563;
+  font-size: 0;
+}
+
+.node-file-icon svg {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.node-file-icon .icon-bg {
+  fill: hsl(214, 20%, 95%);
+  stroke: none;
+}
+
+.node-file-icon .icon-label {
+  fill: currentColor;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: -0.25px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: inherit;
+}
+
+.format-msg,
+.format-zip,
+.format-xls,
+.format-doc,
+.format-pdf,
+.format-jpg,
+.format-file {
+  color: #4b5563;
+}
+
+.node-file-icon.status-success {
+  color: hsl(142, 64%, 28%);
+}
+
+.node-file-icon.status-success .icon-bg {
+  fill: hsl(142, 54%, 92%);
+}
+
+.node-file-icon.status-processing {
+  color: hsl(209, 88%, 36%);
+}
+
+.node-file-icon.status-processing .icon-bg {
+  fill: hsl(208, 100%, 94%);
+}
+
+.node-file-icon.status-review {
+  color: hsl(31, 100%, 31%);
+}
+
+.node-file-icon.status-review .icon-bg {
+  fill: hsl(34, 100%, 92%);
+}
+
+.node-file-icon.status-failed {
+  color: hsl(0, 68%, 36%);
+}
+
+.node-file-icon.status-failed .icon-bg {
+  fill: hsl(0, 82%, 95%);
+}
+
+.node-file-status-dot {
+  position: absolute;
+  top: 0;
+  right: -1px;
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--color-bg-card);
+  border-radius: 50%;
+  background: var(--color-status-gray);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+}
+
+.node-file-status-dot.status-processing {
+  background: var(--color-status-blue);
+}
+
+.node-file-status-dot.status-review {
+  background: var(--color-status-yellow);
+}
+
+.node-file-status-dot.status-failed {
+  background: var(--color-status-red);
+}
+
+.node-main-text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.node-name-text {
+  display: block;
+  max-width: none;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.node-subline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.node-type-text {
+  min-width: 0;
+  max-width: 430px;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.node-size-text {
+  margin-left: 0;
+  flex: 0 0 auto;
+  color: hsl(214, 10%, 48%);
+}
+
+.tree-actions {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tree-actions-btn {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: hsl(215, 13%, 40%);
+  opacity: 0;
+  transform: translateX(2px);
+  transition: opacity var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.tree-row:hover .tree-actions-btn,
+.tree-row:focus-within .tree-actions-btn,
+.tree-actions.open .tree-actions-btn {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.tree-actions-btn:hover,
+.tree-actions.open .tree-actions-btn {
+  background: hsl(210, 24%, 94%);
+  color: hsl(215, 22%, 22%);
+}
+
+.tree-actions-btn span,
+.tree-actions-btn::before,
+.tree-actions-btn::after {
+  content: "";
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.tree-actions-btn {
+  gap: 3px;
+}
+
+.tree-actions-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 188px;
+  padding: 6px;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+}
+
+.tree-actions.open .tree-actions-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.tree-actions-menu button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: hsl(215, 22%, 24%);
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.tree-action-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: hsl(213, 18%, 44%);
+}
+
+.tree-action-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tree-actions-menu button:hover,
+.tree-actions-menu button:focus-visible {
+  outline: none;
+  background: hsl(210, 33%, 96%);
+}
+
+@media (max-width: 1180px) {
+  .rve-summary-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .rve-summary-card {
+    border-right: 1px solid hsl(214, 18%, 80%);
+  }
+
+  .rve-summary-card:nth-child(3n),
+  .rve-summary-card:last-child {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 980px) {
+  .overall-status-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .rve-summary-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rve-summary-card:nth-child(3n) {
+    border-right: 1px solid hsl(214, 18%, 80%);
+  }
+
+  .rve-summary-card:nth-child(2n),
+  .rve-summary-card:last-child {
+    border-right: 0;
+  }
+
+  .tree-table-header,
+  .tree-row {
+    min-width: 920px;
+  }
+}
+
+@media (max-width: 620px) {
+  .overall-status-card {
+    padding: 12px;
+  }
+
+  .rve-summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .rve-summary-card,
+  .rve-summary-card:nth-child(3n),
+  .rve-summary-card:nth-child(2n),
+  .rve-summary-card:last-child {
+    border-right: 0;
+  }
+}

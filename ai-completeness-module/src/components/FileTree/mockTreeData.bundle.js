@@ -1,0 +1,6852 @@
+window.AI_COMPLETENESS_TREE_DATA = [
+  {
+    "id": "node_1",
+    "name": "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+    "type": "msg",
+    "size": 1824050,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "green",
+      "check": "red"
+    },
+    "ai_metadata": {
+      "detected_type": "Электронное письмо с вложениями",
+      "confidence": 99,
+      "error_message": "Пакет содержит файлы с ошибками комплектности и сбоями OCR."
+    },
+    "metadata_details": {
+      "sourceType": "Согласование РП",
+      "authorName": "Смирнов Кирилл Андреевич",
+      "authorRole": "estimator",
+      "uploadDate": "25.02.2026 10:42",
+      "originalComment": "Пересылаю финальные расценки от подрядчика на согласование.",
+      "crossLinks": [
+        {
+          "text": "Приложение №1_РСС (xlsx)",
+          "status": "green",
+          "context": "ИИ обнаружил в тексте текущего файла ссылку на Приложение №1_РСС (xlsx). Документ найден в загруженном пакете."
+        },
+        {
+          "text": "Задание для СЦ (docx)",
+          "status": "green",
+          "context": "ИИ обнаружил в тексте текущего файла ссылку на Задание для СЦ (docx). Документ найден в загруженном пакете."
+        },
+        {
+          "text": "Чертежи_Архив_К19 (zip)",
+          "status": "green",
+          "context": "ИИ обнаружил в тексте текущего файла ссылку на Чертежи_Архив_К19 (zip). Документ найден в загруженном пакете."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:15:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Контейнер .msg успешно распакован. Извлечено 3 вложенных файла."
+        },
+        {
+          "time": "12.05 12:15:03",
+          "stage": "Чтение",
+          "status": "green",
+          "text": "Метаданные письма прочитаны. Текст письма проанализирован."
+        },
+        {
+          "time": "12.05 12:15:05",
+          "stage": "Комплектность",
+          "status": "red",
+          "text": "Обнаружена ошибка комплектности во вложенном архиве и несоответствие нормативной базы в XLSX."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Наличие электронного согласования от ГИП",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "2.1",
+      "textChunks": "14",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] EmbeddingsConnector: Initiating vector search for msg metadata...",
+        "[SUCCESS] Vector DB: Found 4 match clusters in project scope.",
+        "[INFO] EmbeddingsConnector: Context built successfully."
+      ]
+    },
+    "children": [
+      {
+        "id": "node_1_1",
+        "name": "Задание для СЦ.docx",
+        "type": "docx",
+        "size": 420800,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "green"
+        },
+        "ai_metadata": {
+          "detected_type": "Задание на АСОР",
+          "confidence": 98,
+          "error_message": null
+        },
+        "metadata_details": {
+          "sourceType": "Договоры",
+          "authorName": "Мустафаева Эльвина Сейрановна",
+          "authorRole": "contractor",
+          "uploadDate": "25.02.2026 10:45",
+          "originalComment": "Официальное задание на АСОР для Бриз Корпус 19.",
+          "crossLinks": [
+            {
+              "text": "Договор подряда №19-Бриз",
+              "status": "green",
+              "context": "ИИ обнаружил в тексте текущего файла ссылку на Договор подряда №19-Бриз. Документ найден в загруженном пакете."
+            },
+            {
+              "text": "Коммерческое предложение №142",
+              "status": "red",
+              "context": "ИИ обнаружил в тексте текущего файла ссылку на Коммерческое предложение №142. Документ не найден среди загруженных вложений."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:15:06",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл успешно извлечен из MSG."
+            },
+            {
+              "time": "12.05 12:15:08",
+              "stage": "Чтение",
+              "status": "green",
+              "text": "Текст DOCX полностью распознан. Спецификации не найдены."
+            },
+            {
+              "time": "12.05 12:15:09",
+              "stage": "Комплектность",
+              "status": "green",
+              "text": "Документ полностью соответствует регламенту комплектности."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Закрывает бизнес-требование: \"Наличие оформленного технического задания\"",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "1.2",
+          "textChunks": "32",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] EmbeddingsConnector: Loading docx bytes...",
+            "[INFO] TextSplitter: 32 chunks generated using recursive char splitter.",
+            "[SUCCESS] Vector DB: Uploaded embeddings to collection 'scost_requirements'."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "green",
+            "colors": [
+              "green"
+            ],
+            "has_error": false,
+            "has_warning": false,
+            "is_processing": false,
+            "is_success": true,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": []
+          },
+          "semantic_type": {
+            "key": "asor_task",
+            "label": "Задание на АСОР",
+            "detected_label": "Задание на АСОР",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Мустафаева Эльвина Сейрановна",
+            "short_name": "Мустафаева Э.С.",
+            "filter_key": "мустафаева эльвина сейрановна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "docx",
+            "category": "final_document",
+            "label": "Документ Word",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 0,
+            "parent_id": "node_1",
+            "ancestor_ids": [
+              "node_1"
+            ],
+            "ancestor_names": [
+              "RE_ACOP - Расценки СС Бриз Корпус 19.msg"
+            ],
+            "path_ids": [
+              "node_1",
+              "node_1_1"
+            ],
+            "path_names": [
+              "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+              "Задание для СЦ.docx"
+            ],
+            "path_label": "RE_ACOP - Расценки СС Бриз Корпус 19.msg / Задание для СЦ.docx",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_1"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_1_2",
+        "name": "Приложение №1_РСС__СП_5_оч_1_эт_Компл_А1-корп_19_СС_БРИЗ-25-02-26.xlsx",
+        "type": "xlsx",
+        "size": 2540000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "yellow",
+          "check": "red"
+        },
+        "ai_metadata": {
+          "detected_type": "Смета РСС / Спецификация",
+          "confidence": 91,
+          "error_message": "Обнаружено расхождение: извлеченные объемы сметы (Лист 1) не совпадают с шифром нормативной базы АСОР. Необходима корректировка расценок во 2 столбце."
+        },
+        "metadata_details": {
+          "sourceType": "Смета",
+          "authorName": "Мустафаева Эльвина Сейрановна",
+          "authorRole": "contractor",
+          "uploadDate": "25.02.2026 10:46",
+          "originalComment": "Таблица цен и сметных расценок БРИЗ К19.",
+          "crossLinks": [
+            {
+              "text": "Приложение №3_Материалы",
+              "status": "red",
+              "context": "ИИ обнаружил в тексте текущего файла ссылку на Приложение №3_Материалы. Документ не найден среди загруженных вложений."
+            },
+            {
+              "text": "Регламент АСОР-25",
+              "status": "green",
+              "context": "ИИ обнаружил в тексте текущего файла ссылку на Регламент АСОР-25. Документ найден в загруженном пакете."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:15:06",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл извлечен из MSG."
+            },
+            {
+              "time": "12.05 12:15:10",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Распознаны сметные листы. Обнаружено 12 позиций с несоответствием шифра базы."
+            },
+            {
+              "time": "12.05 12:15:12",
+              "stage": "Комплектность",
+              "status": "red",
+              "text": "Ошибка валидации сметных сумм по базе ФСНБ-2022. Требуется корректировка сметчика."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Закрывает бизнес-требование: \"Предоставление сметы в формате РСС\"",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "5.4",
+          "textChunks": "112",
+          "llmModel": "Gemini 1.5 Pro (Heavy)",
+          "embeddingLogs": [
+            "[INFO] EmbeddingsConnector: Fetching Excel sheet structure...",
+            "[WARNING] ParseEngine: Found unsupported style formulas in column 2. Falling back to value-based analysis.",
+            "[SUCCESS] Vector DB: Ingested 112 tabular chunks into Vector Space."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "red",
+            "colors": [
+              "green",
+              "yellow",
+              "red"
+            ],
+            "has_error": true,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "red",
+                "is_error": true,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [
+              "check"
+            ],
+            "warning_stages": [
+              "read"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "read",
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "rss_estimate",
+            "label": "РСС (сметы)",
+            "detected_label": "Смета РСС / Спецификация",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Мустафаева Эльвина Сейрановна",
+            "short_name": "Мустафаева Э.С.",
+            "filter_key": "мустафаева эльвина сейрановна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "xlsx",
+            "category": "final_document",
+            "label": "Таблица Excel",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 1,
+            "parent_id": "node_1",
+            "ancestor_ids": [
+              "node_1"
+            ],
+            "ancestor_names": [
+              "RE_ACOP - Расценки СС Бриз Корпус 19.msg"
+            ],
+            "path_ids": [
+              "node_1",
+              "node_1_2"
+            ],
+            "path_names": [
+              "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+              "Приложение №1_РСС__СП_5_оч_1_эт_Компл_А1-корп_19_СС_БРИЗ-25-02-26.xlsx"
+            ],
+            "path_label": "RE_ACOP - Расценки СС Бриз Корпус 19.msg / Приложение №1_РСС__СП_5_оч_1_эт_Компл_А1-корп_19_СС_БРИЗ-25-02-26.xlsx",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_1"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_1_3",
+        "name": "Чертежи_Архив_К19.zip",
+        "type": "zip",
+        "size": 8450120,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "yellow",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Архив проектных материалов",
+          "confidence": 95,
+          "error_message": "Архив успешно распакован. Обнаружен файл с низким качеством распознавания (низкая уверенность ИИ)."
+        },
+        "metadata_details": {
+          "sourceType": "Архив",
+          "authorName": "Смирнов Кирилл Андреевич",
+          "authorRole": "estimator",
+          "uploadDate": "25.02.2026 10:48",
+          "originalComment": "Архив чертежей и проектных планов Корпуса 19.",
+          "crossLinks": [
+            {
+              "text": "Разрез_Фундамент_К19 (pdf)",
+              "status": "green",
+              "context": "ИИ обнаружил в тексте текущего файла ссылку на Разрез_Фундамент_К19 (pdf). Документ найден в загруженном пакете."
+            },
+            {
+              "text": "Спецификация_Материалов_Скан (pdf)",
+              "status": "green",
+              "context": "ИИ обнаружил в тексте текущего файла ссылку на Спецификация_Материалов_Скан (pdf). Документ найден в загруженном пакете."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:15:06",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Архив успешно распакован. Найдено 2 вложенных PDF документа."
+            },
+            {
+              "time": "12.05 12:15:12",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Один из вложенных PDF-сканов распознан с ошибками OCR (Спецификация_Материалов_Скан.pdf)."
+            },
+            {
+              "time": "12.05 12:15:14",
+              "stage": "Комплектность",
+              "status": "yellow",
+              "text": "Пакет содержит частично нечитаемые материалы."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Наличие рабочей документации разделов КР/СС",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "8.1",
+          "textChunks": "48",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] EmbeddingsConnector: Unzipping 8.4 MB file stream...",
+            "[INFO] ParseEngine: Extracted 2 files (PDF). Running bulk indexation...",
+            "[SUCCESS] Vector DB: Indexed archive file tree."
+          ]
+        },
+        "children": [
+          {
+            "id": "node_1_3_1",
+            "name": "Разрез_Фундамент_К19.pdf",
+            "type": "pdf",
+            "size": 3120500,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "green",
+              "check": "green"
+            },
+            "ai_metadata": {
+              "detected_type": "Рабочая документация (Конструкции)",
+              "confidence": 96,
+              "error_message": null
+            },
+            "metadata_details": {
+              "sourceType": "Рабочая документация",
+              "authorName": "Смирнов Кирилл Андреевич",
+              "authorRole": "estimator",
+              "uploadDate": "25.02.2026 10:49",
+              "originalComment": "Конструктивные чертежи фундамента (КР) Корпус 19.",
+              "crossLinks": [
+                {
+                  "text": "ТЗ на АСОР К19 (docx)",
+                  "status": "green",
+                  "context": "ИИ обнаружил в тексте текущего файла ссылку на ТЗ на АСОР К19 (docx). Документ найден в загруженном пакете."
+                },
+                {
+                  "text": "Спецификация сметы (xlsx)",
+                  "status": "green",
+                  "context": "ИИ обнаружил в тексте текущего файла ссылку на Спецификация сметы (xlsx). Документ найден в загруженном пакете."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:15:07",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл успешно распакован из архива Чертежи_Архив_К19.zip."
+                },
+                {
+                  "time": "12.05 12:15:09",
+                  "stage": "Чтение",
+                  "status": "green",
+                  "text": "Текст и векторные слои PDF прочитаны корректно. OCR не требовалось."
+                },
+                {
+                  "time": "12.05 12:15:11",
+                  "stage": "Комплектность",
+                  "status": "green",
+                  "text": "Штампы чертежа совпадают с шифром Корпуса 19."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие шифра объекта на чертеже заданию АСОР",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "2.4",
+              "textChunks": "8",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] EmbeddingsConnector: Ingesting vector PDF pages...",
+                "[INFO] TextSplitter: 8 high-density structural chunks created.",
+                "[SUCCESS] Vector DB: Injected vector elements to project index."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "green",
+                "colors": [
+                  "green"
+                ],
+                "has_error": false,
+                "has_warning": false,
+                "is_processing": false,
+                "is_success": true,
+                "is_pending": false
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [],
+                "processing_stages": [],
+                "pending_stages": [],
+                "problem_stages": []
+              },
+              "semantic_type": {
+                "key": "working_docs",
+                "label": "Рабочая документация",
+                "detected_label": "Рабочая документация (Конструкции)",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Смирнов Кирилл Андреевич",
+                "short_name": "Смирнов К.А.",
+                "filter_key": "смирнов кирилл андреевич",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "pdf",
+                "category": "final_document",
+                "label": "PDF документ",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 0,
+                "parent_id": "node_1_3",
+                "ancestor_ids": [
+                  "node_1",
+                  "node_1_3"
+                ],
+                "ancestor_names": [
+                  "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+                  "Чертежи_Архив_К19.zip"
+                ],
+                "path_ids": [
+                  "node_1",
+                  "node_1_3",
+                  "node_1_3_1"
+                ],
+                "path_names": [
+                  "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+                  "Чертежи_Архив_К19.zip",
+                  "Разрез_Фундамент_К19.pdf"
+                ],
+                "path_label": "RE_ACOP - Расценки СС Бриз Корпус 19.msg / Чертежи_Архив_К19.zip / Разрез_Фундамент_К19.pdf",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_1",
+                  "node_1_3"
+                ]
+              }
+            }
+          },
+          {
+            "id": "node_1_3_2",
+            "name": "Спецификация_Материалов_Скан.pdf",
+            "type": "pdf",
+            "size": 5140300,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "red",
+              "check": "gray"
+            },
+            "ai_metadata": {
+              "detected_type": "Спецификация материалов и оборудования",
+              "confidence": 64,
+              "error_message": "Сбой этапа 'Чтение' (OCR): Низкое разрешение сканирования на страницах 3 и 4. Текст размыт, автоматический парсинг спецификации невозможен. Рекомендация: пересканировать документ с разрешением не менее 300 DPI."
+            },
+            "metadata_details": {
+              "sourceType": "Рабочая документация",
+              "authorName": "Смирнов Кирилл Андреевич",
+              "authorRole": "estimator",
+              "uploadDate": "25.02.2026 10:50",
+              "originalComment": "Скан спецификации оборудования (низкое качество сканирования).",
+              "crossLinks": [
+                {
+                  "text": "Приложение №1_РСС (xlsx)",
+                  "status": "green",
+                  "context": "ИИ обнаружил в тексте текущего файла ссылку на Приложение №1_РСС (xlsx). Документ найден в загруженном пакете."
+                },
+                {
+                  "text": "Оригинальный договор поставок",
+                  "status": "red",
+                  "context": "ИИ обнаружил в тексте текущего файла ссылку на Оригинальный договор поставок. Документ не найден среди загруженных вложений."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:15:07",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл успешно распакован из архива Чертежи_Архив_К19.zip."
+                },
+                {
+                  "time": "12.05 12:15:10",
+                  "stage": "Чтение",
+                  "status": "red",
+                  "text": "Сбой этапа 'Чтение' (OCR): Разрешение скана < 150 DPI на стр. 3 и 4. Текст размыт, автоматический парсинг таблицы спецификации приостановлен."
+                },
+                {
+                  "time": "12.05 12:15:11",
+                  "stage": "Комплектность",
+                  "status": "gray",
+                  "text": "Этап пропущен из-за критической ошибки чтения на предыдущем шаге."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Наличие спецификации оборудования и ведомости материалов",
+                  "status": "red"
+                }
+              ],
+              "pipelineTime": "4.8",
+              "textChunks": "56",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] EmbeddingsConnector: Initiating OCR engine (Tesseract fallback)...",
+                "[WARNING] ParseEngine: Confidence too low on pages 3-4 (< 70%). Indexation blocked.",
+                "[ERROR] EmbeddingsConnector: Embedding generation failed for 56 chunks."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "red",
+                "colors": [
+                  "green",
+                  "red",
+                  "gray"
+                ],
+                "has_error": true,
+                "has_warning": false,
+                "is_processing": false,
+                "is_success": false,
+                "is_pending": true
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "red",
+                    "is_error": true,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": false
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "gray",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": true,
+                    "is_success": false
+                  }
+                ],
+                "error_stages": [
+                  "read"
+                ],
+                "warning_stages": [],
+                "processing_stages": [],
+                "pending_stages": [
+                  "check"
+                ],
+                "problem_stages": [
+                  "read"
+                ]
+              },
+              "semantic_type": {
+                "key": "working_docs",
+                "label": "Рабочая документация",
+                "detected_label": "Спецификация материалов и оборудования",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Смирнов Кирилл Андреевич",
+                "short_name": "Смирнов К.А.",
+                "filter_key": "смирнов кирилл андреевич",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "pdf",
+                "category": "final_document",
+                "label": "PDF документ",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 1,
+                "parent_id": "node_1_3",
+                "ancestor_ids": [
+                  "node_1",
+                  "node_1_3"
+                ],
+                "ancestor_names": [
+                  "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+                  "Чертежи_Архив_К19.zip"
+                ],
+                "path_ids": [
+                  "node_1",
+                  "node_1_3",
+                  "node_1_3_2"
+                ],
+                "path_names": [
+                  "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+                  "Чертежи_Архив_К19.zip",
+                  "Спецификация_Материалов_Скан.pdf"
+                ],
+                "path_label": "RE_ACOP - Расценки СС Бриз Корпус 19.msg / Чертежи_Архив_К19.zip / Спецификация_Материалов_Скан.pdf",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_1",
+                  "node_1_3"
+                ]
+              }
+            }
+          }
+        ],
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "read",
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "read",
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "project_docs",
+            "label": "Проектная документация",
+            "detected_label": "Архив проектных материалов",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Смирнов Кирилл Андреевич",
+            "short_name": "Смирнов К.А.",
+            "filter_key": "смирнов кирилл андреевич",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "zip",
+            "category": "archive",
+            "label": "Архив .zip",
+            "is_container": true,
+            "is_archive": true,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": false,
+            "is_readable_document": false
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 2,
+            "parent_id": "node_1",
+            "ancestor_ids": [
+              "node_1"
+            ],
+            "ancestor_names": [
+              "RE_ACOP - Расценки СС Бриз Корпус 19.msg"
+            ],
+            "path_ids": [
+              "node_1",
+              "node_1_3"
+            ],
+            "path_names": [
+              "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+              "Чертежи_Архив_К19.zip"
+            ],
+            "path_label": "RE_ACOP - Расценки СС Бриз Корпус 19.msg / Чертежи_Архив_К19.zip",
+            "has_children": true
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_1"
+            ]
+          }
+        }
+      }
+    ],
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "red",
+        "colors": [
+          "green",
+          "red"
+        ],
+        "has_error": true,
+        "has_warning": false,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "red",
+            "is_error": true,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [
+          "check"
+        ],
+        "warning_stages": [],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "other",
+        "label": "Другое",
+        "detected_label": "Электронное письмо с вложениями",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Смирнов Кирилл Андреевич",
+        "short_name": "Смирнов К.А.",
+        "filter_key": "смирнов кирилл андреевич",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "msg",
+        "category": "mail",
+        "label": "Почтовое сообщение",
+        "is_container": true,
+        "is_archive": false,
+        "is_mail": true,
+        "is_folder": false,
+        "is_final_document": false,
+        "is_readable_document": false
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 0,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_1"
+        ],
+        "path_names": [
+          "RE_ACOP - Расценки СС Бриз Корпус 19.msg"
+        ],
+        "path_label": "RE_ACOP - Расценки СС Бриз Корпус 19.msg",
+        "has_children": true
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_2",
+    "name": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+    "type": "zip",
+    "size": 12640500,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "yellow",
+      "check": "yellow"
+    },
+    "ai_metadata": {
+      "detected_type": "Архив технической документации и ведомостей",
+      "confidence": 88,
+      "error_message": "Часть вложенных PDF требует ручной проверки качества OCR."
+    },
+    "metadata_details": {
+      "sourceType": "Архив",
+      "authorName": "Смирнов Кирилл Андреевич",
+      "authorRole": "estimator",
+      "uploadDate": "26.02.2026 09:12",
+      "originalComment": "Дополнительные ТДУ, ведомости материалов и сканы согласований.",
+      "comments": [
+        {
+          "author": "Смирнов Кирилл Андреевич",
+          "date": "26.02.2026 09:12",
+          "text": "Дополнительные ТДУ, ведомости материалов и сканы согласований."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "yellow",
+          "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "7.6",
+      "textChunks": "84",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 84 chunks prepared.",
+        "[INFO] Pipeline status: yellow."
+      ]
+    },
+    "children": [
+      {
+        "id": "node_2_1",
+        "name": "01_Технические_данные.zip",
+        "type": "zip",
+        "size": 5830000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Контейнер технических данных",
+          "confidence": 92,
+          "error_message": "Вложенная спецификация требует сверки с ведомостью материалов."
+        },
+        "metadata_details": {
+          "sourceType": "Архив",
+          "authorName": "Смирнов Кирилл Андреевич",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 09:13",
+          "originalComment": "Подпакет технических исходных данных.",
+          "comments": [
+            {
+              "author": "Смирнов Кирилл Андреевич",
+              "date": "26.02.2026 09:13",
+              "text": "Подпакет технических исходных данных."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "4.2",
+          "textChunks": "41",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 41 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": [
+          {
+            "id": "node_2_1_1",
+            "name": "Раздел_КР.zip",
+            "type": "zip",
+            "size": 3010000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "green",
+              "check": "green"
+            },
+            "ai_metadata": {
+              "detected_type": "Архив раздела конструктивных решений",
+              "confidence": 95,
+              "error_message": null
+            },
+            "metadata_details": {
+              "sourceType": "Архив",
+              "authorName": "Смирнов Кирилл Андреевич",
+              "authorRole": "estimator",
+              "uploadDate": "26.02.2026 09:14",
+              "originalComment": "КР, чертежи и ведомости по корпусу 19.",
+              "comments": [
+                {
+                  "author": "Смирнов Кирилл Андреевич",
+                  "date": "26.02.2026 09:14",
+                  "text": "КР, чертежи и ведомости по корпусу 19."
+                }
+              ],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "green",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "green",
+                  "text": "Документ успешно обработан и связан с пакетом."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "3.1",
+              "textChunks": "26",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 26 chunks prepared.",
+                "[SUCCESS] Pipeline status: green."
+              ]
+            },
+            "children": [
+              {
+                "id": "node_2_1_1_1",
+                "name": "Чертежи_КР_лист_04.pdf",
+                "type": "pdf",
+                "size": 1240000,
+                "pipeline_status": {
+                  "unpack": "green",
+                  "read": "green",
+                  "check": "green"
+                },
+                "ai_metadata": {
+                  "detected_type": "Рабочий чертеж КР",
+                  "confidence": 97,
+                  "error_message": null
+                },
+                "metadata_details": {
+                  "sourceType": "Рабочая документация",
+                  "authorName": "Смирнов Кирилл Андреевич",
+                  "authorRole": "estimator",
+                  "uploadDate": "26.02.2026 09:15",
+                  "originalComment": "Лист с конструктивными узлами.",
+                  "comments": [
+                    {
+                      "author": "Смирнов Кирилл Андреевич",
+                      "date": "26.02.2026 09:15",
+                      "text": "Лист с конструктивными узлами."
+                    }
+                  ],
+                  "crossLinks": [
+                    {
+                      "text": "Задание на АСОР Бриз Корпус 19",
+                      "status": "green",
+                      "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                    },
+                    {
+                      "text": "Пакет сметных расчетов РСС",
+                      "status": "green",
+                      "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                    }
+                  ],
+                  "logs": [
+                    {
+                      "time": "12.05 12:16:02",
+                      "stage": "Распаковка",
+                      "status": "green",
+                      "text": "Файл принят в структуру вложений."
+                    },
+                    {
+                      "time": "12.05 12:16:06",
+                      "stage": "Чтение",
+                      "status": "green",
+                      "text": "Документ успешно обработан и связан с пакетом."
+                    }
+                  ],
+                  "compliance": [
+                    {
+                      "text": "Соответствие пакету комплектности проекта",
+                      "status": "green"
+                    }
+                  ],
+                  "pipelineTime": "1.8",
+                  "textChunks": "11",
+                  "llmModel": "Gemini 2.5 Flash",
+                  "embeddingLogs": [
+                    "[INFO] TreeMock: node inserted into demo state.",
+                    "[INFO] Parser: 11 chunks prepared.",
+                    "[SUCCESS] Pipeline status: green."
+                  ]
+                },
+                "children": null,
+                "filter_metadata": {
+                  "schema_version": 1,
+                  "status": {
+                    "overall": "green",
+                    "colors": [
+                      "green"
+                    ],
+                    "has_error": false,
+                    "has_warning": false,
+                    "is_processing": false,
+                    "is_success": true,
+                    "is_pending": false
+                  },
+                  "pipeline": {
+                    "stages": [
+                      {
+                        "key": "unpack",
+                        "code": "Р",
+                        "label": "Распаковка",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      },
+                      {
+                        "key": "read",
+                        "code": "Ч",
+                        "label": "Чтение",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      },
+                      {
+                        "key": "check",
+                        "code": "К",
+                        "label": "Комплектность",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      }
+                    ],
+                    "error_stages": [],
+                    "warning_stages": [],
+                    "processing_stages": [],
+                    "pending_stages": [],
+                    "problem_stages": []
+                  },
+                  "semantic_type": {
+                    "key": "working_docs",
+                    "label": "Рабочая документация",
+                    "detected_label": "Рабочий чертеж КР",
+                    "source": "ai_metadata.detected_type"
+                  },
+                  "uploaded_by": {
+                    "full_name": "Смирнов Кирилл Андреевич",
+                    "short_name": "Смирнов К.А.",
+                    "filter_key": "смирнов кирилл андреевич",
+                    "source": "metadata_details.authorName"
+                  },
+                  "technical_format": {
+                    "extension": "pdf",
+                    "category": "final_document",
+                    "label": "PDF документ",
+                    "is_container": false,
+                    "is_archive": false,
+                    "is_mail": false,
+                    "is_folder": false,
+                    "is_final_document": true,
+                    "is_readable_document": true
+                  },
+                  "tree_context": {
+                    "depth": 3,
+                    "order_index": 0,
+                    "parent_id": "node_2_1_1",
+                    "ancestor_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ],
+                    "ancestor_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip"
+                    ],
+                    "path_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1",
+                      "node_2_1_1_1"
+                    ],
+                    "path_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip",
+                      "Чертежи_КР_лист_04.pdf"
+                    ],
+                    "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Раздел_КР.zip / Чертежи_КР_лист_04.pdf",
+                    "has_children": false
+                  },
+                  "filter_flags": {
+                    "include_for_status_filter": true,
+                    "include_for_pipeline_filter": true,
+                    "include_for_semantic_filter": true,
+                    "include_for_uploader_filter": true,
+                    "include_for_format_filter": true,
+                    "expand_ancestors_on_match": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "node_2_1_1_1_1",
+                "name": "Фрагмент_узла_КР_04_A.pdf",
+                "type": "pdf",
+                "size": 620000,
+                "pipeline_status": {
+                  "unpack": "green",
+                  "read": "loading",
+                  "check": "gray"
+                },
+                "ai_metadata": {
+                  "detected_type": "Фрагмент чертежа с частичным OCR",
+                  "confidence": 72,
+                  "error_message": "Текстовые подписи распознаны частично."
+                },
+                "metadata_details": {
+                  "sourceType": "Фрагмент PDF",
+                  "authorName": "Смирнов Кирилл Андреевич",
+                  "authorRole": "estimator",
+                  "uploadDate": "26.02.2026 09:16",
+                  "originalComment": "Фрагмент листа для уточнения сметной позиции.",
+                  "comments": [],
+                  "crossLinks": [
+                    {
+                      "text": "Задание на АСОР Бриз Корпус 19",
+                      "status": "green",
+                      "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                    },
+                    {
+                      "text": "Пакет сметных расчетов РСС",
+                      "status": "green",
+                      "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                    }
+                  ],
+                  "logs": [
+                    {
+                      "time": "12.05 12:16:02",
+                      "stage": "Распаковка",
+                      "status": "green",
+                      "text": "Файл принят в структуру вложений."
+                    },
+                    {
+                      "time": "12.05 12:16:06",
+                      "stage": "Чтение",
+                      "status": "loading",
+                      "text": "Документ находится в процессе обработки, следующий этап ожидает результата."
+                    }
+                  ],
+                  "compliance": [
+                    {
+                      "text": "Соответствие пакету комплектности проекта",
+                      "status": "green"
+                    }
+                  ],
+                  "pipelineTime": "2.5",
+                  "textChunks": "6",
+                  "llmModel": "Gemini 2.5 Flash",
+                  "embeddingLogs": [
+                    "[INFO] TreeMock: node inserted into demo state.",
+                    "[INFO] Parser: 6 chunks prepared.",
+                    "[INFO] Pipeline status: loading."
+                  ]
+                },
+                "children": null,
+                "filter_metadata": {
+                  "schema_version": 1,
+                  "status": {
+                    "overall": "loading",
+                    "colors": [
+                      "green",
+                      "loading",
+                      "gray"
+                    ],
+                    "has_error": false,
+                    "has_warning": false,
+                    "is_processing": true,
+                    "is_success": false,
+                    "is_pending": true
+                  },
+                  "pipeline": {
+                    "stages": [
+                      {
+                        "key": "unpack",
+                        "code": "Р",
+                        "label": "Распаковка",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      },
+                      {
+                        "key": "read",
+                        "code": "Ч",
+                        "label": "Чтение",
+                        "status": "loading",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": true,
+                        "is_pending": false,
+                        "is_success": false
+                      },
+                      {
+                        "key": "check",
+                        "code": "К",
+                        "label": "Комплектность",
+                        "status": "gray",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": true,
+                        "is_success": false
+                      }
+                    ],
+                    "error_stages": [],
+                    "warning_stages": [],
+                    "processing_stages": [
+                      "read"
+                    ],
+                    "pending_stages": [
+                      "check"
+                    ],
+                    "problem_stages": []
+                  },
+                  "semantic_type": {
+                    "key": "working_docs",
+                    "label": "Рабочая документация",
+                    "detected_label": "Фрагмент чертежа с частичным OCR",
+                    "source": "ai_metadata.detected_type"
+                  },
+                  "uploaded_by": {
+                    "full_name": "Смирнов Кирилл Андреевич",
+                    "short_name": "Смирнов К.А.",
+                    "filter_key": "смирнов кирилл андреевич",
+                    "source": "metadata_details.authorName"
+                  },
+                  "technical_format": {
+                    "extension": "pdf",
+                    "category": "final_document",
+                    "label": "PDF документ",
+                    "is_container": false,
+                    "is_archive": false,
+                    "is_mail": false,
+                    "is_folder": false,
+                    "is_final_document": true,
+                    "is_readable_document": true
+                  },
+                  "tree_context": {
+                    "depth": 3,
+                    "order_index": 1,
+                    "parent_id": "node_2_1_1",
+                    "ancestor_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ],
+                    "ancestor_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip"
+                    ],
+                    "path_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1",
+                      "node_2_1_1_1_1"
+                    ],
+                    "path_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip",
+                      "Фрагмент_узла_КР_04_A.pdf"
+                    ],
+                    "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Раздел_КР.zip / Фрагмент_узла_КР_04_A.pdf",
+                    "has_children": false
+                  },
+                  "filter_flags": {
+                    "include_for_status_filter": true,
+                    "include_for_pipeline_filter": true,
+                    "include_for_semantic_filter": true,
+                    "include_for_uploader_filter": true,
+                    "include_for_format_filter": true,
+                    "expand_ancestors_on_match": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "node_2_1_1_1_2",
+                "name": "Фрагмент_узла_КР_04_B.jpg",
+                "type": "jpg",
+                "size": 540000,
+                "pipeline_status": {
+                  "unpack": "green",
+                  "read": "yellow",
+                  "check": "gray"
+                },
+                "ai_metadata": {
+                  "detected_type": "Фрагмент чертежа / изображение",
+                  "confidence": 69,
+                  "error_message": "Часть размеров распознана неуверенно, требуется контроль."
+                },
+                "metadata_details": {
+                  "sourceType": "Рабочая документация",
+                  "authorName": "Смирнов Кирилл Андреевич",
+                  "authorRole": "estimator",
+                  "uploadDate": "26.02.2026 09:23",
+                  "originalComment": "JPG-фрагмент узла КР-04 для проверки OCR на изображениях.",
+                  "comments": [
+                    {
+                      "author": "Смирнов Кирилл Андреевич",
+                      "date": "26.02.2026 09:23",
+                      "text": "JPG-фрагмент узла КР-04 для проверки OCR на изображениях."
+                    }
+                  ],
+                  "crossLinks": [
+                    {
+                      "text": "Задание на АСОР Бриз Корпус 19",
+                      "status": "green",
+                      "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                    },
+                    {
+                      "text": "Пакет сметных расчетов РСС",
+                      "status": "green",
+                      "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                    }
+                  ],
+                  "logs": [
+                    {
+                      "time": "12.05 12:16:02",
+                      "stage": "Распаковка",
+                      "status": "green",
+                      "text": "Файл принят в структуру вложений."
+                    },
+                    {
+                      "time": "12.05 12:16:06",
+                      "stage": "Чтение",
+                      "status": "yellow",
+                      "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+                    }
+                  ],
+                  "compliance": [
+                    {
+                      "text": "Соответствие пакету комплектности проекта",
+                      "status": "green"
+                    }
+                  ],
+                  "pipelineTime": "2.9",
+                  "textChunks": "4",
+                  "llmModel": "Gemini 2.5 Flash",
+                  "embeddingLogs": [
+                    "[INFO] TreeMock: node inserted into demo state.",
+                    "[INFO] Parser: 4 chunks prepared.",
+                    "[INFO] Pipeline status: yellow."
+                  ]
+                },
+                "children": null,
+                "filter_metadata": {
+                  "schema_version": 1,
+                  "status": {
+                    "overall": "yellow",
+                    "colors": [
+                      "green",
+                      "yellow",
+                      "gray"
+                    ],
+                    "has_error": false,
+                    "has_warning": true,
+                    "is_processing": false,
+                    "is_success": false,
+                    "is_pending": true
+                  },
+                  "pipeline": {
+                    "stages": [
+                      {
+                        "key": "unpack",
+                        "code": "Р",
+                        "label": "Распаковка",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      },
+                      {
+                        "key": "read",
+                        "code": "Ч",
+                        "label": "Чтение",
+                        "status": "yellow",
+                        "is_error": false,
+                        "is_warning": true,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": false
+                      },
+                      {
+                        "key": "check",
+                        "code": "К",
+                        "label": "Комплектность",
+                        "status": "gray",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": true,
+                        "is_success": false
+                      }
+                    ],
+                    "error_stages": [],
+                    "warning_stages": [
+                      "read"
+                    ],
+                    "processing_stages": [],
+                    "pending_stages": [
+                      "check"
+                    ],
+                    "problem_stages": [
+                      "read"
+                    ]
+                  },
+                  "semantic_type": {
+                    "key": "working_docs",
+                    "label": "Рабочая документация",
+                    "detected_label": "Фрагмент чертежа / изображение",
+                    "source": "ai_metadata.detected_type"
+                  },
+                  "uploaded_by": {
+                    "full_name": "Смирнов Кирилл Андреевич",
+                    "short_name": "Смирнов К.А.",
+                    "filter_key": "смирнов кирилл андреевич",
+                    "source": "metadata_details.authorName"
+                  },
+                  "technical_format": {
+                    "extension": "jpg",
+                    "category": "final_document",
+                    "label": "Изображение / скан",
+                    "is_container": false,
+                    "is_archive": false,
+                    "is_mail": false,
+                    "is_folder": false,
+                    "is_final_document": true,
+                    "is_readable_document": true
+                  },
+                  "tree_context": {
+                    "depth": 3,
+                    "order_index": 2,
+                    "parent_id": "node_2_1_1",
+                    "ancestor_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ],
+                    "ancestor_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip"
+                    ],
+                    "path_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1",
+                      "node_2_1_1_1_2"
+                    ],
+                    "path_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip",
+                      "Фрагмент_узла_КР_04_B.jpg"
+                    ],
+                    "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Раздел_КР.zip / Фрагмент_узла_КР_04_B.jpg",
+                    "has_children": false
+                  },
+                  "filter_flags": {
+                    "include_for_status_filter": true,
+                    "include_for_pipeline_filter": true,
+                    "include_for_semantic_filter": true,
+                    "include_for_uploader_filter": true,
+                    "include_for_format_filter": true,
+                    "expand_ancestors_on_match": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "node_2_1_1_2",
+                "name": "Спецификация_КР_лист_04.xlsx",
+                "type": "xlsx",
+                "size": 1180000,
+                "pipeline_status": {
+                  "unpack": "green",
+                  "read": "green",
+                  "check": "yellow"
+                },
+                "ai_metadata": {
+                  "detected_type": "РСС (сметы)",
+                  "confidence": 88,
+                  "error_message": "Требуется сверка количества материалов с листом КР-04."
+                },
+                "metadata_details": {
+                  "sourceType": "Смета",
+                  "authorName": "Мустафаева Эльвина Сейрановна",
+                  "authorRole": "contractor",
+                  "uploadDate": "26.02.2026 09:22",
+                  "originalComment": "Табличная спецификация к листу КР-04.",
+                  "comments": [
+                    {
+                      "author": "Мустафаева Эльвина Сейрановна",
+                      "date": "26.02.2026 09:22",
+                      "text": "Табличная спецификация к листу КР-04."
+                    }
+                  ],
+                  "crossLinks": [
+                    {
+                      "text": "Задание на АСОР Бриз Корпус 19",
+                      "status": "green",
+                      "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                    },
+                    {
+                      "text": "Пакет сметных расчетов РСС",
+                      "status": "green",
+                      "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                    }
+                  ],
+                  "logs": [
+                    {
+                      "time": "12.05 12:16:02",
+                      "stage": "Распаковка",
+                      "status": "green",
+                      "text": "Файл принят в структуру вложений."
+                    },
+                    {
+                      "time": "12.05 12:16:06",
+                      "stage": "Чтение",
+                      "status": "yellow",
+                      "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+                    }
+                  ],
+                  "compliance": [
+                    {
+                      "text": "Соответствие пакету комплектности проекта",
+                      "status": "green"
+                    }
+                  ],
+                  "pipelineTime": "3.2",
+                  "textChunks": "51",
+                  "llmModel": "Gemini 1.5 Pro (Heavy)",
+                  "embeddingLogs": [
+                    "[INFO] TreeMock: node inserted into demo state.",
+                    "[INFO] Parser: 51 chunks prepared.",
+                    "[INFO] Pipeline status: yellow."
+                  ]
+                },
+                "children": null,
+                "filter_metadata": {
+                  "schema_version": 1,
+                  "status": {
+                    "overall": "yellow",
+                    "colors": [
+                      "green",
+                      "yellow"
+                    ],
+                    "has_error": false,
+                    "has_warning": true,
+                    "is_processing": false,
+                    "is_success": false,
+                    "is_pending": false
+                  },
+                  "pipeline": {
+                    "stages": [
+                      {
+                        "key": "unpack",
+                        "code": "Р",
+                        "label": "Распаковка",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      },
+                      {
+                        "key": "read",
+                        "code": "Ч",
+                        "label": "Чтение",
+                        "status": "green",
+                        "is_error": false,
+                        "is_warning": false,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": true
+                      },
+                      {
+                        "key": "check",
+                        "code": "К",
+                        "label": "Комплектность",
+                        "status": "yellow",
+                        "is_error": false,
+                        "is_warning": true,
+                        "is_processing": false,
+                        "is_pending": false,
+                        "is_success": false
+                      }
+                    ],
+                    "error_stages": [],
+                    "warning_stages": [
+                      "check"
+                    ],
+                    "processing_stages": [],
+                    "pending_stages": [],
+                    "problem_stages": [
+                      "check"
+                    ]
+                  },
+                  "semantic_type": {
+                    "key": "rss_estimate",
+                    "label": "РСС (сметы)",
+                    "detected_label": "РСС (сметы)",
+                    "source": "ai_metadata.detected_type"
+                  },
+                  "uploaded_by": {
+                    "full_name": "Мустафаева Эльвина Сейрановна",
+                    "short_name": "Мустафаева Э.С.",
+                    "filter_key": "мустафаева эльвина сейрановна",
+                    "source": "metadata_details.authorName"
+                  },
+                  "technical_format": {
+                    "extension": "xlsx",
+                    "category": "final_document",
+                    "label": "Таблица Excel",
+                    "is_container": false,
+                    "is_archive": false,
+                    "is_mail": false,
+                    "is_folder": false,
+                    "is_final_document": true,
+                    "is_readable_document": true
+                  },
+                  "tree_context": {
+                    "depth": 3,
+                    "order_index": 3,
+                    "parent_id": "node_2_1_1",
+                    "ancestor_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ],
+                    "ancestor_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip"
+                    ],
+                    "path_ids": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1",
+                      "node_2_1_1_2"
+                    ],
+                    "path_names": [
+                      "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                      "01_Технические_данные.zip",
+                      "Раздел_КР.zip",
+                      "Спецификация_КР_лист_04.xlsx"
+                    ],
+                    "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Раздел_КР.zip / Спецификация_КР_лист_04.xlsx",
+                    "has_children": false
+                  },
+                  "filter_flags": {
+                    "include_for_status_filter": true,
+                    "include_for_pipeline_filter": true,
+                    "include_for_semantic_filter": true,
+                    "include_for_uploader_filter": true,
+                    "include_for_format_filter": true,
+                    "expand_ancestors_on_match": [
+                      "node_2",
+                      "node_2_1",
+                      "node_2_1_1"
+                    ]
+                  }
+                }
+              }
+            ],
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "green",
+                "colors": [
+                  "green"
+                ],
+                "has_error": false,
+                "has_warning": false,
+                "is_processing": false,
+                "is_success": true,
+                "is_pending": false
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [],
+                "processing_stages": [],
+                "pending_stages": [],
+                "problem_stages": []
+              },
+              "semantic_type": {
+                "key": "project_docs",
+                "label": "Проектная документация",
+                "detected_label": "Архив раздела конструктивных решений",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Смирнов Кирилл Андреевич",
+                "short_name": "Смирнов К.А.",
+                "filter_key": "смирнов кирилл андреевич",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "zip",
+                "category": "archive",
+                "label": "Архив .zip",
+                "is_container": true,
+                "is_archive": true,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": false,
+                "is_readable_document": false
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 0,
+                "parent_id": "node_2_1",
+                "ancestor_ids": [
+                  "node_2",
+                  "node_2_1"
+                ],
+                "ancestor_names": [
+                  "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                  "01_Технические_данные.zip"
+                ],
+                "path_ids": [
+                  "node_2",
+                  "node_2_1",
+                  "node_2_1_1"
+                ],
+                "path_names": [
+                  "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                  "01_Технические_данные.zip",
+                  "Раздел_КР.zip"
+                ],
+                "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Раздел_КР.zip",
+                "has_children": true
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_2",
+                  "node_2_1"
+                ]
+              }
+            }
+          },
+          {
+            "id": "node_2_1_2",
+            "name": "Пояснительная_записка_ТДУ.docx",
+            "type": "docx",
+            "size": 740000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "green",
+              "check": "green"
+            },
+            "ai_metadata": {
+              "detected_type": "Проектная документация",
+              "confidence": 94,
+              "error_message": null
+            },
+            "metadata_details": {
+              "sourceType": "Проектная документация",
+              "authorName": "Смирнов Кирилл Андреевич",
+              "authorRole": "estimator",
+              "uploadDate": "26.02.2026 09:20",
+              "originalComment": "Пояснительная записка к техническим исходным данным.",
+              "comments": [
+                {
+                  "author": "Смирнов Кирилл Андреевич",
+                  "date": "26.02.2026 09:20",
+                  "text": "Пояснительная записка к техническим исходным данным."
+                }
+              ],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "green",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "green",
+                  "text": "Документ успешно обработан и связан с пакетом."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "1.9",
+              "textChunks": "29",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 29 chunks prepared.",
+                "[SUCCESS] Pipeline status: green."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "green",
+                "colors": [
+                  "green"
+                ],
+                "has_error": false,
+                "has_warning": false,
+                "is_processing": false,
+                "is_success": true,
+                "is_pending": false
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [],
+                "processing_stages": [],
+                "pending_stages": [],
+                "problem_stages": []
+              },
+              "semantic_type": {
+                "key": "project_docs",
+                "label": "Проектная документация",
+                "detected_label": "Проектная документация",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Смирнов Кирилл Андреевич",
+                "short_name": "Смирнов К.А.",
+                "filter_key": "смирнов кирилл андреевич",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "docx",
+                "category": "final_document",
+                "label": "Документ Word",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 1,
+                "parent_id": "node_2_1",
+                "ancestor_ids": [
+                  "node_2",
+                  "node_2_1"
+                ],
+                "ancestor_names": [
+                  "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                  "01_Технические_данные.zip"
+                ],
+                "path_ids": [
+                  "node_2",
+                  "node_2_1",
+                  "node_2_1_2"
+                ],
+                "path_names": [
+                  "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                  "01_Технические_данные.zip",
+                  "Пояснительная_записка_ТДУ.docx"
+                ],
+                "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Пояснительная_записка_ТДУ.docx",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_2",
+                  "node_2_1"
+                ]
+              }
+            }
+          },
+          {
+            "id": "node_2_1_3",
+            "name": "Скан_подписей_ТДУ.pdf",
+            "type": "pdf",
+            "size": 930000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "red",
+              "check": "gray"
+            },
+            "ai_metadata": {
+              "detected_type": "Скан согласования",
+              "confidence": 61,
+              "error_message": "OCR не распознал часть подписей на скане."
+            },
+            "metadata_details": {
+              "sourceType": "Согласование РП",
+              "authorName": "Волкова Анна Петровна",
+              "authorRole": "estimator",
+              "uploadDate": "26.02.2026 09:21",
+              "originalComment": "Скан листа подписей по техническим данным.",
+              "comments": [
+                {
+                  "author": "Волкова Анна Петровна",
+                  "date": "26.02.2026 09:21",
+                  "text": "Скан листа подписей по техническим данным."
+                }
+              ],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "red",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "red",
+                  "text": "Обнаружены ошибки обработки, требуется ручное уточнение."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "red"
+                }
+              ],
+              "pipelineTime": "4.6",
+              "textChunks": "12",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 12 chunks prepared.",
+                "[ERROR] Pipeline status: red."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "red",
+                "colors": [
+                  "green",
+                  "red",
+                  "gray"
+                ],
+                "has_error": true,
+                "has_warning": false,
+                "is_processing": false,
+                "is_success": false,
+                "is_pending": true
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "red",
+                    "is_error": true,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": false
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "gray",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": true,
+                    "is_success": false
+                  }
+                ],
+                "error_stages": [
+                  "read"
+                ],
+                "warning_stages": [],
+                "processing_stages": [],
+                "pending_stages": [
+                  "check"
+                ],
+                "problem_stages": [
+                  "read"
+                ]
+              },
+              "semantic_type": {
+                "key": "rp_approval",
+                "label": "Согласование РП",
+                "detected_label": "Скан согласования",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Волкова Анна Петровна",
+                "short_name": "Волкова А.П.",
+                "filter_key": "волкова анна петровна",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "pdf",
+                "category": "final_document",
+                "label": "PDF документ",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 2,
+                "parent_id": "node_2_1",
+                "ancestor_ids": [
+                  "node_2",
+                  "node_2_1"
+                ],
+                "ancestor_names": [
+                  "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                  "01_Технические_данные.zip"
+                ],
+                "path_ids": [
+                  "node_2",
+                  "node_2_1",
+                  "node_2_1_3"
+                ],
+                "path_names": [
+                  "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+                  "01_Технические_данные.zip",
+                  "Скан_подписей_ТДУ.pdf"
+                ],
+                "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip / Скан_подписей_ТДУ.pdf",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_2",
+                  "node_2_1"
+                ]
+              }
+            }
+          }
+        ],
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "other",
+            "label": "Другое",
+            "detected_label": "Контейнер технических данных",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Смирнов Кирилл Андреевич",
+            "short_name": "Смирнов К.А.",
+            "filter_key": "смирнов кирилл андреевич",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "zip",
+            "category": "archive",
+            "label": "Архив .zip",
+            "is_container": true,
+            "is_archive": true,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": false,
+            "is_readable_document": false
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 0,
+            "parent_id": "node_2",
+            "ancestor_ids": [
+              "node_2"
+            ],
+            "ancestor_names": [
+              "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip"
+            ],
+            "path_ids": [
+              "node_2",
+              "node_2_1"
+            ],
+            "path_names": [
+              "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+              "01_Технические_данные.zip"
+            ],
+            "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 01_Технические_данные.zip",
+            "has_children": true
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_2"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_2_2",
+        "name": "02_Геология_и_основания.pdf",
+        "type": "pdf",
+        "size": 2180000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Проектная документация",
+          "confidence": 89,
+          "error_message": "Требуется сверка ссылок на геологические приложения."
+        },
+        "metadata_details": {
+          "sourceType": "Проектная документация",
+          "authorName": "Смирнов Кирилл Андреевич",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 09:18",
+          "originalComment": "Раздел с исходными инженерно-геологическими условиями.",
+          "comments": [
+            {
+              "author": "Смирнов Кирилл Андреевич",
+              "date": "26.02.2026 09:18",
+              "text": "Раздел с исходными инженерно-геологическими условиями."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "2.7",
+          "textChunks": "22",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 22 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "project_docs",
+            "label": "Проектная документация",
+            "detected_label": "Проектная документация",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Смирнов Кирилл Андреевич",
+            "short_name": "Смирнов К.А.",
+            "filter_key": "смирнов кирилл андреевич",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "pdf",
+            "category": "final_document",
+            "label": "PDF документ",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 1,
+            "parent_id": "node_2",
+            "ancestor_ids": [
+              "node_2"
+            ],
+            "ancestor_names": [
+              "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip"
+            ],
+            "path_ids": [
+              "node_2",
+              "node_2_2"
+            ],
+            "path_names": [
+              "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+              "02_Геология_и_основания.pdf"
+            ],
+            "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 02_Геология_и_основания.pdf",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_2"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_2_3",
+        "name": "03_Ведомость_материалов_ТДУ.xlsx",
+        "type": "xlsx",
+        "size": 1460000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "yellow",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Ведомость материалов",
+          "confidence": 84,
+          "error_message": "Найдены позиции без ссылки на спецификацию материалов."
+        },
+        "metadata_details": {
+          "sourceType": "Смета",
+          "authorName": "Мустафаева Эльвина Сейрановна",
+          "authorRole": "contractor",
+          "uploadDate": "26.02.2026 09:19",
+          "originalComment": "Ведомость материалов из технических данных подрядчика.",
+          "comments": [
+            {
+              "author": "Мустафаева Эльвина Сейрановна",
+              "date": "26.02.2026 09:19",
+              "text": "Ведомость материалов из технических данных подрядчика."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "3.8",
+          "textChunks": "67",
+          "llmModel": "Gemini 1.5 Pro (Heavy)",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 67 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "read",
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "read",
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "other",
+            "label": "Другое",
+            "detected_label": "Ведомость материалов",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Мустафаева Эльвина Сейрановна",
+            "short_name": "Мустафаева Э.С.",
+            "filter_key": "мустафаева эльвина сейрановна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "xlsx",
+            "category": "final_document",
+            "label": "Таблица Excel",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 2,
+            "parent_id": "node_2",
+            "ancestor_ids": [
+              "node_2"
+            ],
+            "ancestor_names": [
+              "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip"
+            ],
+            "path_ids": [
+              "node_2",
+              "node_2_3"
+            ],
+            "path_names": [
+              "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+              "03_Ведомость_материалов_ТДУ.xlsx"
+            ],
+            "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip / 03_Ведомость_материалов_ТДУ.xlsx",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_2"
+            ]
+          }
+        }
+      }
+    ],
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "yellow",
+        "colors": [
+          "green",
+          "yellow"
+        ],
+        "has_error": false,
+        "has_warning": true,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [
+          "read",
+          "check"
+        ],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "read",
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "other",
+        "label": "Другое",
+        "detected_label": "Архив технической документации и ведомостей",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Смирнов Кирилл Андреевич",
+        "short_name": "Смирнов К.А.",
+        "filter_key": "смирнов кирилл андреевич",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "zip",
+        "category": "archive",
+        "label": "Архив .zip",
+        "is_container": true,
+        "is_archive": true,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": false,
+        "is_readable_document": false
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 1,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_2"
+        ],
+        "path_names": [
+          "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip"
+        ],
+        "path_label": "Пакет_ТДУ_и_ведомостей_Бриз_К19.zip",
+        "has_children": true
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_3",
+    "name": "Задание_на_АСОР_Бриз_К19_редакция_02.docx",
+    "type": "docx",
+    "size": 510400,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "green",
+      "check": "green"
+    },
+    "ai_metadata": {
+      "detected_type": "Задание на АСОР",
+      "confidence": 99,
+      "error_message": null
+    },
+    "metadata_details": {
+      "sourceType": "Задание",
+      "authorName": "Мустафаева Эльвина Сейрановна",
+      "authorRole": "contractor",
+      "uploadDate": "26.02.2026 09:30",
+      "originalComment": "Обновленная редакция задания на АСОР.",
+      "comments": [
+        {
+          "author": "Мустафаева Эльвина Сейрановна",
+          "date": "26.02.2026 09:30",
+          "text": "Обновленная редакция задания на АСОР."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "green",
+          "text": "Документ успешно обработан и связан с пакетом."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "1.4",
+      "textChunks": "34",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 34 chunks prepared.",
+        "[SUCCESS] Pipeline status: green."
+      ]
+    },
+    "children": null,
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "green",
+        "colors": [
+          "green"
+        ],
+        "has_error": false,
+        "has_warning": false,
+        "is_processing": false,
+        "is_success": true,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": []
+      },
+      "semantic_type": {
+        "key": "asor_task",
+        "label": "Задание на АСОР",
+        "detected_label": "Задание на АСОР",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Мустафаева Эльвина Сейрановна",
+        "short_name": "Мустафаева Э.С.",
+        "filter_key": "мустафаева эльвина сейрановна",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "docx",
+        "category": "final_document",
+        "label": "Документ Word",
+        "is_container": false,
+        "is_archive": false,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": true,
+        "is_readable_document": true
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 2,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_3"
+        ],
+        "path_names": [
+          "Задание_на_АСОР_Бриз_К19_редакция_02.docx"
+        ],
+        "path_label": "Задание_на_АСОР_Бриз_К19_редакция_02.docx",
+        "has_children": false
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_4",
+    "name": "Ведомость_объемов_работ_К19.xlsx",
+    "type": "xlsx",
+    "size": 1960000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "yellow",
+      "check": "red"
+    },
+    "ai_metadata": {
+      "detected_type": "Ведомость объемов работ",
+      "confidence": 86,
+      "error_message": "Найдены расхождения объемов по двум позициям."
+    },
+    "metadata_details": {
+      "sourceType": "Ведомость",
+      "authorName": "Мустафаева Эльвина Сейрановна",
+      "authorRole": "contractor",
+      "uploadDate": "26.02.2026 10:05",
+      "originalComment": "ВОР для сверки с локальной сметой.",
+      "comments": [
+        {
+          "author": "Мустафаева Эльвина Сейрановна",
+          "date": "26.02.2026 10:05",
+          "text": "ВОР для сверки с локальной сметой."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "red",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "red",
+          "text": "Обнаружены ошибки обработки, требуется ручное уточнение."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "red"
+        }
+      ],
+      "pipelineTime": "5.9",
+      "textChunks": "118",
+      "llmModel": "Gemini 1.5 Pro (Heavy)",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 118 chunks prepared.",
+        "[ERROR] Pipeline status: red."
+      ]
+    },
+    "children": null,
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "red",
+        "colors": [
+          "green",
+          "yellow",
+          "red"
+        ],
+        "has_error": true,
+        "has_warning": true,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "red",
+            "is_error": true,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [
+          "check"
+        ],
+        "warning_stages": [
+          "read"
+        ],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "read",
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "rss_estimate",
+        "label": "РСС (сметы)",
+        "detected_label": "Ведомость объемов работ",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Мустафаева Эльвина Сейрановна",
+        "short_name": "Мустафаева Э.С.",
+        "filter_key": "мустафаева эльвина сейрановна",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "xlsx",
+        "category": "final_document",
+        "label": "Таблица Excel",
+        "is_container": false,
+        "is_archive": false,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": true,
+        "is_readable_document": true
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 3,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_4"
+        ],
+        "path_names": [
+          "Ведомость_объемов_работ_К19.xlsx"
+        ],
+        "path_label": "Ведомость_объемов_работ_К19.xlsx",
+        "has_children": false
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_4_1",
+    "name": "Лист_проверки_объемов.pdf",
+    "type": "pdf",
+    "size": 860000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "green",
+      "check": "yellow"
+    },
+    "ai_metadata": {
+      "detected_type": "Лист проверки объемов",
+      "confidence": 90,
+      "error_message": "Требуется подтверждение ответственного сметчика."
+    },
+    "metadata_details": {
+      "sourceType": "Проверочный лист",
+      "authorName": "Мустафаева Эльвина Сейрановна",
+      "authorRole": "contractor",
+      "uploadDate": "26.02.2026 10:07",
+      "originalComment": "Пояснение к спорным позициям ВОР.",
+      "comments": [
+        {
+          "author": "Мустафаева Эльвина Сейрановна",
+          "date": "26.02.2026 10:07",
+          "text": "Пояснение к спорным позициям ВОР."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "yellow",
+          "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "2.2",
+      "textChunks": "16",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 16 chunks prepared.",
+        "[INFO] Pipeline status: yellow."
+      ]
+    },
+    "children": null,
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "yellow",
+        "colors": [
+          "green",
+          "yellow"
+        ],
+        "has_error": false,
+        "has_warning": true,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [
+          "check"
+        ],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "other",
+        "label": "Другое",
+        "detected_label": "Лист проверки объемов",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Мустафаева Эльвина Сейрановна",
+        "short_name": "Мустафаева Э.С.",
+        "filter_key": "мустафаева эльвина сейрановна",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "pdf",
+        "category": "final_document",
+        "label": "PDF документ",
+        "is_container": false,
+        "is_archive": false,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": true,
+        "is_readable_document": true
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 4,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_4_1"
+        ],
+        "path_names": [
+          "Лист_проверки_объемов.pdf"
+        ],
+        "path_label": "Лист_проверки_объемов.pdf",
+        "has_children": false
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_4_2",
+    "name": "Протокол_разногласий_по_объемам.docx",
+    "type": "docx",
+    "size": 680000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "green",
+      "check": "red"
+    },
+    "ai_metadata": {
+      "detected_type": "Доп. соглашение",
+      "confidence": 82,
+      "error_message": "В протоколе есть ссылка на отсутствующее приложение с корректировками."
+    },
+    "metadata_details": {
+      "sourceType": "Доп. соглашение",
+      "authorName": "Мустафаева Эльвина Сейрановна",
+      "authorRole": "contractor",
+      "uploadDate": "26.02.2026 10:09",
+      "originalComment": "Протокол разногласий по объемам работ.",
+      "comments": [
+        {
+          "author": "Мустафаева Эльвина Сейрановна",
+          "date": "26.02.2026 10:09",
+          "text": "Протокол разногласий по объемам работ."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "red",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "red",
+          "text": "Обнаружены ошибки обработки, требуется ручное уточнение."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "red"
+        }
+      ],
+      "pipelineTime": "2.6",
+      "textChunks": "24",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 24 chunks prepared.",
+        "[ERROR] Pipeline status: red."
+      ]
+    },
+    "children": null,
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "red",
+        "colors": [
+          "green",
+          "red"
+        ],
+        "has_error": true,
+        "has_warning": false,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "red",
+            "is_error": true,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [
+          "check"
+        ],
+        "warning_stages": [],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "additional_agreement",
+        "label": "Доп. соглашение",
+        "detected_label": "Доп. соглашение",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Мустафаева Эльвина Сейрановна",
+        "short_name": "Мустафаева Э.С.",
+        "filter_key": "мустафаева эльвина сейрановна",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "docx",
+        "category": "final_document",
+        "label": "Документ Word",
+        "is_container": false,
+        "is_archive": false,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": true,
+        "is_readable_document": true
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 5,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_4_2"
+        ],
+        "path_names": [
+          "Протокол_разногласий_по_объемам.docx"
+        ],
+        "path_label": "Протокол_разногласий_по_объемам.docx",
+        "has_children": false
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_5",
+    "name": "Согласование_ГИП_по_комплектности.msg",
+    "type": "msg",
+    "size": 960000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "green",
+      "check": "yellow"
+    },
+    "ai_metadata": {
+      "detected_type": "Электронное согласование комплектности",
+      "confidence": 94,
+      "error_message": "В письме есть ссылка на отсутствующий договор поставки."
+    },
+    "metadata_details": {
+      "sourceType": "Письмо",
+      "authorName": "Волкова Анна Петровна",
+      "authorRole": "estimator",
+      "uploadDate": "26.02.2026 10:22",
+      "originalComment": "Согласование комплекта с приложениями.",
+      "comments": [
+        {
+          "author": "Волкова Анна Петровна",
+          "date": "26.02.2026 10:22",
+          "text": "Согласование комплекта с приложениями."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "yellow",
+          "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "2.8",
+      "textChunks": "19",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 19 chunks prepared.",
+        "[INFO] Pipeline status: yellow."
+      ]
+    },
+    "children": [
+      {
+        "id": "node_5_1",
+        "name": "Приложение_к_согласованию.pdf",
+        "type": "pdf",
+        "size": 710000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "green"
+        },
+        "ai_metadata": {
+          "detected_type": "Приложение к согласованию",
+          "confidence": 96,
+          "error_message": null
+        },
+        "metadata_details": {
+          "sourceType": "Приложение",
+          "authorName": "Волкова Анна Петровна",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 10:23",
+          "originalComment": "Подтверждение состава пакета.",
+          "comments": [
+            {
+              "author": "Волкова Анна Петровна",
+              "date": "26.02.2026 10:23",
+              "text": "Подтверждение состава пакета."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "green",
+              "text": "Документ успешно обработан и связан с пакетом."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "1.5",
+          "textChunks": "9",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 9 chunks prepared.",
+            "[SUCCESS] Pipeline status: green."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "green",
+            "colors": [
+              "green"
+            ],
+            "has_error": false,
+            "has_warning": false,
+            "is_processing": false,
+            "is_success": true,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": []
+          },
+          "semantic_type": {
+            "key": "rp_approval",
+            "label": "Согласование РП",
+            "detected_label": "Приложение к согласованию",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Волкова Анна Петровна",
+            "short_name": "Волкова А.П.",
+            "filter_key": "волкова анна петровна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "pdf",
+            "category": "final_document",
+            "label": "PDF документ",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 0,
+            "parent_id": "node_5",
+            "ancestor_ids": [
+              "node_5"
+            ],
+            "ancestor_names": [
+              "Согласование_ГИП_по_комплектности.msg"
+            ],
+            "path_ids": [
+              "node_5",
+              "node_5_1"
+            ],
+            "path_names": [
+              "Согласование_ГИП_по_комплектности.msg",
+              "Приложение_к_согласованию.pdf"
+            ],
+            "path_label": "Согласование_ГИП_по_комплектности.msg / Приложение_к_согласованию.pdf",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_5"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_5_2",
+        "name": "Ответ_ГИП_по_КП_№142.msg",
+        "type": "msg",
+        "size": 820000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Согласование РП",
+          "confidence": 91,
+          "error_message": "В письме подтверждается необходимость приложить КП №142 отдельным файлом."
+        },
+        "metadata_details": {
+          "sourceType": "Согласование РП",
+          "authorName": "Волкова Анна Петровна",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 10:25",
+          "originalComment": "Ответ ГИП о составе коммерческих предложений.",
+          "comments": [
+            {
+              "author": "Волкова Анна Петровна",
+              "date": "26.02.2026 10:25",
+              "text": "Ответ ГИП о составе коммерческих предложений."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "2.1",
+          "textChunks": "18",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 18 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "rp_approval",
+            "label": "Согласование РП",
+            "detected_label": "Согласование РП",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Волкова Анна Петровна",
+            "short_name": "Волкова А.П.",
+            "filter_key": "волкова анна петровна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "msg",
+            "category": "mail",
+            "label": "Почтовое сообщение",
+            "is_container": true,
+            "is_archive": false,
+            "is_mail": true,
+            "is_folder": false,
+            "is_final_document": false,
+            "is_readable_document": false
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 1,
+            "parent_id": "node_5",
+            "ancestor_ids": [
+              "node_5"
+            ],
+            "ancestor_names": [
+              "Согласование_ГИП_по_комплектности.msg"
+            ],
+            "path_ids": [
+              "node_5",
+              "node_5_2"
+            ],
+            "path_names": [
+              "Согласование_ГИП_по_комплектности.msg",
+              "Ответ_ГИП_по_КП_№142.msg"
+            ],
+            "path_label": "Согласование_ГИП_по_комплектности.msg / Ответ_ГИП_по_КП_№142.msg",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_5"
+            ]
+          }
+        }
+      }
+    ],
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "yellow",
+        "colors": [
+          "green",
+          "yellow"
+        ],
+        "has_error": false,
+        "has_warning": true,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [
+          "check"
+        ],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "rp_approval",
+        "label": "Согласование РП",
+        "detected_label": "Электронное согласование комплектности",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Волкова Анна Петровна",
+        "short_name": "Волкова А.П.",
+        "filter_key": "волкова анна петровна",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "msg",
+        "category": "mail",
+        "label": "Почтовое сообщение",
+        "is_container": true,
+        "is_archive": false,
+        "is_mail": true,
+        "is_folder": false,
+        "is_final_document": false,
+        "is_readable_document": false
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 6,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_5"
+        ],
+        "path_names": [
+          "Согласование_ГИП_по_комплектности.msg"
+        ],
+        "path_label": "Согласование_ГИП_по_комплектности.msg",
+        "has_children": true
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_6",
+    "name": "Договор_подряда_№19-Бриз.pdf",
+    "type": "pdf",
+    "size": 1740000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "green",
+      "check": "green"
+    },
+    "ai_metadata": {
+      "detected_type": "Договор",
+      "confidence": 97,
+      "error_message": null
+    },
+    "metadata_details": {
+      "sourceType": "Договор",
+      "authorName": "Волкова Анна Петровна",
+      "authorRole": "estimator",
+      "uploadDate": "26.02.2026 10:34",
+      "originalComment": "Договор подряда, на который ссылается задание и сметный пакет.",
+      "comments": [
+        {
+          "author": "Волкова Анна Петровна",
+          "date": "26.02.2026 10:34",
+          "text": "Договор подряда, на который ссылается задание и сметный пакет."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "green",
+          "text": "Документ успешно обработан и связан с пакетом."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "2.0",
+      "textChunks": "27",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 27 chunks prepared.",
+        "[SUCCESS] Pipeline status: green."
+      ]
+    },
+    "children": null,
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "green",
+        "colors": [
+          "green"
+        ],
+        "has_error": false,
+        "has_warning": false,
+        "is_processing": false,
+        "is_success": true,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": []
+      },
+      "semantic_type": {
+        "key": "contract",
+        "label": "Договор",
+        "detected_label": "Договор",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Волкова Анна Петровна",
+        "short_name": "Волкова А.П.",
+        "filter_key": "волкова анна петровна",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "pdf",
+        "category": "final_document",
+        "label": "PDF документ",
+        "is_container": false,
+        "is_archive": false,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": true,
+        "is_readable_document": true
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 7,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_6"
+        ],
+        "path_names": [
+          "Договор_подряда_№19-Бриз.pdf"
+        ],
+        "path_label": "Договор_подряда_№19-Бриз.pdf",
+        "has_children": false
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_7",
+    "name": "Фотофиксация_обследования_К19.jpg",
+    "type": "jpg",
+    "size": 2840000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "loading",
+      "check": "gray"
+    },
+    "ai_metadata": {
+      "detected_type": "Фотофиксация / скан обследования",
+      "confidence": 73,
+      "error_message": "Изображение находится в OCR-обработке, комплектность будет проверена после извлечения подписей."
+    },
+    "metadata_details": {
+      "sourceType": "Другое",
+      "authorName": "Шутько Павел Игоревич",
+      "authorRole": "contractor",
+      "uploadDate": "26.02.2026 10:41",
+      "originalComment": "Фотофиксация обследования узлов перед уточнением объемов работ.",
+      "comments": [],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "loading",
+          "text": "Документ находится в процессе обработки, следующий этап ожидает результата."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "3.4",
+      "textChunks": "5",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 5 chunks prepared.",
+        "[INFO] Pipeline status: loading."
+      ]
+    },
+    "children": null,
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "loading",
+        "colors": [
+          "green",
+          "loading",
+          "gray"
+        ],
+        "has_error": false,
+        "has_warning": false,
+        "is_processing": true,
+        "is_success": false,
+        "is_pending": true
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "loading",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": true,
+            "is_pending": false,
+            "is_success": false
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "gray",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": true,
+            "is_success": false
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [],
+        "processing_stages": [
+          "read"
+        ],
+        "pending_stages": [
+          "check"
+        ],
+        "problem_stages": []
+      },
+      "semantic_type": {
+        "key": "other",
+        "label": "Другое",
+        "detected_label": "Фотофиксация / скан обследования",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Шутько Павел Игоревич",
+        "short_name": "Шутько П.И.",
+        "filter_key": "шутько павел игоревич",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "jpg",
+        "category": "final_document",
+        "label": "Изображение / скан",
+        "is_container": false,
+        "is_archive": false,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": true,
+        "is_readable_document": true
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 8,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_7"
+        ],
+        "path_names": [
+          "Фотофиксация_обследования_К19.jpg"
+        ],
+        "path_label": "Фотофиксация_обследования_К19.jpg",
+        "has_children": false
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_8",
+    "name": "Договорные_материалы_и_переписка_К19.rar",
+    "type": "rar",
+    "size": 4380000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "yellow",
+      "check": "yellow"
+    },
+    "ai_metadata": {
+      "detected_type": "Архив договорных материалов",
+      "confidence": 91,
+      "error_message": "В архиве есть устаревшая редакция договора и письмо с уточнением КП."
+    },
+    "metadata_details": {
+      "sourceType": "Договор",
+      "authorName": "Шутько Павел Игоревич",
+      "authorRole": "contractor",
+      "uploadDate": "26.02.2026 11:05",
+      "originalComment": "Архив договорных материалов подрядчика с письмом-уточнением.",
+      "comments": [
+        {
+          "author": "Шутько Павел Игоревич",
+          "date": "26.02.2026 11:05",
+          "text": "Архив договорных материалов подрядчика с письмом-уточнением."
+        }
+      ],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "yellow",
+          "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "4.1",
+      "textChunks": "42",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 42 chunks prepared.",
+        "[INFO] Pipeline status: yellow."
+      ]
+    },
+    "children": [
+      {
+        "id": "node_8_1",
+        "name": "Договор_поставки_редакция_01.doc",
+        "type": "doc",
+        "size": 920000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "yellow",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Договор",
+          "confidence": 86,
+          "error_message": "Документ похож на устаревшую редакцию договора поставки."
+        },
+        "metadata_details": {
+          "sourceType": "Договор",
+          "authorName": "Шутько Павел Игоревич",
+          "authorRole": "contractor",
+          "uploadDate": "26.02.2026 11:06",
+          "originalComment": "DOC-версия договора поставки для сверки с актуальной редакцией.",
+          "comments": [
+            {
+              "author": "Шутько Павел Игоревич",
+              "date": "26.02.2026 11:06",
+              "text": "DOC-версия договора поставки для сверки с актуальной редакцией."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "2.4",
+          "textChunks": "38",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 38 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "read",
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "read",
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "contract",
+            "label": "Договор",
+            "detected_label": "Договор",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Шутько Павел Игоревич",
+            "short_name": "Шутько П.И.",
+            "filter_key": "шутько павел игоревич",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "doc",
+            "category": "final_document",
+            "label": "Документ Word",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 0,
+            "parent_id": "node_8",
+            "ancestor_ids": [
+              "node_8"
+            ],
+            "ancestor_names": [
+              "Договорные_материалы_и_переписка_К19.rar"
+            ],
+            "path_ids": [
+              "node_8",
+              "node_8_1"
+            ],
+            "path_names": [
+              "Договорные_материалы_и_переписка_К19.rar",
+              "Договор_поставки_редакция_01.doc"
+            ],
+            "path_label": "Договорные_материалы_и_переписка_К19.rar / Договор_поставки_редакция_01.doc",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_8"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_8_2",
+        "name": "Письмо_поставщика_с_уточнением_КП.msg",
+        "type": "msg",
+        "size": 1180000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Почтовое сообщение с вложениями",
+          "confidence": 94,
+          "error_message": "Во вложении найдено КП, требующее сверки с договором."
+        },
+        "metadata_details": {
+          "sourceType": "Согласование РП",
+          "authorName": "Волкова Анна Петровна",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 11:08",
+          "originalComment": "Письмо поставщика с уточнением коммерческого предложения.",
+          "comments": [
+            {
+              "author": "Волкова Анна Петровна",
+              "date": "26.02.2026 11:08",
+              "text": "Письмо поставщика с уточнением коммерческого предложения."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "2.9",
+          "textChunks": "21",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 21 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": [
+          {
+            "id": "node_8_2_1",
+            "name": "КП_поставщика_№142.xls",
+            "type": "xls",
+            "size": 1340000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "yellow",
+              "check": "yellow"
+            },
+            "ai_metadata": {
+              "detected_type": "Коммерческое предложение (КП)",
+              "confidence": 88,
+              "error_message": "Стоимость оборудования требует сверки с лимитами АСОР."
+            },
+            "metadata_details": {
+              "sourceType": "Коммерческое предложение (КП)",
+              "authorName": "Шутько Павел Игоревич",
+              "authorRole": "contractor",
+              "uploadDate": "26.02.2026 11:09",
+              "originalComment": "XLS-таблица коммерческого предложения поставщика.",
+              "comments": [
+                {
+                  "author": "Шутько Павел Игоревич",
+                  "date": "26.02.2026 11:09",
+                  "text": "XLS-таблица коммерческого предложения поставщика."
+                }
+              ],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "green",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "yellow",
+                  "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "3.6",
+              "textChunks": "73",
+              "llmModel": "Gemini 1.5 Pro (Heavy)",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 73 chunks prepared.",
+                "[INFO] Pipeline status: yellow."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "yellow",
+                "colors": [
+                  "green",
+                  "yellow"
+                ],
+                "has_error": false,
+                "has_warning": true,
+                "is_processing": false,
+                "is_success": false,
+                "is_pending": false
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "yellow",
+                    "is_error": false,
+                    "is_warning": true,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": false
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "yellow",
+                    "is_error": false,
+                    "is_warning": true,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": false
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [
+                  "read",
+                  "check"
+                ],
+                "processing_stages": [],
+                "pending_stages": [],
+                "problem_stages": [
+                  "read",
+                  "check"
+                ]
+              },
+              "semantic_type": {
+                "key": "commercial_offer",
+                "label": "Коммерческое предложение (КП)",
+                "detected_label": "Коммерческое предложение (КП)",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Шутько Павел Игоревич",
+                "short_name": "Шутько П.И.",
+                "filter_key": "шутько павел игоревич",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "xls",
+                "category": "final_document",
+                "label": "Таблица Excel",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 0,
+                "parent_id": "node_8_2",
+                "ancestor_ids": [
+                  "node_8",
+                  "node_8_2"
+                ],
+                "ancestor_names": [
+                  "Договорные_материалы_и_переписка_К19.rar",
+                  "Письмо_поставщика_с_уточнением_КП.msg"
+                ],
+                "path_ids": [
+                  "node_8",
+                  "node_8_2",
+                  "node_8_2_1"
+                ],
+                "path_names": [
+                  "Договорные_материалы_и_переписка_К19.rar",
+                  "Письмо_поставщика_с_уточнением_КП.msg",
+                  "КП_поставщика_№142.xls"
+                ],
+                "path_label": "Договорные_материалы_и_переписка_К19.rar / Письмо_поставщика_с_уточнением_КП.msg / КП_поставщика_№142.xls",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_8",
+                  "node_8_2"
+                ]
+              }
+            }
+          },
+          {
+            "id": "node_8_2_2",
+            "name": "Фото_маркировки_оборудования.jpeg",
+            "type": "jpeg",
+            "size": 2280000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "loading",
+              "check": "gray"
+            },
+            "ai_metadata": {
+              "detected_type": "Фотофиксация / скан обследования",
+              "confidence": 70,
+              "error_message": "Изображение находится в OCR-обработке."
+            },
+            "metadata_details": {
+              "sourceType": "Другое",
+              "authorName": "Шутько Павел Игоревич",
+              "authorRole": "contractor",
+              "uploadDate": "26.02.2026 11:10",
+              "originalComment": "JPEG-фото маркировки оборудования для подтверждения позиции КП.",
+              "comments": [],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "green",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "loading",
+                  "text": "Документ находится в процессе обработки, следующий этап ожидает результата."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "3.0",
+              "textChunks": "3",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 3 chunks prepared.",
+                "[INFO] Pipeline status: loading."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "loading",
+                "colors": [
+                  "green",
+                  "loading",
+                  "gray"
+                ],
+                "has_error": false,
+                "has_warning": false,
+                "is_processing": true,
+                "is_success": false,
+                "is_pending": true
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "loading",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": true,
+                    "is_pending": false,
+                    "is_success": false
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "gray",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": true,
+                    "is_success": false
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [],
+                "processing_stages": [
+                  "read"
+                ],
+                "pending_stages": [
+                  "check"
+                ],
+                "problem_stages": []
+              },
+              "semantic_type": {
+                "key": "other",
+                "label": "Другое",
+                "detected_label": "Фотофиксация / скан обследования",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Шутько Павел Игоревич",
+                "short_name": "Шутько П.И.",
+                "filter_key": "шутько павел игоревич",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "jpeg",
+                "category": "final_document",
+                "label": "Изображение / скан",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 1,
+                "parent_id": "node_8_2",
+                "ancestor_ids": [
+                  "node_8",
+                  "node_8_2"
+                ],
+                "ancestor_names": [
+                  "Договорные_материалы_и_переписка_К19.rar",
+                  "Письмо_поставщика_с_уточнением_КП.msg"
+                ],
+                "path_ids": [
+                  "node_8",
+                  "node_8_2",
+                  "node_8_2_2"
+                ],
+                "path_names": [
+                  "Договорные_материалы_и_переписка_К19.rar",
+                  "Письмо_поставщика_с_уточнением_КП.msg",
+                  "Фото_маркировки_оборудования.jpeg"
+                ],
+                "path_label": "Договорные_материалы_и_переписка_К19.rar / Письмо_поставщика_с_уточнением_КП.msg / Фото_маркировки_оборудования.jpeg",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_8",
+                  "node_8_2"
+                ]
+              }
+            }
+          }
+        ],
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "other",
+            "label": "Другое",
+            "detected_label": "Почтовое сообщение с вложениями",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Волкова Анна Петровна",
+            "short_name": "Волкова А.П.",
+            "filter_key": "волкова анна петровна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "msg",
+            "category": "mail",
+            "label": "Почтовое сообщение",
+            "is_container": true,
+            "is_archive": false,
+            "is_mail": true,
+            "is_folder": false,
+            "is_final_document": false,
+            "is_readable_document": false
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 1,
+            "parent_id": "node_8",
+            "ancestor_ids": [
+              "node_8"
+            ],
+            "ancestor_names": [
+              "Договорные_материалы_и_переписка_К19.rar"
+            ],
+            "path_ids": [
+              "node_8",
+              "node_8_2"
+            ],
+            "path_names": [
+              "Договорные_материалы_и_переписка_К19.rar",
+              "Письмо_поставщика_с_уточнением_КП.msg"
+            ],
+            "path_label": "Договорные_материалы_и_переписка_К19.rar / Письмо_поставщика_с_уточнением_КП.msg",
+            "has_children": true
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_8"
+            ]
+          }
+        }
+      }
+    ],
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "yellow",
+        "colors": [
+          "green",
+          "yellow"
+        ],
+        "has_error": false,
+        "has_warning": true,
+        "is_processing": false,
+        "is_success": false,
+        "is_pending": false
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "yellow",
+            "is_error": false,
+            "is_warning": true,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": false
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [
+          "read",
+          "check"
+        ],
+        "processing_stages": [],
+        "pending_stages": [],
+        "problem_stages": [
+          "read",
+          "check"
+        ]
+      },
+      "semantic_type": {
+        "key": "contract",
+        "label": "Договор",
+        "detected_label": "Архив договорных материалов",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Шутько Павел Игоревич",
+        "short_name": "Шутько П.И.",
+        "filter_key": "шутько павел игоревич",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "rar",
+        "category": "archive",
+        "label": "Архив .rar",
+        "is_container": true,
+        "is_archive": true,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": false,
+        "is_readable_document": false
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 9,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_8"
+        ],
+        "path_names": [
+          "Договорные_материалы_и_переписка_К19.rar"
+        ],
+        "path_label": "Договорные_материалы_и_переписка_К19.rar",
+        "has_children": true
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  },
+  {
+    "id": "node_9",
+    "name": "OCR_сканы_и_контрольные_листы_К19.7z",
+    "type": "7z",
+    "size": 5120000,
+    "pipeline_status": {
+      "unpack": "green",
+      "read": "loading",
+      "check": "gray"
+    },
+    "ai_metadata": {
+      "detected_type": "Архив сканов и контрольных листов",
+      "confidence": 90,
+      "error_message": "Часть изображений еще проходит OCR."
+    },
+    "metadata_details": {
+      "sourceType": "Другое",
+      "authorName": "Смирнов Кирилл Андреевич",
+      "authorRole": "estimator",
+      "uploadDate": "26.02.2026 11:18",
+      "originalComment": "Архив с OCR-сканами, текстовым протоколом и контрольными листами.",
+      "comments": [],
+      "crossLinks": [
+        {
+          "text": "Задание на АСОР Бриз Корпус 19",
+          "status": "green",
+          "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+        },
+        {
+          "text": "Пакет сметных расчетов РСС",
+          "status": "green",
+          "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+        }
+      ],
+      "logs": [
+        {
+          "time": "12.05 12:16:02",
+          "stage": "Распаковка",
+          "status": "green",
+          "text": "Файл принят в структуру вложений."
+        },
+        {
+          "time": "12.05 12:16:06",
+          "stage": "Чтение",
+          "status": "loading",
+          "text": "Документ находится в процессе обработки, следующий этап ожидает результата."
+        }
+      ],
+      "compliance": [
+        {
+          "text": "Соответствие пакету комплектности проекта",
+          "status": "green"
+        }
+      ],
+      "pipelineTime": "5.2",
+      "textChunks": "31",
+      "llmModel": "Gemini 2.5 Flash",
+      "embeddingLogs": [
+        "[INFO] TreeMock: node inserted into demo state.",
+        "[INFO] Parser: 31 chunks prepared.",
+        "[INFO] Pipeline status: loading."
+      ]
+    },
+    "children": [
+      {
+        "id": "node_9_1",
+        "name": "Протокол_OCR_распознавания.txt",
+        "type": "txt",
+        "size": 180000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "green"
+        },
+        "ai_metadata": {
+          "detected_type": "Текстовый файл",
+          "confidence": 96,
+          "error_message": null
+        },
+        "metadata_details": {
+          "sourceType": "Другое",
+          "authorName": "Смирнов Кирилл Андреевич",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 11:19",
+          "originalComment": "TXT-протокол распознавания сканов для проверки пайплайна.",
+          "comments": [
+            {
+              "author": "Смирнов Кирилл Андреевич",
+              "date": "26.02.2026 11:19",
+              "text": "TXT-протокол распознавания сканов для проверки пайплайна."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "green",
+              "text": "Документ успешно обработан и связан с пакетом."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "0.8",
+          "textChunks": "9",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 9 chunks prepared.",
+            "[SUCCESS] Pipeline status: green."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "green",
+            "colors": [
+              "green"
+            ],
+            "has_error": false,
+            "has_warning": false,
+            "is_processing": false,
+            "is_success": true,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": []
+          },
+          "semantic_type": {
+            "key": "other",
+            "label": "Другое",
+            "detected_label": "Текстовый файл",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Смирнов Кирилл Андреевич",
+            "short_name": "Смирнов К.А.",
+            "filter_key": "смирнов кирилл андреевич",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "txt",
+            "category": "final_document",
+            "label": "Текстовый файл",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 0,
+            "parent_id": "node_9",
+            "ancestor_ids": [
+              "node_9"
+            ],
+            "ancestor_names": [
+              "OCR_сканы_и_контрольные_листы_К19.7z"
+            ],
+            "path_ids": [
+              "node_9",
+              "node_9_1"
+            ],
+            "path_names": [
+              "OCR_сканы_и_контрольные_листы_К19.7z",
+              "Протокол_OCR_распознавания.txt"
+            ],
+            "path_label": "OCR_сканы_и_контрольные_листы_К19.7z / Протокол_OCR_распознавания.txt",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_9"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_9_2",
+        "name": "Схема_узла_монтажа.png",
+        "type": "png",
+        "size": 1640000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "yellow",
+          "check": "gray"
+        },
+        "ai_metadata": {
+          "detected_type": "Фрагмент чертежа / изображение",
+          "confidence": 74,
+          "error_message": "Размерные подписи на PNG распознаны частично."
+        },
+        "metadata_details": {
+          "sourceType": "Рабочая документация",
+          "authorName": "Смирнов Кирилл Андреевич",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 11:20",
+          "originalComment": "PNG-схема монтажного узла для OCR-проверки.",
+          "comments": [
+            {
+              "author": "Смирнов Кирилл Андреевич",
+              "date": "26.02.2026 11:20",
+              "text": "PNG-схема монтажного узла для OCR-проверки."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "3.3",
+          "textChunks": "5",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 5 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": null,
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow",
+              "gray"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": true
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "gray",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": true,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "read"
+            ],
+            "processing_stages": [],
+            "pending_stages": [
+              "check"
+            ],
+            "problem_stages": [
+              "read"
+            ]
+          },
+          "semantic_type": {
+            "key": "working_docs",
+            "label": "Рабочая документация",
+            "detected_label": "Фрагмент чертежа / изображение",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Смирнов Кирилл Андреевич",
+            "short_name": "Смирнов К.А.",
+            "filter_key": "смирнов кирилл андреевич",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "png",
+            "category": "final_document",
+            "label": "Изображение / скан",
+            "is_container": false,
+            "is_archive": false,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": true,
+            "is_readable_document": true
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 1,
+            "parent_id": "node_9",
+            "ancestor_ids": [
+              "node_9"
+            ],
+            "ancestor_names": [
+              "OCR_сканы_и_контрольные_листы_К19.7z"
+            ],
+            "path_ids": [
+              "node_9",
+              "node_9_2"
+            ],
+            "path_names": [
+              "OCR_сканы_и_контрольные_листы_К19.7z",
+              "Схема_узла_монтажа.png"
+            ],
+            "path_label": "OCR_сканы_и_контрольные_листы_К19.7z / Схема_узла_монтажа.png",
+            "has_children": false
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_9"
+            ]
+          }
+        }
+      },
+      {
+        "id": "node_9_3",
+        "name": "Контрольные_листы_проверки.tar",
+        "type": "tar",
+        "size": 1860000,
+        "pipeline_status": {
+          "unpack": "green",
+          "read": "green",
+          "check": "yellow"
+        },
+        "ai_metadata": {
+          "detected_type": "Архив контрольных листов",
+          "confidence": 92,
+          "error_message": "Один контрольный лист содержит замечание по комплектности."
+        },
+        "metadata_details": {
+          "sourceType": "Согласование РП",
+          "authorName": "Волкова Анна Петровна",
+          "authorRole": "estimator",
+          "uploadDate": "26.02.2026 11:23",
+          "originalComment": "TAR-архив контрольных листов проверки комплекта.",
+          "comments": [
+            {
+              "author": "Волкова Анна Петровна",
+              "date": "26.02.2026 11:23",
+              "text": "TAR-архив контрольных листов проверки комплекта."
+            }
+          ],
+          "crossLinks": [
+            {
+              "text": "Задание на АСОР Бриз Корпус 19",
+              "status": "green",
+              "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+            },
+            {
+              "text": "Пакет сметных расчетов РСС",
+              "status": "green",
+              "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+            }
+          ],
+          "logs": [
+            {
+              "time": "12.05 12:16:02",
+              "stage": "Распаковка",
+              "status": "green",
+              "text": "Файл принят в структуру вложений."
+            },
+            {
+              "time": "12.05 12:16:06",
+              "stage": "Чтение",
+              "status": "yellow",
+              "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+            }
+          ],
+          "compliance": [
+            {
+              "text": "Соответствие пакету комплектности проекта",
+              "status": "green"
+            }
+          ],
+          "pipelineTime": "2.7",
+          "textChunks": "18",
+          "llmModel": "Gemini 2.5 Flash",
+          "embeddingLogs": [
+            "[INFO] TreeMock: node inserted into demo state.",
+            "[INFO] Parser: 18 chunks prepared.",
+            "[INFO] Pipeline status: yellow."
+          ]
+        },
+        "children": [
+          {
+            "id": "node_9_3_1",
+            "name": "Лист_замечаний_комплектности.pdf",
+            "type": "pdf",
+            "size": 760000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "green",
+              "check": "yellow"
+            },
+            "ai_metadata": {
+              "detected_type": "Согласование РП",
+              "confidence": 87,
+              "error_message": "В листе указано замечание по отсутствующему приложению."
+            },
+            "metadata_details": {
+              "sourceType": "Согласование РП",
+              "authorName": "Волкова Анна Петровна",
+              "authorRole": "estimator",
+              "uploadDate": "26.02.2026 11:24",
+              "originalComment": "PDF-лист замечаний по комплектности.",
+              "comments": [
+                {
+                  "author": "Волкова Анна Петровна",
+                  "date": "26.02.2026 11:24",
+                  "text": "PDF-лист замечаний по комплектности."
+                }
+              ],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "green",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "yellow",
+                  "text": "Документ обработан с предупреждениями, требуется выборочная проверка."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "1.7",
+              "textChunks": "14",
+              "llmModel": "Gemini 2.5 Flash",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 14 chunks prepared.",
+                "[INFO] Pipeline status: yellow."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "yellow",
+                "colors": [
+                  "green",
+                  "yellow"
+                ],
+                "has_error": false,
+                "has_warning": true,
+                "is_processing": false,
+                "is_success": false,
+                "is_pending": false
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "yellow",
+                    "is_error": false,
+                    "is_warning": true,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": false
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [
+                  "check"
+                ],
+                "processing_stages": [],
+                "pending_stages": [],
+                "problem_stages": [
+                  "check"
+                ]
+              },
+              "semantic_type": {
+                "key": "rp_approval",
+                "label": "Согласование РП",
+                "detected_label": "Согласование РП",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Волкова Анна Петровна",
+                "short_name": "Волкова А.П.",
+                "filter_key": "волкова анна петровна",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "pdf",
+                "category": "final_document",
+                "label": "PDF документ",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 0,
+                "parent_id": "node_9_3",
+                "ancestor_ids": [
+                  "node_9",
+                  "node_9_3"
+                ],
+                "ancestor_names": [
+                  "OCR_сканы_и_контрольные_листы_К19.7z",
+                  "Контрольные_листы_проверки.tar"
+                ],
+                "path_ids": [
+                  "node_9",
+                  "node_9_3",
+                  "node_9_3_1"
+                ],
+                "path_names": [
+                  "OCR_сканы_и_контрольные_листы_К19.7z",
+                  "Контрольные_листы_проверки.tar",
+                  "Лист_замечаний_комплектности.pdf"
+                ],
+                "path_label": "OCR_сканы_и_контрольные_листы_К19.7z / Контрольные_листы_проверки.tar / Лист_замечаний_комплектности.pdf",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_9",
+                  "node_9_3"
+                ]
+              }
+            }
+          },
+          {
+            "id": "node_9_3_2",
+            "name": "Ведомость_контроля_объемов.xls",
+            "type": "xls",
+            "size": 980000,
+            "pipeline_status": {
+              "unpack": "green",
+              "read": "green",
+              "check": "green"
+            },
+            "ai_metadata": {
+              "detected_type": "Ведомость объемов работ",
+              "confidence": 93,
+              "error_message": null
+            },
+            "metadata_details": {
+              "sourceType": "Ведомость",
+              "authorName": "Мустафаева Эльвина Сейрановна",
+              "authorRole": "contractor",
+              "uploadDate": "26.02.2026 11:25",
+              "originalComment": "XLS-ведомость контроля объемов из TAR-архива.",
+              "comments": [
+                {
+                  "author": "Мустафаева Эльвина Сейрановна",
+                  "date": "26.02.2026 11:25",
+                  "text": "XLS-ведомость контроля объемов из TAR-архива."
+                }
+              ],
+              "crossLinks": [
+                {
+                  "text": "Задание на АСОР Бриз Корпус 19",
+                  "status": "green",
+                  "context": "В тексте текущего документа найдено указание на выполнение работ по заданию на АСОР для корпуса 19."
+                },
+                {
+                  "text": "Пакет сметных расчетов РСС",
+                  "status": "green",
+                  "context": "ИИ обнаружил ссылку на сметный пакет РСС как обязательное основание для проверки стоимости и объемов."
+                }
+              ],
+              "logs": [
+                {
+                  "time": "12.05 12:16:02",
+                  "stage": "Распаковка",
+                  "status": "green",
+                  "text": "Файл принят в структуру вложений."
+                },
+                {
+                  "time": "12.05 12:16:06",
+                  "stage": "Чтение",
+                  "status": "green",
+                  "text": "Документ успешно обработан и связан с пакетом."
+                }
+              ],
+              "compliance": [
+                {
+                  "text": "Соответствие пакету комплектности проекта",
+                  "status": "green"
+                }
+              ],
+              "pipelineTime": "2.2",
+              "textChunks": "45",
+              "llmModel": "Gemini 1.5 Pro (Heavy)",
+              "embeddingLogs": [
+                "[INFO] TreeMock: node inserted into demo state.",
+                "[INFO] Parser: 45 chunks prepared.",
+                "[SUCCESS] Pipeline status: green."
+              ]
+            },
+            "children": null,
+            "filter_metadata": {
+              "schema_version": 1,
+              "status": {
+                "overall": "green",
+                "colors": [
+                  "green"
+                ],
+                "has_error": false,
+                "has_warning": false,
+                "is_processing": false,
+                "is_success": true,
+                "is_pending": false
+              },
+              "pipeline": {
+                "stages": [
+                  {
+                    "key": "unpack",
+                    "code": "Р",
+                    "label": "Распаковка",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "read",
+                    "code": "Ч",
+                    "label": "Чтение",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  },
+                  {
+                    "key": "check",
+                    "code": "К",
+                    "label": "Комплектность",
+                    "status": "green",
+                    "is_error": false,
+                    "is_warning": false,
+                    "is_processing": false,
+                    "is_pending": false,
+                    "is_success": true
+                  }
+                ],
+                "error_stages": [],
+                "warning_stages": [],
+                "processing_stages": [],
+                "pending_stages": [],
+                "problem_stages": []
+              },
+              "semantic_type": {
+                "key": "rss_estimate",
+                "label": "РСС (сметы)",
+                "detected_label": "Ведомость объемов работ",
+                "source": "ai_metadata.detected_type"
+              },
+              "uploaded_by": {
+                "full_name": "Мустафаева Эльвина Сейрановна",
+                "short_name": "Мустафаева Э.С.",
+                "filter_key": "мустафаева эльвина сейрановна",
+                "source": "metadata_details.authorName"
+              },
+              "technical_format": {
+                "extension": "xls",
+                "category": "final_document",
+                "label": "Таблица Excel",
+                "is_container": false,
+                "is_archive": false,
+                "is_mail": false,
+                "is_folder": false,
+                "is_final_document": true,
+                "is_readable_document": true
+              },
+              "tree_context": {
+                "depth": 2,
+                "order_index": 1,
+                "parent_id": "node_9_3",
+                "ancestor_ids": [
+                  "node_9",
+                  "node_9_3"
+                ],
+                "ancestor_names": [
+                  "OCR_сканы_и_контрольные_листы_К19.7z",
+                  "Контрольные_листы_проверки.tar"
+                ],
+                "path_ids": [
+                  "node_9",
+                  "node_9_3",
+                  "node_9_3_2"
+                ],
+                "path_names": [
+                  "OCR_сканы_и_контрольные_листы_К19.7z",
+                  "Контрольные_листы_проверки.tar",
+                  "Ведомость_контроля_объемов.xls"
+                ],
+                "path_label": "OCR_сканы_и_контрольные_листы_К19.7z / Контрольные_листы_проверки.tar / Ведомость_контроля_объемов.xls",
+                "has_children": false
+              },
+              "filter_flags": {
+                "include_for_status_filter": true,
+                "include_for_pipeline_filter": true,
+                "include_for_semantic_filter": true,
+                "include_for_uploader_filter": true,
+                "include_for_format_filter": true,
+                "expand_ancestors_on_match": [
+                  "node_9",
+                  "node_9_3"
+                ]
+              }
+            }
+          }
+        ],
+        "filter_metadata": {
+          "schema_version": 1,
+          "status": {
+            "overall": "yellow",
+            "colors": [
+              "green",
+              "yellow"
+            ],
+            "has_error": false,
+            "has_warning": true,
+            "is_processing": false,
+            "is_success": false,
+            "is_pending": false
+          },
+          "pipeline": {
+            "stages": [
+              {
+                "key": "unpack",
+                "code": "Р",
+                "label": "Распаковка",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "read",
+                "code": "Ч",
+                "label": "Чтение",
+                "status": "green",
+                "is_error": false,
+                "is_warning": false,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": true
+              },
+              {
+                "key": "check",
+                "code": "К",
+                "label": "Комплектность",
+                "status": "yellow",
+                "is_error": false,
+                "is_warning": true,
+                "is_processing": false,
+                "is_pending": false,
+                "is_success": false
+              }
+            ],
+            "error_stages": [],
+            "warning_stages": [
+              "check"
+            ],
+            "processing_stages": [],
+            "pending_stages": [],
+            "problem_stages": [
+              "check"
+            ]
+          },
+          "semantic_type": {
+            "key": "other",
+            "label": "Другое",
+            "detected_label": "Архив контрольных листов",
+            "source": "ai_metadata.detected_type"
+          },
+          "uploaded_by": {
+            "full_name": "Волкова Анна Петровна",
+            "short_name": "Волкова А.П.",
+            "filter_key": "волкова анна петровна",
+            "source": "metadata_details.authorName"
+          },
+          "technical_format": {
+            "extension": "tar",
+            "category": "archive",
+            "label": "Архив .tar",
+            "is_container": true,
+            "is_archive": true,
+            "is_mail": false,
+            "is_folder": false,
+            "is_final_document": false,
+            "is_readable_document": false
+          },
+          "tree_context": {
+            "depth": 1,
+            "order_index": 2,
+            "parent_id": "node_9",
+            "ancestor_ids": [
+              "node_9"
+            ],
+            "ancestor_names": [
+              "OCR_сканы_и_контрольные_листы_К19.7z"
+            ],
+            "path_ids": [
+              "node_9",
+              "node_9_3"
+            ],
+            "path_names": [
+              "OCR_сканы_и_контрольные_листы_К19.7z",
+              "Контрольные_листы_проверки.tar"
+            ],
+            "path_label": "OCR_сканы_и_контрольные_листы_К19.7z / Контрольные_листы_проверки.tar",
+            "has_children": true
+          },
+          "filter_flags": {
+            "include_for_status_filter": true,
+            "include_for_pipeline_filter": true,
+            "include_for_semantic_filter": true,
+            "include_for_uploader_filter": true,
+            "include_for_format_filter": true,
+            "expand_ancestors_on_match": [
+              "node_9"
+            ]
+          }
+        }
+      }
+    ],
+    "filter_metadata": {
+      "schema_version": 1,
+      "status": {
+        "overall": "loading",
+        "colors": [
+          "green",
+          "loading",
+          "gray"
+        ],
+        "has_error": false,
+        "has_warning": false,
+        "is_processing": true,
+        "is_success": false,
+        "is_pending": true
+      },
+      "pipeline": {
+        "stages": [
+          {
+            "key": "unpack",
+            "code": "Р",
+            "label": "Распаковка",
+            "status": "green",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": false,
+            "is_success": true
+          },
+          {
+            "key": "read",
+            "code": "Ч",
+            "label": "Чтение",
+            "status": "loading",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": true,
+            "is_pending": false,
+            "is_success": false
+          },
+          {
+            "key": "check",
+            "code": "К",
+            "label": "Комплектность",
+            "status": "gray",
+            "is_error": false,
+            "is_warning": false,
+            "is_processing": false,
+            "is_pending": true,
+            "is_success": false
+          }
+        ],
+        "error_stages": [],
+        "warning_stages": [],
+        "processing_stages": [
+          "read"
+        ],
+        "pending_stages": [
+          "check"
+        ],
+        "problem_stages": []
+      },
+      "semantic_type": {
+        "key": "other",
+        "label": "Другое",
+        "detected_label": "Архив сканов и контрольных листов",
+        "source": "ai_metadata.detected_type"
+      },
+      "uploaded_by": {
+        "full_name": "Смирнов Кирилл Андреевич",
+        "short_name": "Смирнов К.А.",
+        "filter_key": "смирнов кирилл андреевич",
+        "source": "metadata_details.authorName"
+      },
+      "technical_format": {
+        "extension": "7z",
+        "category": "archive",
+        "label": "Архив .7z",
+        "is_container": true,
+        "is_archive": true,
+        "is_mail": false,
+        "is_folder": false,
+        "is_final_document": false,
+        "is_readable_document": false
+      },
+      "tree_context": {
+        "depth": 0,
+        "order_index": 10,
+        "parent_id": null,
+        "ancestor_ids": [],
+        "ancestor_names": [],
+        "path_ids": [
+          "node_9"
+        ],
+        "path_names": [
+          "OCR_сканы_и_контрольные_листы_К19.7z"
+        ],
+        "path_label": "OCR_сканы_и_контрольные_листы_К19.7z",
+        "has_children": true
+      },
+      "filter_flags": {
+        "include_for_status_filter": true,
+        "include_for_pipeline_filter": true,
+        "include_for_semantic_filter": true,
+        "include_for_uploader_filter": true,
+        "include_for_format_filter": true,
+        "expand_ancestors_on_match": []
+      }
+    }
+  }
+];

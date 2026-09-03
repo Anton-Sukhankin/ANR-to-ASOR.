@@ -1,0 +1,497 @@
+/* ==========================================================================
+   СТИЛИ ПАНЕЛИ ФИЛЬТРАЦИИ ДОКУМЕНТОВ
+   S.Cost / src / components / Filtering / filtering.css
+   ========================================================================== */
+
+.filtering-panel-open {
+  overflow: auto;
+}
+
+#btn-trigger-ai-chat {
+  transition: opacity var(--transition-fast), visibility var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.filtering-panel-open #btn-trigger-ai-chat {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#metadata-panel-root.metadata-filtering-mode {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+}
+
+.filtering-panel {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: filteringPanelIn 0.18s ease-out;
+}
+
+.filtering-panel.no-replay {
+  animation: none;
+}
+
+@keyframes filteringPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.filtering-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0 16px;
+  border-bottom: 1px solid hsl(214, 24%, 92%);
+}
+
+.filtering-context-btn {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  border: 1px solid hsl(208, 88%, 88%);
+  border-radius: 8px;
+  background: hsl(207, 100%, 96%);
+  color: hsl(209, 88%, 45%);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.filtering-context-btn:hover {
+  border-color: hsl(209, 88%, 78%);
+  background: hsl(207, 100%, 93%);
+  color: hsl(209, 88%, 38%);
+  transform: translateX(-1px);
+}
+
+.filtering-context-icon {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.filtering-context-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.filtering-context-filter svg path {
+  fill: currentColor;
+}
+
+.filtering-context-back {
+  opacity: 0;
+  transform: translateX(4px);
+}
+
+.filtering-context-back svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.filtering-context-btn:hover .filtering-context-filter {
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.filtering-context-btn:hover .filtering-context-back {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.filtering-header-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.filtering-header h2 {
+  margin: 0 0 2px;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filtering-header p {
+  margin: 0;
+  color: hsl(216, 12%, 48%);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.filtering-close-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  border: 1px solid hsl(214, 22%, 90%);
+  border-radius: 10px;
+  background: hsl(210, 24%, 98%);
+  color: hsl(215, 14%, 34%);
+  font-size: 22px;
+  line-height: 1;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.filtering-close-btn:hover {
+  border-color: hsl(214, 20%, 82%);
+  background: hsl(210, 24%, 94%);
+  color: hsl(215, 24%, 18%);
+}
+
+.filtering-groups {
+  min-height: 0;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.filtering-groups::-webkit-scrollbar {
+  width: 8px;
+}
+
+.filtering-groups::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filtering-groups::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: hsl(214, 12%, 78%);
+  background-clip: content-box;
+}
+
+.filtering-accordion {
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid hsl(214, 24%, 88%);
+  border-radius: 14px;
+  background: #fff;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.filtering-accordion:hover {
+  border-color: hsl(209, 88%, 45%);
+  box-shadow: 0 10px 24px rgba(23, 122, 210, 0.08);
+}
+
+.filtering-accordion.open {
+  border-color: hsl(214, 24%, 84%);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+}
+
+.filtering-accordion.open:hover {
+  border-color: hsl(209, 88%, 45%);
+  box-shadow: 0 10px 24px rgba(23, 122, 210, 0.08);
+}
+
+.filtering-accordion-head {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  background: #fff;
+  transition: background-color var(--transition-fast);
+}
+
+.filtering-accordion-head:hover {
+  background: hsl(210, 30%, 98%);
+}
+
+.filtering-accordion-toggle {
+  min-width: 0;
+  flex: 1;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  color: hsl(215, 24%, 18%);
+  text-align: left;
+}
+
+.filtering-accordion-toggle:focus-visible,
+.filtering-reset-group:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(23, 122, 210, 0.14);
+}
+
+.filtering-accordion-caret {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  flex: 0 0 18px;
+  border-radius: 7px;
+  background: hsl(210, 24%, 95%);
+}
+
+.filtering-accordion-caret::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  color: hsl(215, 18%, 32%);
+  transform: translate(-50%, -62%) rotate(45deg);
+}
+
+.filtering-accordion.open .filtering-accordion-caret::before {
+  transform: translate(-50%, -38%) rotate(225deg);
+}
+
+.filtering-accordion-title {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filtering-accordion-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.filtering-selected-count {
+  min-width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: hsl(208, 100%, 94%);
+  color: hsl(209, 88%, 42%);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.filtering-reset-group {
+  border: none;
+  background: transparent;
+  color: hsl(209, 88%, 42%);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.filtering-reset-group:hover {
+  color: hsl(209, 88%, 32%);
+  text-decoration: underline;
+}
+
+.filtering-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 10px 10px;
+}
+
+.filtering-option {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px;
+  border-radius: 9px;
+  color: hsl(215, 22%, 24%);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.filtering-option:hover {
+  background: hsl(210, 30%, 97%);
+}
+
+.filtering-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filtering-checkmark {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  flex: 0 0 16px;
+  border: 1.5px solid hsl(214, 18%, 72%);
+  border-radius: 5px;
+  background: #fff;
+}
+
+.filtering-option input:checked + .filtering-checkmark {
+  border-color: hsl(209, 88%, 45%);
+  background: hsl(209, 88%, 45%);
+}
+
+.filtering-option input:checked + .filtering-checkmark::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+}
+
+.filtering-status-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: var(--color-status-gray);
+}
+
+.filtering-status-dot.status-green {
+  background: var(--color-status-green);
+}
+
+.filtering-status-dot.status-yellow {
+  background: var(--color-status-yellow);
+}
+
+.filtering-status-dot.status-red {
+  background: var(--color-status-red);
+}
+
+.filtering-status-dot.status-gray {
+  background: var(--color-status-gray);
+}
+
+.filtering-status-dot.status-loading {
+  background: var(--color-primary);
+}
+
+.filtering-option-label {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filtering-option-count {
+  min-width: 28px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: hsl(210, 20%, 95%);
+  color: hsl(216, 12%, 44%);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.filtering-empty-group {
+  padding: 12px 8px 14px;
+  color: hsl(216, 12%, 52%);
+  font-size: 12px;
+}
+
+.filtering-footer {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0 0;
+  border-top: 1px solid hsl(214, 24%, 92%);
+  background: transparent;
+}
+
+.filtering-reset-all,
+.filtering-apply-btn {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.filtering-reset-all {
+  flex: 0 0 auto;
+  padding: 0 14px;
+  border: 1px solid hsl(214, 22%, 88%);
+  background: #fff;
+  color: hsl(215, 14%, 38%);
+}
+
+.filtering-reset-all:hover {
+  background: hsl(210, 24%, 96%);
+  color: hsl(215, 24%, 18%);
+}
+
+.filtering-apply-btn {
+  flex: 1;
+  border: none;
+  background: hsl(209, 88%, 45%);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(23, 122, 210, 0.22);
+}
+
+.filtering-apply-btn:hover {
+  background: hsl(209, 88%, 39%);
+}
+
+@media (max-width: 560px) {
+  .filtering-panel {
+    width: 100%;
+    height: 100%;
+  }
+}

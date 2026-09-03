@@ -1,0 +1,77 @@
+{
+  "module": "ai-completeness-module",
+  "title": "ИИ-Анализ комплектности S.Cost",
+  "snapshot_date": "2026-08-30",
+  "maturity": "prototype",
+  "entrypoint": "index.html",
+  "runtime": {
+    "type": "static-browser-prototype",
+    "module_system": "plain-scripts",
+    "external_dependencies": [
+      {
+        "type": "font",
+        "source": "Google Fonts",
+        "usage": "Manrope и Space Grotesk подключены в index.html; могут быть заменены шрифтами целевого проекта."
+      }
+    ]
+  },
+  "included_paths": [
+    "AGENTS.md",
+    "README.md",
+    "module_manifest.json",
+    "index.html",
+    "docs/",
+    "scripts/docs-sync-check.js",
+    "src/app.js",
+    "src/index.css",
+    "src/assets/",
+    "src/components/AICompletenessTab/",
+    "src/components/FileTree/",
+    "src/components/Filtering/",
+    "src/components/MetadataPanel/",
+    "src/components/AISidebarDrawer/",
+    "src/components/ThreadedRemarks/"
+  ],
+  "active_components": [
+    "AICompletenessTab",
+    "FileTree",
+    "Filtering",
+    "MetadataPanel",
+    "AISidebarDrawer"
+  ],
+  "included_reference_components": [
+    {
+      "name": "ThreadedRemarks",
+      "reason": "Компонентная спецификация, CSS и mock-данные сохранены как соседний контекст обсуждений, но текущий index.html не монтирует JS-интерфейс тредов."
+    }
+  ],
+  "data_sources": [
+    "src/components/FileTree/mockTreeData.json",
+    "src/components/AISidebarDrawer/mockChatHistory.json",
+    "src/components/ThreadedRemarks/mockRemarksData.json"
+  ],
+  "assets": [
+    "src/assets/metadata-empty-illustration.png"
+  ],
+  "mount_points": [
+    "#standard-upload-root",
+    "#tree-summary-cards-root",
+    "#file-tree-root",
+    "#metadata-panel-root",
+    "#ai-sidebar-drawer-root",
+    "#btn-trigger-ai-chat"
+  ],
+  "storage": [
+    {
+      "key": "scost.aiChatWorkspace.v1",
+      "owner": "AISidebarDrawer",
+      "purpose": "Демо-сохранение списка чатов, активного чата, истории сообщений и состояния названий чатов."
+    }
+  ],
+  "integration_boundaries": [
+    "Реальные API анализа комплектности не входят в пакет.",
+    "Реальная загрузка, скачивание и хранение документов не входят в пакет.",
+    "Mock-данные являются демонстрационным источником и должны быть заменены в целевом проекте.",
+    "Документация описывает текущий UI-контракт прототипа и должна быть синхронизирована после адаптации."
+  ]
+}
