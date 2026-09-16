@@ -64,7 +64,7 @@ ai-completeness-module/
 
 * `src/components/FileTree/mockTreeData.json` - дерево документов и атрибуты фильтрации;
 * `src/components/AISidebarDrawer/mockChatHistory.json` - сохраненный формат истории чатов;
-* `src/components/ThreadedRemarks/mockRemarksData.json` - mock-данные тредов замечаний.
+* `src/components/ThreadedRemarks/mockRemarksData.json` — остаточные данные неиспользуемого компонента, не обязательный контекст и не действующий контракт обсуждений.
 
 Для надежной работы через `file://` часть mock-данных также продублирована прямо в JS-компонентах. При интеграции с backend/API нужно заменить демонстрационный источник данных, но сохранить атрибутивный контракт сущностей, описанный в документации компонентов.
 

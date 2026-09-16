@@ -119,7 +119,8 @@ const state = {
     rdActiveFilter: "all",
     rdSelectedChangeId: null,
     rdChangesExpanded: true,
-    rdSimilarExpanded: false,
+    rdSimilarExpanded: true,
+    rdLayout: "stacked",
     rdCommentsExpanded: true,
     rdEditingCommentId: null,
     rdEditingVolumeChangeId: null,
@@ -804,6 +805,7 @@ function renderReviewDrawer() {
   }
   if (isRdChangesMode) renderRdChangesMode();
   if (isCompletenessMode) renderCompletenessMode();
+  syncRdLayout();
   renderRdCancelAllDialog();
   window.updateAIDrawerContext?.();
 }
@@ -837,7 +839,7 @@ function getReviewModeTabStatus(modeKey) {
 function renderReviewModeTabs() {
   const panel = document.getElementById("reviewModeContent");
   const activeMode = getReviewMode();
-  document.querySelectorAll("[data-review-mode]").forEach((tab) => {
+  document.querySelectorAll(".review-mode-tab[data-review-mode]").forEach((tab) => {
     const selected = tab.dataset.reviewMode === activeMode.key;
     const mode = getReviewMode(tab.dataset.reviewMode);
     const status = getReviewModeTabStatus(mode.key);
@@ -890,6 +892,62 @@ function renderReviewModeContent() {
     '<h3>' + activeMode.emptyTitle + '</h3>' +
     '<p>' + activeMode.emptyDescription + '</p>' +
   '</div>';
+}
+
+const rdSplitViewport = window.matchMedia("(min-width: 1100px)");
+let rdLayoutTransition = null;
+let anrSplitActive = false;
+
+function syncRdLayout() {
+  const bulkMode = state.review.activeMode === "rd-changes" && state.review.rdBulkMode;
+  const layout = state.review.rdLayout === "split" && rdSplitViewport.matches ? "split" : "stacked";
+  const isAnrSplitActive = state.review.drawerOpen && state.review.activeMode === "anr" && layout === "split";
+  const enteringAnrSplit = isAnrSplitActive && !anrSplitActive;
+  anrSplitActive = isAnrSplitActive;
+  const drawer = document.getElementById("reviewDrawer");
+  const control = document.getElementById("rdLayoutSwitch");
+  if (drawer) drawer.dataset.rdLayout = layout;
+  document.body.classList.toggle("review-rd-split", state.review.drawerOpen && layout === "split");
+  if (control) control.hidden = false;
+  control?.querySelectorAll("[data-rd-layout]").forEach((button) => {
+    const selected = button.dataset.rdLayout === layout;
+    const unavailable = button.dataset.rdLayout === "split" && !rdSplitViewport.matches;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-checked", String(selected));
+    button.setAttribute("aria-disabled", String(unavailable || bulkMode));
+    button.tabIndex = selected ? 0 : -1;
+    button.dataset.tooltip = bulkMode ? "Завершите выбор изменений, чтобы изменить расположение" : unavailable ? "Две колонки доступны при ширине окна от 1100 px" : button.getAttribute("aria-label");
+  });
+  if (enteringAnrSplit && !state.review.positionsExpanded) {
+    window.clearTimeout(positionAccordionListRenderTimer);
+    state.review.positionsExpanded = true;
+    renderReviewList();
+    renderPositionAccordion({ animate: false });
+    document.querySelector("#reviewList .issue-card.active")?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+}
+
+function setRdLayout(layout) {
+  if (!["stacked", "split"].includes(layout) || (state.review.activeMode === "rd-changes" && state.review.rdBulkMode)) return;
+  if (layout === "split" && !rdSplitViewport.matches) return;
+  if (state.review.rdLayout === layout) return;
+  state.review.rdLayout = layout;
+  rdLayoutTransition?.skipTransition();
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!document.startViewTransition || reducedMotion) {
+    syncRdLayout();
+    return;
+  }
+  // Capture the two existing regions; their controls and edit drafts keep the same DOM nodes.
+  document.documentElement.classList.add("rd-layout-transitioning");
+  const transition = document.startViewTransition(syncRdLayout);
+  rdLayoutTransition = transition;
+  transition.ready.catch(() => {});
+  transition.finished.catch(() => {}).finally(() => {
+    if (rdLayoutTransition !== transition) return;
+    rdLayoutTransition = null;
+    document.documentElement.classList.remove("rd-layout-transitioning");
+  });
 }
 
 function getCompletenessFirstProblem() {
@@ -1184,7 +1242,7 @@ function renderCompletenessRequirements() {
     return '<section class="completeness-requirement-block metadata-card ' + (expanded ? 'expanded' : 'collapsed') + '" aria-labelledby="completenessGroup-' + group.kind + '">' +
       '<button class="completeness-requirement-group-head classification-section-head" id="completenessGroupToggle-' + group.kind + '" type="button" data-completeness-action="toggle-requirement-group" data-requirement-kind="' + group.kind + '" aria-expanded="' + String(expanded) + '" aria-controls="' + panelId + '">' +
         '<span class="completeness-requirement-group-title"><h3 id="completenessGroup-' + group.kind + '">' + group.title + '</h3></span>' +
-        '<span class="completeness-requirement-group-actions"><b title="Количество элементов">' + group.items.length + '</b><span class="position-accordion-icon" aria-hidden="true">' + renderAccordionArrowIcon(expanded) + '</span></span>' +
+        '<span class="completeness-requirement-group-actions"><b>' + group.items.length + '</b><span class="position-accordion-icon" aria-hidden="true">' + renderAccordionArrowIcon(expanded) + '</span></span>' +
       '</button>' +
       '<div class="completeness-requirement-list cross-links-list" id="' + panelId + '"' + (expanded ? '' : ' hidden') + '>' + group.items.map(renderCompletenessRequirement).join("") + '</div>' +
     '</section>';
@@ -1585,7 +1643,7 @@ function renderCompletenessPipeline(file) {
   return '<section class="completeness-detail-section completeness-pipeline-section metadata-section pipeline-overview-section ' + (expanded ? 'expanded' : 'collapsed') + '">' +
     '<button class="completeness-detail-section-head pipeline-overview-summary" type="button" data-completeness-action="toggle-pipeline" aria-expanded="' + String(expanded) + '" aria-controls="completenessPipelinePanel"><span class="section-title">Статусы обработки</span><span class="accordion-arrow position-accordion-icon" aria-hidden="true">' + renderAccordionArrowIcon(expanded) + '</span></button>' +
     '<div class="completeness-pipeline-grid pipeline-overview-content pipeline-overview-grid" id="completenessPipelinePanel"' + (expanded ? '' : ' hidden') + '>' + stages.map((stage) => {
-      return '<article class="completeness-pipeline-stage pipeline-stage-card status-' + stage.status + '" aria-label="' + stage.order + '. ' + stage.label + ': ' + stage.statusLabel + '"><div class="completeness-pipeline-stage-index pipeline-stage-icon-wrap"><span class="pipeline-stage-icon" aria-hidden="true">' + renderCompletenessPipelineStageIcon(stage.key) + '</span><span class="pipeline-state-badge" title="' + stage.statusLabel + '" aria-label="' + stage.statusLabel + '">' + renderCompletenessPipelineStateIcon(stage.status) + '</span></div><div class="pipeline-stage-copy"><span class="pipeline-stage-title">' + stage.order + '. ' + stage.label + '</span><span class="pipeline-stage-status">' + stage.statusLabel + '</span><span class="pipeline-stage-message">' + escapeAttr(stage.message) + '</span></div></article>';
+      return '<article class="completeness-pipeline-stage pipeline-stage-card status-' + stage.status + '" aria-label="' + stage.order + '. ' + stage.label + ': ' + stage.statusLabel + '"><div class="completeness-pipeline-stage-index pipeline-stage-icon-wrap"><span class="pipeline-stage-icon" aria-hidden="true">' + renderCompletenessPipelineStageIcon(stage.key) + '</span><span class="pipeline-state-badge" aria-label="' + stage.statusLabel + '">' + renderCompletenessPipelineStateIcon(stage.status) + '</span></div><div class="pipeline-stage-copy"><span class="pipeline-stage-title">' + stage.order + '. ' + stage.label + '</span><span class="pipeline-stage-status">' + stage.statusLabel + '</span><span class="pipeline-stage-message">' + escapeAttr(stage.message) + '</span></div></article>';
     }).join("") + '</div>' +
   '</section>';
 }
@@ -1648,7 +1706,7 @@ function renderCompletenessFileDetailPage(file) {
   const details = file.metadata_details || {};
   const rechecking = state.review.completenessRecheckingFileIds.has(file.id);
   const downloadHref = getCompletenessFileDownloadHref(file);
-  return '<div class="completeness-detail-page" id="completenessFileDetail" tabindex="-1">' +
+  return '<div class="completeness-detail-page" id="completenessFileDetail" data-file-id="' + escapeAttr(file.id) + '" tabindex="-1">' +
     '<article class="completeness-detail-file-head metadata-header animate-fade-in">' +
       '<button class="completeness-detail-title-back metadata-icon-action" type="button" data-completeness-action="back-to-overview" aria-label="Вернуться к обзору комплектности" title="Назад к обзору комплектности"><span aria-hidden="true">' + renderCompletenessIcon("back") + '</span></button>' +
       '<span class="completeness-detail-file-copy metadata-title-block"><strong class="metadata-filename" title="' + escapeAttr(file.name) + '">' + escapeAttr(file.name) + '</strong><small class="metadata-file-meta"><span class="text-uppercase">' + escapeAttr(kind.extension) + '</span><span>' + formatCompletenessFileSize(file.size) + '</span>' + (details.uploadDate ? '<span>' + escapeAttr(details.uploadDate) + '</span>' : '') + (details.authorName ? '<span title="' + escapeAttr(details.authorName) + '">' + escapeAttr(details.authorName) + '</span>' : '') + '</small></span>' +
@@ -1656,13 +1714,13 @@ function renderCompletenessFileDetailPage(file) {
         '<button class="metadata-icon-action metadata-actions-trigger" type="button" data-completeness-action="toggle-file-menu" aria-expanded="' + String(state.review.completenessFileActionMenuOpen) + '" aria-label="Действия с файлом" title="Действия"><span aria-hidden="true">' + renderCompletenessIcon("more") + '</span></button>' +
         (state.review.completenessFileActionMenuOpen ? '<div class="completeness-detail-menu-popover metadata-actions-dropdown"><a href="' + escapeAttr(downloadHref) + '" download="' + escapeAttr(file.name) + '"><span class="metadata-menu-icon" aria-hidden="true">' + renderCompletenessIcon("download") + '</span>Скачать файл</a><button type="button" data-completeness-action="recheck-file" data-file-id="' + escapeAttr(file.id) + '"' + (rechecking ? ' disabled' : '') + '><span class="metadata-menu-icon" aria-hidden="true">' + renderCompletenessIcon("recheck") + '</span>' + (rechecking ? 'Проверяем...' : 'Пересчитать файл') + '</button></div>' : '') +
       '</div></div>' +
-    '</article>' +
+    '</article><div class="completeness-detail-sections">' +
     renderCompletenessPipeline(file) +
     renderCompletenessClassification(file) +
     renderCompletenessCrossLinks(file) +
     renderCompletenessFileComments(file) +
     renderCompletenessLogs(file) +
-  '</div>';
+  '</div></div>';
 }
 
 function downloadCompletenessFile(fileId) {
@@ -1682,21 +1740,27 @@ function downloadCompletenessFile(fileId) {
 function renderCompletenessMode() {
   const content = document.getElementById("reviewCompletenessContent");
   if (!content) return;
+  const summaryScrollTop = content.querySelector(".completeness-summary-column")?.scrollTop || 0;
+  const previousFileId = content.querySelector("#completenessFileDetail")?.dataset.fileId;
+  const detailScrollTop = content.querySelector(".completeness-detail-sections")?.scrollTop || 0;
   if (state.review.completenessView === "overview" && content.childElementCount) {
     state.review.completenessOverviewScrollTop = content.scrollTop;
   }
   ensureCompletenessFileState();
   const selectedFile = getCompletenessFile(state.review.completenessSelectedFileId);
-  if (state.review.completenessView === "detail" && selectedFile) {
-    content.innerHTML = renderCompletenessFileDetailPage(selectedFile);
-    content.scrollTop = 0;
-    return;
-  }
-  state.review.completenessView = "overview";
+  const isDetail = state.review.completenessView === "detail" && Boolean(selectedFile);
+  if (!isDetail) state.review.completenessView = "overview";
   const model = getCompletenessViewModel();
-  content.innerHTML = '<div class="completeness-overview">' + renderCompletenessDashboard(model) + renderCompletenessConfirmation() + renderCompletenessRequirements() + renderCompletenessFiles() + '</div>';
+  content.innerHTML = '<div class="completeness-overview' + (isDetail ? ' is-file-detail' : '') + '">' +
+    '<div class="completeness-summary-column">' + renderCompletenessDashboard(model) + renderCompletenessConfirmation() + renderCompletenessRequirements() + '</div>' +
+    '<div class="completeness-documents-column">' + (isDetail ? renderCompletenessFileDetailPage(selectedFile) : renderCompletenessFiles()) + '</div>' +
+  '</div>';
   requestAnimationFrame(() => {
-    content.scrollTop = state.review.completenessOverviewScrollTop;
+    content.scrollTop = isDetail ? 0 : state.review.completenessOverviewScrollTop;
+    const summary = content.querySelector(".completeness-summary-column");
+    if (summary) summary.scrollTop = summaryScrollTop;
+    const sections = content.querySelector(".completeness-detail-sections");
+    if (sections && selectedFile?.id === previousFileId) sections.scrollTop = detailScrollTop;
   });
 }
 
@@ -2080,14 +2144,14 @@ function setupAiChatEvents() {
   });
 }
 
-function renderPositionAccordion() {
+function renderPositionAccordion(options = {}) {
   const accordion = document.getElementById("positionAccordion");
   const toggle = document.getElementById("positionAccordionToggle");
   const icon = document.getElementById("positionAccordionIcon");
-  syncReviewAccordionElements(accordion, toggle, icon, state.review.positionsExpanded);
+  syncReviewAccordionElements(accordion, toggle, icon, state.review.positionsExpanded, renderAccordionArrowIcon, options);
 }
 
-function syncReviewAccordionElements(root, toggle, icon, expanded, iconRenderer = renderAccordionArrowIcon) {
+function syncReviewAccordionElements(root, toggle, icon, expanded, iconRenderer = renderAccordionArrowIcon, options = {}) {
   if (!root || !toggle || !icon) return;
   const stateChanged = root.classList.contains("expanded") !== expanded;
   const update = () => {
@@ -2109,7 +2173,7 @@ function syncReviewAccordionElements(root, toggle, icon, expanded, iconRenderer 
     update();
     return;
   }
-  animateReviewAccordionPanel(panel, update, expanded);
+  animateReviewAccordionPanel(panel, update, expanded, options);
 }
 
 const reviewAccordionAnimations = new WeakMap();
@@ -2150,7 +2214,7 @@ function animateReviewAccordionPanel(panel, update, expanded, options = {}) {
   if (!expanded && !options.toggleHidden && renderedDisplay === "none") {
     panel.style.display = startDisplay === "none" ? "block" : startDisplay;
   }
-  if (reduceMotion || Math.abs(endHeight - startHeight) < 1) {
+  if (options.animate === false || reduceMotion || Math.abs(endHeight - startHeight) < 1) {
     resetReviewAccordionPanelStyles(panel);
     if (options.toggleHidden) panel.hidden = !expanded;
     return;
@@ -2215,7 +2279,7 @@ function renderReviewFilters() {
   filters.innerHTML = reviewFilters
     .map((filter) => {
       const count = getReviewFilterCount(filter.key, counts);
-      return `<button class="review-filter ${state.review.activeFilter === filter.key ? "active" : ""}" type="button" data-review-filter="${filter.key}" aria-label="${filter.label}: ${count}"><span>${filter.label}</span><strong>${count}</strong></button>`;
+      return `<button class="review-filter ${state.review.activeFilter === filter.key ? "active" : ""}" type="button" data-review-filter="${filter.key}" aria-label="${filter.label}: ${count}"><span data-tooltip="${filter.label}">${filter.label}</span><strong>${count}</strong></button>`;
     })
     .join("");
 }
@@ -2442,8 +2506,14 @@ function syncRdSimilarAccordion() {
   const icon = toggle?.querySelector(".position-accordion-icon");
   const panel = document.getElementById("rdSimilarAccordionPanel");
   if (!change || !root || !toggle || !icon || !panel) return;
-  syncReviewAccordionElements(root, toggle, icon, state.review.rdSimilarExpanded);
-  panel.innerHTML = renderRdSimilarRows(change, state.review.rdSimilarExpanded);
+  const expanded = state.review.rdSimilarExpanded;
+  animateReviewAccordionPanel(panel, () => {
+    root.classList.toggle("expanded", expanded);
+    root.classList.toggle("collapsed", !expanded);
+    toggle.setAttribute("aria-expanded", String(expanded));
+    icon.innerHTML = renderAccordionArrowIcon(expanded);
+    panel.querySelector(".rd-similar-card-list")?.scrollTo(0, 0);
+  }, expanded);
 }
 
 function renderRdReviewFilters() {
@@ -2532,24 +2602,43 @@ function renderRdVolumeComparison(change, unit = "", modifierClass = "", editabl
 
 function getRdSimilarRows(change) {
   if (!change || !Array.isArray(change.similarRows)) return [];
-  return change.similarRows.filter((row) => row.rowId !== change.rowId);
+  const seen = new Set([change.rowId]);
+  return change.similarRows.filter((row) => {
+    if (seen.has(row.rowId) || !findRow(rows, row.rowId)) return false;
+    seen.add(row.rowId);
+    return true;
+  }).slice(0, 15);
 }
 
-function renderRdSimilarRows(change, expanded = true) {
+function renderRdSimilarPath(candidate) {
+  const path = findRowPath(rows, candidate.rowId);
+  const icons = { group: "folder-tree", work: "hammer", material: "package" };
+  const types = { group: "Группа работ", work: "Работа", material: "Материал" };
+  const unit = getRdRowUnit(candidate.rowId, candidate.unit);
+  return '<ol class="rd-similar-path" aria-label="Расположение строки в смете">' + path.map((row, depth) => {
+    const terminal = depth === path.length - 1;
+    const volume = terminal ? '<span class="rd-similar-current-volume"><strong>' + escapeAttr(candidate.currentVolume) + '</strong>' + (unit ? '<span>' + escapeAttr(unit) + '</span>' : '') + '</span>' : '';
+    const label = 'Перейти в смете: ' + (types[row.type] || 'Строка') + ' ' + row.number + '. ' + row.name;
+    return '<li class="rd-similar-step' + (terminal ? ' is-terminal' : '') + '" style="--route-depth:' + depth + '">' +
+      '<button class="rd-similar-step-button" type="button" data-rd-go-to-row="' + escapeAttr(row.id) + '" aria-label="' + escapeAttr(label) + '">' +
+        '<img class="rd-similar-step-icon" src="assets/icons/' + (icons[row.type] || 'box') + '.svg" alt="" aria-hidden="true">' +
+        '<span class="rd-similar-step-label"><span class="rd-similar-step-number">' + escapeAttr(row.number) + '</span><span class="rd-similar-step-name">' + escapeAttr(row.name) + '</span></span>' + volume +
+      '</button></li>';
+  }).join('') + '</ol>';
+}
+
+function renderRdSimilarRows(change) {
   const similarRows = getRdSimilarRows(change);
   if (!similarRows.length) {
     return '<p class="rd-similar-empty">Похожие строки сметы не найдены.</p>';
   }
-  const visibleRows = expanded ? similarRows : similarRows.slice(0, 1);
-  return '<div class="review-list rd-similar-card-list" aria-label="Похожие строки сметы">' + visibleRows
+  return '<div class="review-list rd-similar-card-list" role="list" aria-label="Похожие строки сметы">' + similarRows
     .map((row) => {
       const similarityPercent = Math.max(0, Math.min(100, Number(row.similarityPercent) || 0));
-      const unit = getRdRowUnit(row.rowId, row.unit);
-      const currentVolumeLabel = 'Текущий объем ' + row.currentVolume + (unit ? ' ' + unit : '');
-      return '<button class="issue-card rd-change-card rd-similar-card" type="button" data-rd-go-to-row="' + escapeAttr(row.rowId) + '" aria-label="Перейти к похожей строке ' + escapeAttr(row.rowNumber) + ' в смете. ' + escapeAttr(currentVolumeLabel) + '. Сходство ' + similarityPercent + '%">' +
-        '<span class="issue-card-top rd-similar-card-top"><span class="issue-card-tags rd-similar-tags">' + renderRdSvTag(row.svLevel) + '<span class="issue-tag rd-similarity-tag">Сходство <strong>' + similarityPercent + '%</strong></span></span><span class="rd-similar-current-volume" aria-label="' + escapeAttr(currentVolumeLabel) + '"><strong>' + escapeAttr(row.currentVolume) + '</strong>' + (unit ? '<span>' + escapeAttr(unit) + '</span>' : '') + '</span></span>' +
-        '<span class="rd-change-row-title"><strong class="rd-change-number">' + escapeAttr(row.rowNumber) + '</strong><span class="issue-card-title" title="' + escapeAttr(row.name) + '">' + escapeAttr(row.name) + '</span></span>' +
-      '</button>';
+      return '<article class="rd-similar-card" role="listitem" data-rd-similar-row="' + escapeAttr(row.rowId) + '" aria-label="Похожая строка ' + escapeAttr(row.rowNumber) + '">' +
+        '<div class="rd-similar-card-top">' + renderRdSvTag(row.svLevel) + '<span class="rd-similarity-value"><span>Сходство</span><strong>' + similarityPercent + '%</strong></span></div>' +
+        renderRdSimilarPath(row) +
+      '</article>';
     })
     .join("") + '</div>';
 }
@@ -2655,11 +2744,11 @@ function renderRdSelectedChange() {
   detail.innerHTML = '<div class="rd-detail-scroll rd-review-detail-scroll">' +
     '<section class="position-accordion rd-similar-accordion ' + (expanded ? 'expanded' : 'collapsed') + '" id="rdSimilarAccordion">' +
       '<button class="position-accordion-head" type="button" data-toggle-rd-similar aria-expanded="' + expanded + '" aria-controls="rdSimilarAccordionPanel">' +
-        '<span class="rd-similar-accordion-title"><span>Похожие строки</span><span class="rd-detail-count" title="Количество похожих строк">' + similarRows.length + '</span></span>' +
+        '<span class="rd-similar-accordion-title"><span>Похожие строки</span><span class="rd-detail-count">' + similarRows.length + '</span></span>' +
         '<span class="position-accordion-icon" aria-hidden="true">' + renderAccordionArrowIcon(expanded) + '</span>' +
       '</button>' +
       '<div class="position-accordion-panel" id="rdSimilarAccordionPanel">' +
-        renderRdSimilarRows(change, expanded) +
+        renderRdSimilarRows(change) +
       '</div>' +
     '</section>' +
     renderRdActionCard(change) +
@@ -3364,9 +3453,8 @@ function formatEstimateNumber(value) {
 }
 
 function renderMatchingHelpTooltip() {
-  return '<span class="matching-help" tabindex="0" aria-label="Справка по логике сопоставления">' +
+  return '<span class="matching-help" tabindex="0" aria-label="Справка по логике сопоставления" data-tooltip="Система сопоставляет строку АНР с АСОР по детерминированным правилам: типу объекта, специализации, группе работ, виду работ, материалу, единице измерения и совпадениям в справочниках.">' +
     '<span class="matching-help-icon" aria-hidden="true">?</span>' +
-    '<span class="matching-help-tooltip" role="tooltip">Система сопоставляет строку АНР с АСОР по детерминированным правилам: типу объекта, специализации, группе работ, виду работ, материалу, единице измерения и совпадениям в справочниках.</span>' +
   '</span>';
 }
 
@@ -3381,6 +3469,25 @@ function setupGlobalTooltips() {
 
   let activeTarget = null;
   let showTimer = null;
+  let hideTimer = null;
+
+  const normalizeText = (text) => (text || "").replace(/\s+/g, " ").trim();
+  const isTextClipped = (target) => {
+    const elements = [target, ...target.querySelectorAll("*")];
+    return elements.some((element) => {
+      const style = getComputedStyle(element);
+      const clipsX = /hidden|clip|auto|scroll/.test(style.overflowX);
+      const clipsY = /hidden|clip|auto|scroll/.test(style.overflowY);
+      return (clipsX && element.scrollWidth > element.clientWidth + 1) ||
+        (clipsY && element.scrollHeight > element.clientHeight + 1);
+    });
+  };
+  const needsTooltip = (target) => {
+    const text = normalizeText(target?.dataset.tooltip);
+    if (!text || !target.getClientRects().length) return false;
+    // Explanations remain available; a duplicate label only reveals clipped text.
+    return text !== normalizeText(target.textContent) || isTextClipped(target);
+  };
 
   const normalizeTarget = (target) => {
     if (!(target instanceof Element) || !target.hasAttribute("title")) return;
@@ -3398,17 +3505,18 @@ function setupGlobalTooltips() {
   const positionTooltip = () => {
     if (!activeTarget || tooltip.hidden || !activeTarget.isConnected) return;
     const targetRect = activeTarget.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
     const edge = 8;
     const gap = 8;
+    tooltip.style.maxHeight = "none";
+    const naturalHeight = tooltip.getBoundingClientRect().height;
+    const above = Math.max(0, targetRect.top - gap - edge);
+    const below = Math.max(0, window.innerHeight - targetRect.bottom - gap - edge);
+    const placement = naturalHeight <= above || above >= below ? "top" : "bottom";
+    tooltip.style.maxHeight = Math.floor(placement === "top" ? above : below) + "px";
+    const tooltipRect = tooltip.getBoundingClientRect();
     let left = targetRect.left + targetRect.width / 2 - tooltipRect.width / 2;
     left = Math.max(edge, Math.min(left, window.innerWidth - tooltipRect.width - edge));
-    let top = targetRect.bottom + gap;
-    let placement = "bottom";
-    if (top + tooltipRect.height > window.innerHeight - edge) {
-      top = targetRect.top - tooltipRect.height - gap;
-      placement = "top";
-    }
+    const top = placement === "top" ? targetRect.top - tooltipRect.height - gap : targetRect.bottom + gap;
     tooltip.dataset.placement = placement;
     tooltip.style.left = Math.round(left) + "px";
     tooltip.style.top = Math.round(Math.max(edge, top)) + "px";
@@ -3416,26 +3524,35 @@ function setupGlobalTooltips() {
 
   const hideTooltip = () => {
     clearTimeout(showTimer);
+    clearTimeout(hideTimer);
     showTimer = null;
-    if (activeTarget?.getAttribute("aria-describedby") === tooltip.id) {
-      activeTarget.removeAttribute("aria-describedby");
+    if (activeTarget) {
+      const ids = (activeTarget.getAttribute("aria-describedby") || "").split(/\s+/).filter((id) => id && id !== tooltip.id);
+      if (ids.length) activeTarget.setAttribute("aria-describedby", ids.join(" "));
+      else activeTarget.removeAttribute("aria-describedby");
     }
     activeTarget = null;
     tooltip.hidden = true;
     tooltip.textContent = "";
   };
 
-  const showTooltip = (target, delay = 180) => {
+  const showTooltip = (target, delay = 350) => {
     const text = target?.dataset.tooltip?.trim();
-    if (!text) return;
+    if (!text || !needsTooltip(target)) return hideTooltip();
+    clearTimeout(hideTimer);
+    if (activeTarget === target && !tooltip.hidden) {
+      return;
+    }
     clearTimeout(showTimer);
     if (activeTarget && activeTarget !== target) hideTooltip();
     activeTarget = target;
     showTimer = setTimeout(() => {
-      if (!activeTarget?.isConnected) return hideTooltip();
+      if (!activeTarget?.isConnected || !needsTooltip(activeTarget)) return hideTooltip();
       tooltip.textContent = text;
       tooltip.hidden = false;
-      activeTarget.setAttribute("aria-describedby", tooltip.id);
+      const ids = new Set((activeTarget.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+      ids.add(tooltip.id);
+      activeTarget.setAttribute("aria-describedby", [...ids].join(" "));
       positionTooltip();
     }, delay);
   };
@@ -3445,10 +3562,19 @@ function setupGlobalTooltips() {
     if (target && !target.contains(event.relatedTarget)) showTooltip(target);
   });
   document.addEventListener("mouseout", (event) => {
-    if (activeTarget && !activeTarget.contains(event.relatedTarget)) hideTooltip();
+    if (activeTarget && !activeTarget.contains(event.relatedTarget) && !tooltip.contains(event.relatedTarget)) {
+      clearTimeout(showTimer);
+      hideTimer = setTimeout(hideTooltip, 120);
+    }
+  });
+  tooltip.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+  tooltip.addEventListener("mouseleave", (event) => {
+    if (!activeTarget?.contains(event.relatedTarget)) hideTooltip();
   });
   document.addEventListener("focusin", (event) => {
-    const target = event.target.closest?.("[data-tooltip]");
+    const target = event.target.closest?.("[data-tooltip]") ||
+      [...(event.target.querySelectorAll?.("[data-tooltip]") || [])].find((child) =>
+        normalizeText(child.dataset.tooltip) === normalizeText(child.textContent) && needsTooltip(child));
     if (target) showTooltip(target, 0);
   });
   document.addEventListener("focusout", (event) => {
@@ -3457,10 +3583,16 @@ function setupGlobalTooltips() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") hideTooltip();
   });
-  document.addEventListener("scroll", hideTooltip, true);
+  document.addEventListener("scroll", (event) => {
+    if (!tooltip.contains(event.target)) hideTooltip();
+  }, true);
+  document.addEventListener("pointerdown", (event) => {
+    if (!tooltip.contains(event.target)) hideTooltip();
+  });
   window.addEventListener("resize", hideTooltip);
 
   const observer = new MutationObserver((mutations) => {
+    if (activeTarget && !activeTarget.isConnected) hideTooltip();
     mutations.forEach((mutation) => {
       if (mutation.type === "attributes") normalizeTarget(mutation.target);
       mutation.addedNodes.forEach((node) => normalizeTree(node));
@@ -4284,7 +4416,115 @@ function bindBodyEvents() {
 
 }
 
+function setupReviewScrollIndicators() {
+  const drawer = document.getElementById("reviewDrawer");
+  const indicators = new Map();
+  let userScrollUntil = 0;
+  let frame = 0;
+
+  function update() {
+    frame = 0;
+    const now = performance.now();
+    for (const [surface, entry] of indicators) {
+      const remove = () => { entry.thumb.remove(); indicators.delete(surface); };
+      if (!state.review.drawerOpen || !surface.isConnected || !surface.getClientRects().length ||
+          document.documentElement.classList.contains("rd-layout-transitioning") || now > entry.until + 180) {
+        remove();
+        continue;
+      }
+      const range = surface.scrollHeight - surface.clientHeight;
+      if (range <= 1) { remove(); continue; }
+      const rect = surface.getBoundingClientRect();
+      let top = Math.max(0, rect.top + surface.clientTop);
+      let bottom = Math.min(window.innerHeight, top + surface.clientHeight);
+      let right = Math.min(window.innerWidth, rect.right - surface.clientLeft);
+      // Nested lists may be partly clipped by their independently scrolling column.
+      for (let parent = surface.parentElement; parent; parent = parent.parentElement) {
+        const style = getComputedStyle(parent);
+        const bounds = parent.getBoundingClientRect();
+        if (/(auto|scroll|hidden|clip)/.test(style.overflowY)) {
+          top = Math.max(top, bounds.top + parent.clientTop);
+          bottom = Math.min(bottom, bounds.top + parent.clientTop + parent.clientHeight);
+        }
+        if (/(auto|scroll|hidden|clip)/.test(style.overflowX)) right = Math.min(right, bounds.right);
+      }
+      const height = bottom - top - 8;
+      if (height < 24 || right < 10) { remove(); continue; }
+      const thumbHeight = Math.min(height, Math.max(24, height * surface.clientHeight / surface.scrollHeight));
+      entry.travel = height - thumbHeight;
+      entry.range = range;
+      entry.thumb.style.left = (right - 12) + "px";
+      entry.thumb.style.top = (top + 4 + entry.travel * Math.max(0, Math.min(1, surface.scrollTop / range))) + "px";
+      entry.thumb.style.height = thumbHeight + "px";
+      entry.thumb.classList.toggle("is-visible", now < entry.until);
+    }
+    if (indicators.size) frame = requestAnimationFrame(update);
+  }
+
+  drawer.addEventListener("scroll", (event) => {
+    const surface = event.target;
+    if (!(surface instanceof HTMLElement) || performance.now() > userScrollUntil ||
+        surface.scrollHeight <= surface.clientHeight + 1 || getComputedStyle(surface).scrollbarWidth !== "none") return;
+    let entry = indicators.get(surface);
+    if (!entry) {
+      const thumb = document.createElement("div");
+      thumb.className = "review-scroll-indicator";
+      thumb.setAttribute("aria-hidden", "true");
+      document.body.append(thumb);
+      entry = { thumb, until: 0, travel: 0, range: 0 };
+      indicators.set(surface, entry);
+      thumb.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        thumb.setPointerCapture(event.pointerId);
+        entry.drag = { y: event.clientY, scroll: surface.scrollTop, ratio: entry.range / Math.max(1, entry.travel) };
+        entry.until = Infinity;
+        thumb.classList.add("is-dragging");
+      });
+      thumb.addEventListener("pointermove", (event) => {
+        if (entry.drag) surface.scrollTop = entry.drag.scroll + (event.clientY - entry.drag.y) * entry.drag.ratio;
+      });
+      thumb.addEventListener("lostpointercapture", () => {
+        entry.drag = null;
+        entry.until = performance.now() + 900;
+        thumb.classList.remove("is-dragging");
+      });
+      thumb.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        userScrollUntil = performance.now() + 500;
+        const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? surface.clientHeight : 1;
+        surface.scrollTop += event.deltaY * unit;
+      }, { passive: false });
+    }
+    if (!entry.drag) entry.until = performance.now() + 900;
+    if (!frame) frame = requestAnimationFrame(update);
+  }, true);
+
+  const markUserScroll = () => { userScrollUntil = performance.now() + 500; };
+  drawer.addEventListener("wheel", markUserScroll, { passive: true });
+  drawer.addEventListener("touchmove", markUserScroll, { passive: true });
+  drawer.addEventListener("keydown", (event) => {
+    if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) markUserScroll();
+  });
+}
+
 function setupReviewEvents() {
+  const layoutControl = document.getElementById("rdLayoutSwitch");
+  layoutControl?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-rd-layout]");
+    if (button?.getAttribute("aria-disabled") === "false") setRdLayout(button.dataset.rdLayout);
+  });
+  layoutControl?.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const buttons = [...layoutControl.querySelectorAll('[data-rd-layout][aria-disabled="false"]')];
+    if (!buttons.length) return;
+    event.preventDefault();
+    const index = buttons.indexOf(document.activeElement);
+    const next = event.key === "Home" ? 0 : event.key === "End" ? buttons.length - 1 : (index + (event.key === "ArrowLeft" ? -1 : 1) + buttons.length) % buttons.length;
+    buttons[next].focus({ preventScroll: true });
+    setRdLayout(buttons[next].dataset.rdLayout);
+  });
+  rdSplitViewport.addEventListener("change", syncRdLayout);
   document.addEventListener("click", cancelCommentEditingOnOutsideInteraction);
   document.getElementById("openReviewDrawer")?.addEventListener("click", () => {
     state.review.activeFilter = "created";
@@ -4414,8 +4654,14 @@ function setupReviewEvents() {
       return;
     }
     const button = event.target.closest("[data-select-rd-change]");
-    if (!button) return;
-    selectRdChange(button.dataset.selectRdChange);
+    if (button) {
+      selectRdChange(button.dataset.selectRdChange);
+      return;
+    }
+    const card = event.target.closest("[data-rd-change-card]");
+    if (!card || event.target.closest("button, input, textarea, select, a")) return;
+    if (state.review.rdBulkMode) toggleRdBulkSelection(card.dataset.rdChangeCard);
+    else selectRdChange(card.dataset.rdChangeCard);
   });
 
   document.getElementById("rdReviewList")?.addEventListener("input", (event) => {
@@ -4657,6 +4903,7 @@ renderColumns();
 renderHeader();
 renderBody();
 setupReviewEvents();
+setupReviewScrollIndicators();
 setupAiChatEvents();
 setupGlobalTooltips();
 loadCompletenessModuleData();

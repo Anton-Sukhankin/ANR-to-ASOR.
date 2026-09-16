@@ -72,11 +72,95 @@
 }
 
 .completeness-overview,
-.completeness-detail-page {
+.completeness-detail-page,
+.completeness-summary-column,
+.completeness-documents-column {
   display: flex;
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+}
+
+.review-drawer[data-rd-layout="stacked"] .completeness-overview.is-file-detail .completeness-summary-column {
+  display: none;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-source-host {
+  padding: 12px 16px;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 12px;
+  min-height: 0;
+  height: 100%;
+}
+
+.review-drawer[data-rd-layout="split"] :is(.completeness-summary-column, .completeness-documents-column) {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-gutter: auto;
+  padding-bottom: 2px;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-summary-column > *,
+.review-drawer[data-rd-layout="split"] .completeness-documents-column > * {
+  flex-shrink: 0;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-dashboard-metrics.rve-summary-cards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: none;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-dashboard-metric.rve-summary-card:not(:last-child) {
+  border-bottom: 1px solid hsl(214, 18%, 80%);
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-dashboard-metric:nth-child(2n) {
+  border-right: 0;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-requirement-block.metadata-card {
+  height: auto;
+}
+
+.review-drawer .completeness-files-head.tree-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 12px;
+}
+
+.review-drawer .completeness-files-head .tree-toolbar-main {
+  min-height: 46px;
+}
+
+.review-drawer .completeness-files-head-actions {
+  display: contents;
+}
+
+.review-drawer .completeness-files-head-actions > .position-accordion-icon {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.review-drawer .completeness-tree-legend.tree-status-legend {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+  padding-bottom: 12px;
+  justify-content: flex-start;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-tree-scroll.tree-scroll-area {
+  height: min(600px, 58vh);
+  max-height: min(600px, 58vh);
 }
 
 /* Block-level hover and flat surfaces for the completeness mode. */
@@ -1040,6 +1124,37 @@
   --completeness-item-title-line-height: 18px;
 }
 
+.completeness-detail-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.review-drawer[data-rd-layout="split"] .is-file-detail .completeness-documents-column {
+  overflow: hidden;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-detail-page {
+  height: 100%;
+  min-height: 0;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-detail-file-head {
+  flex: 0 0 auto;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-detail-sections {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.review-drawer[data-rd-layout="split"] .completeness-detail-sections > * {
+  flex-shrink: 0;
+}
+
 .completeness-detail-file-head.metadata-header {
   position: relative;
   top: auto;
@@ -1433,6 +1548,17 @@
   white-space: nowrap;
 }
 
+.completeness-classification-section .completeness-detail-section-label .classification-confidence-label.text-green {
+  box-sizing: border-box;
+  min-height: var(--review-tag-height);
+  padding: 2px var(--review-tag-padding-x);
+  border-radius: var(--review-tag-radius);
+  background: #eaf7ec;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: normal;
+}
+
 .completeness-classification-card .classification-confidence {
   --confidence-ring: hsl(126, 34%, 40%);
   box-sizing: border-box;
@@ -1809,39 +1935,45 @@
   outline: 0;
 }
 
-/* Cards use a quiet gray fill with a slight blue tint; their parent block keeps the blue border. */
-.review-drawer {
-  --review-card-hover-bg: hsl(210, 24%, 97%);
-}
-
+/* Only cards with a selection action receive a hover outline. */
 .review-drawer .issue-card:hover,
-.review-drawer .candidate-list li:hover,
-.review-drawer .completeness-file-tree-row.tree-row:hover,
+.review-drawer .candidate-list li[data-candidate-id]:hover,
 .review-drawer .cross-link-item:hover,
 .review-drawer .completeness-classification-card.classification-card:hover,
-.review-drawer .completeness-pipeline-stage.pipeline-stage-card:hover,
-.review-drawer .filtering-option:hover,
-.review-drawer .document-comment-item:hover,
-.review-drawer .comment-message:hover {
-  background: var(--review-card-hover-bg) !important;
+.review-drawer .completeness-pipeline-stage.pipeline-stage-card:hover {
+  background: #fff !important;
   box-shadow: none;
   filter: none;
   transform: none;
 }
 
-.review-drawer .issue-card:not(.active):hover,
-.review-drawer .candidate-list li:hover {
-  border-color: #d7e1ed !important;
-}
-
-.review-drawer .issue-card.active:hover {
+.review-drawer :is(.issue-card:not(:disabled):not([aria-disabled="true"]), .candidate-list li[data-candidate-id]):hover {
   border-color: var(--blue) !important;
 }
 
-.review-drawer .rd-changes-accordion .rd-change-card.active:hover,
-.review-drawer .rd-similar-accordion .rd-similar-card:hover {
-  background: var(--review-card-hover-bg) !important;
+.review-drawer .issue-card.active:hover,
+.review-drawer .candidate-list .candidate-item.selected:hover {
+  background: #f7fbff !important;
+}
+
+.review-drawer .rd-changes-accordion .rd-change-card.active:hover {
+  background: #fff !important;
   box-shadow: none;
+}
+
+.review-drawer .rd-changes-accordion .rd-change-card.is-volume-editing:hover {
+  background: #f6f7f9 !important;
+}
+
+.review-drawer .comment-message:hover,
+.review-drawer .filtering-option:hover,
+.review-drawer .ai-reasoning-event:hover {
+  background: transparent !important;
+}
+
+.review-drawer .filtering-option:hover {
+  outline: 1px solid var(--blue);
+  outline-offset: -1px;
 }
 
 .review-drawer .completeness-dashboard-metric.rve-summary-card:hover {
@@ -1872,7 +2004,7 @@
   border-color: var(--pipeline-border) !important;
 }
 
-/* File-detail hover belongs to the top-level section, not to its nested cards. */
+/* Nested cards retain their normal surfaces. */
 .review-drawer .completeness-detail-page .completeness-pipeline-stage.pipeline-stage-card:hover,
 .review-drawer .completeness-detail-page .completeness-classification-card.classification-card:hover,
 .review-drawer .completeness-detail-page .completeness-links-section .cross-link-item:hover {
@@ -1900,12 +2032,14 @@
 
 .review-drawer .completeness-file-tree-row.tree-row:hover {
   border-color: transparent !important;
-  background: #f3f4f6 !important;
+  background: #fff !important;
+  outline: 1px solid var(--blue);
+  outline-offset: -1px;
   box-shadow: none;
 }
 
 .review-drawer .completeness-file-tree-row.tree-row.active:hover {
-  background: #f3f4f6 !important;
+  background: var(--color-primary-light) !important;
 }
 
 /* Accordion affordances remain visually unchanged while their container is hovered. */
@@ -2014,8 +2148,7 @@
   border-color: var(--color-border) !important;
 }
 
-.review-drawer[data-review-mode="completeness"] .completeness-detail-page .document-comment-item,
-.review-drawer[data-review-mode="completeness"] .completeness-detail-page .document-comment-item:hover {
+.review-drawer[data-review-mode="completeness"] .completeness-detail-page .document-comment-item {
   border-color: hsl(214, 24%, 92%) !important;
   background: hsl(210, 36%, 99%) !important;
   box-shadow: none !important;

@@ -1992,6 +1992,7 @@ window.SCOST_PROJECT_DATA = {
       }
     ]
   };
+  const hasProvidedRdChanges = Boolean(data.checks.rdChanges);
   data.checks.rdChanges = data.checks.rdChanges || {
     changes: [
       {
@@ -2715,6 +2716,39 @@ window.SCOST_PROJECT_DATA = {
     addUnrecognizedSourceRow(item);
     addUnrecognizedIssue(item);
   });
+
+  // Demo-only candidates use existing estimate rows; percentages are fixture values, not a matching algorithm.
+  if (!hasProvidedRdChanges) {
+    const demoFamilies = {
+      "rd-change-001": /кабель-канал|кабельных трасс/i,
+      "rd-change-002": /кабель-канал|кабельных трасс/i,
+      "rd-change-003": /модул|датчик|оборудован|шкаф|исполнительн/i,
+      "rd-change-004": /кабель-канал|кабельных трасс/i,
+      "rd-change-005": /труб/i,
+      "rd-change-006": /кабель силовой|кабель монтажный|прокладка кабеля/i
+    };
+    data.checks.rdChanges.changes.forEach((change) => {
+      const seen = new Set([change.rowId, ...change.similarRows.map((row) => row.rowId)]);
+      const candidates = asorRows.filter((row) => row.type !== "group" && demoFamilies[change.id]?.test(row.name));
+      const initialCount = change.similarRows.length;
+      const lowestSimilarity = Math.min(...change.similarRows.map((row) => row.similarityPercent));
+      for (const row of candidates) {
+        if (change.similarRows.length >= 15) break;
+        if (seen.has(row.id)) continue;
+        seen.add(row.id);
+        const index = change.similarRows.length - initialCount;
+        change.similarRows.push({
+          rowId: row.id,
+          rowNumber: row.number,
+          name: row.name,
+          svLevel: "SV " + (index % 3),
+          currentVolume: row.values.qtyRcc,
+          unit: row.unit,
+          similarityPercent: Math.max(40, lowestSimilarity - index - 1)
+        });
+      }
+    });
+  }
 
   data.processingRun.rowsCreated = asorRows.length;
   data.processingRun.warningCount = issues.filter((issue) => issue.severity === "warning" && issue.status === "open").length;

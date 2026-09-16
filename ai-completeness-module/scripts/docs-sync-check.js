@@ -1,14 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-
-const registryPath = path.join(process.cwd(), 'docs', 'component_registry.json');
-
 function normalizePath(filePath) {
   return filePath.replace(/\\/g, '/').replace(/^\.\//, '');
-}
-
-function readRegistry() {
-  return JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 }
 
 function getComponentMatches(registry, changedFiles) {
@@ -57,8 +48,13 @@ function printMatches(matches) {
   }
 }
 
-function main() {
-  const registry = readRegistry();
+async function main() {
+  // Dynamic imports work both in this ES-module host and in a standalone package.
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const moduleRoot = path.dirname(path.dirname(path.resolve(process.argv[1])));
+  const registryPath = path.join(moduleRoot, 'docs', 'component_registry.json');
+  const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
   const changedFiles = process.argv.slice(2).map(normalizePath);
 
   if (changedFiles.length === 0) {
@@ -77,4 +73,7 @@ function main() {
   printMatches(matches);
 }
 
-main();
+main().catch(error => {
+  console.error(`Documentation route check failed: ${error.message}`);
+  process.exitCode = 1;
+});

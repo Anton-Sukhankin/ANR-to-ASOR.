@@ -167,29 +167,6 @@
         }
       ]
     },
-    "ThreadedRemarks": {
-      "title": "Тред-система замечаний",
-      "scope": "GitLab-like обсуждения по строкам сметы, статусы тредов, блокировки и mock-данные замечаний",
-      "ui_files": [
-        "src/components/ThreadedRemarks/ThreadedRemarks.css"
-      ],
-      "data_files": [
-        "src/components/ThreadedRemarks/mockRemarksData.json"
-      ],
-      "primary_docs": [
-        "src/components/ThreadedRemarks/threaded_remarks_system.md"
-      ],
-      "conditional_docs": [
-        {
-          "path": "docs/README.md",
-          "review_when": "Меняется назначение тредов или название компонента в оглавлении"
-        },
-        {
-          "path": "docs/design_system_statuses.md",
-          "review_when": "Меняются статусы замечаний, блокировок или цветовая индикация"
-        }
-      ]
-    },
     "Filtering": {
       "title": "Панель фильтрации документов",
       "scope": "Встроенная в правую область панель фильтрации дерева документов, группы фильтров, чекбоксы, счетчики, сброс, черновое состояние и применение фильтров к FileTree",

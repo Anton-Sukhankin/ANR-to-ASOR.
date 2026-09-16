@@ -195,10 +195,16 @@
             </button>
           </div>
         </div>
+        <div class="review-mode-toolbar">
         <div class="review-mode-tabs" id="reviewModeTabs" role="tablist" aria-label="Вид проверки">
           <button class="review-mode-tab" id="reviewModeCompleteness" type="button" role="tab" aria-selected="false" aria-controls="reviewModeContent" tabindex="-1" data-review-mode="completeness"><span class="review-mode-label">Комплектность</span><span class="review-mode-attention-count" hidden></span></button>
           <button class="review-mode-tab active" id="reviewModeAnr" type="button" role="tab" aria-selected="true" aria-controls="reviewModeContent" data-review-mode="anr"><span class="review-mode-label">АНР</span><span class="review-mode-attention-count" hidden></span></button>
           <button class="review-mode-tab" id="reviewModeRdChanges" type="button" role="tab" aria-selected="false" aria-controls="reviewModeContent" tabindex="-1" data-review-mode="rd-changes"><span class="review-mode-label">Изменения РД</span><span class="review-mode-attention-count" hidden></span></button>
+        </div>
+        <div class="review-layout-switch" id="rdLayoutSwitch" role="radiogroup" aria-label="Расположение блоков проверки">
+          <button class="review-layout-option active" type="button" role="radio" aria-checked="true" aria-label="Блоки сверху вниз" data-tooltip="Блоки сверху вниз" data-rd-layout="stacked"><img src="assets/icons/rows-2.svg" alt="" aria-hidden="true"></button>
+          <button class="review-layout-option" type="button" role="radio" aria-checked="false" aria-label="Блоки в две колонки" data-tooltip="Блоки в две колонки" data-rd-layout="split" tabindex="-1"><img src="assets/icons/columns-2.svg" alt="" aria-hidden="true"></button>
+        </div>
         </div>
         <div class="review-body" id="reviewModeContent" role="tabpanel" aria-labelledby="reviewModeAnr">
           <div class="review-mode-placeholder" id="reviewModePlaceholder" hidden></div>
